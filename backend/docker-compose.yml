@@ -1,0 +1,14 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: inventory-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: teamB
+      MYSQL_DATABASE: test
+    volumes:
+      - inventory:/var/lib/mysql
+
+volumes:
+  inventory:
