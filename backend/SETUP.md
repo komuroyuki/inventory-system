@@ -211,7 +211,7 @@ docker exec -it inventory-mysql bash
 
 ##### 実行後の表示例
 ```
-root@abcd1234efgh:/#
+bash-5.1#
 ```
 
 ※ この表示になれば、現在はMySQLコンテナ内部に入っています。
