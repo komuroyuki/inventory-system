@@ -1,7 +1,5 @@
 package com.inventory.Entity;
 
-import org.jspecify.annotations.Nullable;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,9 +16,9 @@ import lombok.Setter;
 @Setter
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    private @Nullable Integer id;
+    private Integer id;
 
     @Column(name = "category_name")
     @NotBlank
