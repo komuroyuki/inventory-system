@@ -3,7 +3,6 @@ package com.inventory.Entity;
 import java.time.LocalDateTime;
 
 import org.hibernate.validator.constraints.URL;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -29,9 +28,9 @@ import lombok.Setter;
 @Setter
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private @Nullable Integer id;
+    private Integer id;
 
     @Column(name = "product_name")
     @NotBlank
