@@ -20,7 +20,7 @@ import lombok.Setter;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "products")
+@Table(name = "product_m")
 @Getter
 @Setter
 public class Product {
