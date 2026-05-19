@@ -4,12 +4,19 @@ import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 import Top from './Top.jsx'
+import Header from './Header.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      <Header/>
+
+      <div>
+        <Top/>
+      </div>
+      
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
@@ -117,9 +124,6 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
 
-      <div>
-        <Top/>
-      </div>
     </>
   )
 }
