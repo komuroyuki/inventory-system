@@ -4,7 +4,7 @@ import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 import Top from './Top.jsx'
-import Header from './Header.jsx'
+import Header from './Header/Header.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
