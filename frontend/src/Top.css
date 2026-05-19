@@ -1,0 +1,65 @@
+.container {
+  padding: 20px;
+  font-family: sans-serif;
+  color: #000;
+  background-color: #B8EAFF;
+}
+
+/* 横3列のグリッドレイアウト（4つ目以降は自動で下の行に折り返し） */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* 商品ごとの枠（カード） */
+.card {
+  border: 4px dotted #688AC0;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.product-header {
+  display: flex;
+  gap: 12px;         /* IDと名前の間のすき間 */
+  align-items: center; /* 上下の中心を揃える */
+  margin-bottom: 12px; /* 下（在庫数）との間のすき間 */
+}
+
+.id {
+  font-size: 1.1rem;
+  color: #000000;
+  margin-bottom: 12px;
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+/* .stockContainer {
+  display: flex;
+  align-items: center; 
+  justify-content: space-between;
+} */
+
+.stockBox {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 100px;
+  border-radius: 4px;
+  background-color: #B8EAFF;
+  font-weight: bold;
+
+}
+
+.footer {
+    font-size: small;
+    margin-bottom: auto;
+    padding-top: 100px;
+    padding-bottom: 0;
+}
