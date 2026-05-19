@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,8 +26,8 @@ import lombok.Setter;
 public class Product {
     @Id
     @Column(name = "product_id")
-    @NotBlank
-    private String id;
+    @NotNull
+    private Integer id;
 
     @Column(name = "product_name")
     @NotBlank
