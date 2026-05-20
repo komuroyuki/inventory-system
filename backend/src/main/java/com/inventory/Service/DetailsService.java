@@ -67,5 +67,6 @@ public class DetailsService {
                 product.getCategoryId());
 
         return response;
+        
     }    
 }
