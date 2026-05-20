@@ -41,11 +41,11 @@ public class Product {
     @Min(0)
     private Integer quantity;
 
-    @Column(name = "product_imageUrl")
+    @Column(name = "product_image_url")
     @URL
     private String image;
 
-    @Column(name = "product_updatedAt")
+    @Column(name = "product_updated_at")
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
