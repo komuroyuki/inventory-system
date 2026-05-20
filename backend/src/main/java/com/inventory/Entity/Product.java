@@ -2,7 +2,6 @@ package com.inventory.Entity;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.validator.constraints.URL;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -41,15 +40,16 @@ public class Product {
     @Min(0)
     private Integer quantity;
 
-    @Column(name = "product_imageUrl")
-    @URL
+    @Column(name = "product_image_url")
+    @NotBlank
     private String image;
 
-    @Column(name = "product_updatedAt")
+    @Column(name = "product_updated_at")
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-    @ManyToOne()
-    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @NotNull
     private Category categoryId;
 }
