@@ -1,7 +1,7 @@
 import React from 'react';
 import useSWR from 'swr';
 import './Top.css';
-import './Header/Header.jsx';
+// import './Header/Header.jsx';
 
 
 const fetcher = async (url) => {
@@ -20,7 +20,7 @@ const fetcher = async (url) => {
 
 const Top = ({ searchQuery = '', selectedCategory = '' }) => {
 
-  const { data: products, error, isLoading } = useSWR('/api/products', fetcher);
+  const { data: products, error, isLoading } = useSWR('http://localhost:8080/product', fetcher);
 
   const filteredProducts = (products || []).filter((product) => {
     const matchesSearch = searchQuery === '' || Object.values(product).some(value => 
