@@ -1,7 +1,7 @@
 import './Header.css';
 import React, {useState} from 'react';
 
-const Header = () =>{
+const Header = ({showSearch = true }) =>{ //ここで検索フォームとカテゴリ表示を切り替え
     const [keyword, setKeyword] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('すべて');
     const category = ['すべて','水','お茶飲料','コーヒー飲料','炭酸飲料','果実・野菜飲料','スポーツドリンク','健康飲料','エナジードリンク','乳性・乳酸菌飲料','その他'];
@@ -15,7 +15,7 @@ const Header = () =>{
                     </a>
                 </h1>
             </div>
-
+        {showSearch && ( //ここで検索フォームとカテゴリ表示を切り替え
             <div className='header-area'>
 
             <div className='header-keyword'>
@@ -42,21 +42,21 @@ const Header = () =>{
                                 return(
                                     <li
                                          key={item}
-                                         className='category-option'
+                                         className='category-item'
                                          onClick={() =>{
                                             setSelectedCategory(item);
                                             setIsOpen(false);
                                          }}
                                          >
                                             {item}
-                                         </li>
+                                    </li>
                                 )
                             })}
                         </ul>
                     )}
                 </div>
                 </div>
-
+            )}
         </header>
 
     );
