@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS product_m (
     product_quantity INTEGER NOT NULL
         CHECK (product_quantity >= 0)
         CHECK (product_quantity <= 1000),
-    product_imageUrl VARCHAR(255),
-    product_updateAt TIMESTAMP NOT NULL
+    product_image_url VARCHAR(255),
+    product_updated_at TIMESTAMP NOT NULL
         DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
     category_id INTEGER NOT NULL,

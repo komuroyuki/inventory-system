@@ -2,7 +2,7 @@ INSERT INTO product_m (
     product_id,
     product_name,
     product_quantity,
-    product_imageUrl,
+    product_image_url,
     category_id
 ) VALUES
 (1, 'いろはす', 0, 'frontend/public/images/water/1.jpeg', 1),
