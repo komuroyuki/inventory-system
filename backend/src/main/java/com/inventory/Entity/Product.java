@@ -48,7 +48,7 @@ public class Product {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-    @ManyToOne()
-    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category categoryId;
 }
