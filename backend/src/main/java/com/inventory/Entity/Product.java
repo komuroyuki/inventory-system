@@ -50,5 +50,6 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @NotNull
     private Category categoryId;
 }
