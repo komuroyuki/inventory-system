@@ -1,3 +1,15 @@
+INSERT INTO category_m (category_id, category_name) VALUES
+(1, '水'),
+(2, 'お茶飲料'),
+(3, 'コーヒー飲料'),
+(4, '炭酸飲料'),
+(5, '果実・野菜飲料'),
+(6, 'スポーツ飲料'),
+(7, '健康飲料'),
+(8, 'エナジードリンク'),
+(9, '乳性・乳酸菌飲料'),
+(10, 'その他');
+
 INSERT INTO product_m (
     product_id,
     product_name,
@@ -59,14 +71,3 @@ INSERT INTO product_m (
  (52, 'おしるこ', 0, 'frontend/public/images/others/52.jpeg', 10),
  (53, '一風堂ラーメンスープ', 0, 'frontend/public/images/others/53.jpeg', 10);
 
-INSERT INTO category_m (category_id, category_name) VALUES
-(1, '水'),
-(2, 'お茶飲料'),
-(3, 'コーヒー飲料'),
-(4, '炭酸飲料'),
-(5, '果実・野菜飲料'),
-(6, 'スポーツ飲料'),
-(7, '健康飲料'),
-(8, 'エナジードリンク'),
-(9, '乳性・乳酸菌飲料'),
-(10, 'その他');
