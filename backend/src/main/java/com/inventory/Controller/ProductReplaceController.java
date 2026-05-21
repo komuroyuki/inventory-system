@@ -14,7 +14,7 @@ import com.inventory.Service.ProductPutService;
 
 @RestController
 @RequestMapping("/products")
-public class ProductPutController {
+public class ProductReplaceController {
     @Autowired
     private ProductPutService productPutService;
 
