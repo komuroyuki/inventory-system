@@ -1,8 +1,30 @@
+/* 💡 ページ全体の背景を水色にし、高さを画面いっぱいに広げます */
+.product_container {
+  background-color: #B8EAFF;
+  /* min-height: 100vh; */
+}
+
+.product_container .header {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  top: 50px;
+  margin: 20px;
+}
+
 .container {
   padding: 20px;
+  /* 💡 固定されたヘッダーの下にコンテンツが隠れないよう、上部に余白を設けます */
+  padding-top: 50px; 
   font-family: sans-serif;
   color: #000;
-  background-color: #B8EAFF;
+  /* background-color: #B8EAFF; は .product_container に移動しました */
+}
+
+h2{
+  margin-bottom: 40px;
+  font-weight: bold;
+  font-size: 30px;
 }
 
 .grid {
@@ -41,12 +63,25 @@
   font-size: 1.1rem;
   font-weight: bold;
   margin-bottom: 12px;
+  margin-left: 20px;
 }
 
-.stockBox {
+.stockBox1 {
   display: flex;
   justify-content: space-between;
   padding: 25px 10px;
+  border-radius: 4px;
+  background-color: #B8EAFF;
+  font-weight: bold;
+  overflow-wrap: break-word;
+  font-size: larger;
+}
+
+.stockBox2 {
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 10px;
+  padding-bottom: 0px;
   border-radius: 4px;
   background-color: #B8EAFF;
   font-weight: bold;
