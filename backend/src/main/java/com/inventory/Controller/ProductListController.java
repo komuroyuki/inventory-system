@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
 public class ProductListController {
 
@@ -19,9 +17,10 @@ public class ProductListController {
     public ProductListController(ProductListService productListService) {
         this.productListService = productListService;
     }
+
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/product")
-        public List<Product> getProductList() {
-             return productListService.getProductList();
-}
+    public List<Product> getProductList() {
+        return productListService.getProductList();
+    }
 }
