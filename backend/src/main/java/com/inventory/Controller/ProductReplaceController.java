@@ -1,6 +1,5 @@
 package com.inventory.Controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,11 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inventory.Entity.Product;
 import com.inventory.Service.ProductReplaceService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductReplaceController {
-    @Autowired
-    private ProductReplaceService productReplaceService;
+    private final ProductReplaceService productReplaceService;
 
     @PutMapping("/{id}")
     public ResponseEntity<?> replaceProduct(@Validated @RequestBody Product newProduct, @PathVariable Integer id) {
