@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.inventory.DTO.ProductRequest;
 import com.inventory.Entity.Category;
 import com.inventory.Entity.Product;
 import com.inventory.Repository.CategoryRepository;
@@ -18,10 +19,10 @@ public class ProductReplaceService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public ResponseEntity<?> replaceProduct(Product newProduct, Integer id) {
+    public ResponseEntity<?> replaceProduct(ProductRequest newProduct, Integer id) {
         Optional<Product> updatedProduct = productRepository.findById(id);
 
-        Integer categoryId = newProduct.getCategoryId().getId();
+        Integer categoryId = newProduct.categoryId();
         Category category = categoryRepository.findById(categoryId).orElse(null);
 
         if (updatedProduct == null) {
@@ -33,9 +34,9 @@ public class ProductReplaceService {
         }
 
         updatedProduct.map(product -> {
-            product.setName(newProduct.getName());
-            product.setQuantity(newProduct.getQuantity());
-            product.setImage(newProduct.getImage());
+            product.setName(newProduct.name());
+            product.setQuantity(newProduct.quantity());
+            product.setImage(newProduct.image());
             product.setCategoryId(category);
 
             return productRepository.save(product);

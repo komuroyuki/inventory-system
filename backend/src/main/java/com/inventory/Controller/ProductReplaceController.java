@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.inventory.Entity.Product;
+import com.inventory.DTO.ProductRequest;
 import com.inventory.Service.ProductReplaceService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,8 @@ public class ProductReplaceController {
     private final ProductReplaceService productReplaceService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> replaceProduct(@Validated @RequestBody Product newProduct, @PathVariable Integer id) {
+    public ResponseEntity<?> replaceProduct(@Validated @RequestBody ProductRequest newProduct,
+            @PathVariable Integer id) {
         return productReplaceService.replaceProduct(newProduct, id);
     }
 }
