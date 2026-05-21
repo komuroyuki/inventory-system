@@ -2,7 +2,6 @@ package com.inventory.Service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +10,13 @@ import com.inventory.Entity.Product;
 import com.inventory.Repository.CategoryRepository;
 import com.inventory.Repository.ProductRepository;
 
-@Service
-public class ProductReplaceService {
-    @Autowired
-    private ProductRepository productRepository;
+import lombok.RequiredArgsConstructor;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+@Service
+@RequiredArgsConstructor
+public class ProductReplaceService {
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     public ResponseEntity<?> replaceProduct(Product newProduct, Integer id) {
         Optional<Product> updatedProduct = productRepository.findById(id);
