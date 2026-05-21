@@ -12,7 +12,7 @@ import com.inventory.Repository.CategoryRepository;
 import com.inventory.Repository.ProductRepository;
 
 @Service
-public class ProductPutService {
+public class ProductReplaceService {
     @Autowired
     private ProductRepository productRepository;
 

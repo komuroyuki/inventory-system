@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inventory.Entity.Product;
-import com.inventory.Service.ProductPutService;
+import com.inventory.Service.ProductReplaceService;
 
 @RestController
 @RequestMapping("/products")
 public class ProductReplaceController {
     @Autowired
-    private ProductPutService productPutService;
+    private ProductReplaceService productReplaceService;
 
     @PutMapping("/{id}")
     public ResponseEntity<?> replaceProduct(@Validated @RequestBody Product newProduct, @PathVariable Integer id) {
-        return productPutService.replaceProduct(newProduct, id);
+        return productReplaceService.replaceProduct(newProduct, id);
     }
 }
