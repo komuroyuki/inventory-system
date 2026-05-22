@@ -21,9 +21,11 @@ const fetcher = async (url) => {
 
 const Top = ({ searchQuery = '', selectedCategory = '' }) => {
 
-  const { data: products, error, isLoading } = useSWR('http://localhost:8080/product', fetcher);
+  const navigate = useNavigate();
 
-  const filteredProducts = (products || []).filter((product) => {
+  const { data: product, error, isLoading } = useSWR('http://localhost:8080/product', fetcher);
+
+  const filteredProduct = (product || []).filter((product) => {
     const productName = product.name || product.productName || product.product_name || '';
     const matchesSearch = 
       searchQuery === '' || 
@@ -39,7 +41,7 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
   });
 
   const handleProductClick = (productId) => {
-    navigate(`/products/${productId}`); 
+    navigate(`/product/${productId}`); 
   };
 
   return (
@@ -55,7 +57,7 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
           <>
             <h2>商品一覧</h2>
             <div className="grid">
-              {filteredProducts.map((product) => (
+              {filteredProduct.map((product) => (
                 <div key={product.productId} className="card">
                   <div className="product-header">
                     <div className="id">{product.id}</div>
@@ -79,7 +81,7 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
               ))}
             </div>
             
-            {filteredProducts.length === 0 && (
+            {filteredProduct.length === 0 && (
               <p style={{ textAlign: 'center', marginTop: '20px', color: '#666' }}>
                 該当する商品は見つかりませんでした
               </p>
