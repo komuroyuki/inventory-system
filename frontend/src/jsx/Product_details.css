@@ -117,8 +117,8 @@
   display: flex;
   align-items: baseline;
   gap: 15px;
-  margin-top: 0;
-  margin-bottom: 28px;
+  margin-top: 30px;
+  margin-bottom: 24px;
   padding-bottom: 12px;
   border-bottom: 2px dotted #4A5568; /* ここで綺麗なドット点線を作っています */
 }
@@ -137,17 +137,20 @@
 
 /* --- 一体型入出庫ボックス（内側2層構造版） --- */
 .combined-stock-wrapper {
-  margin-bottom: 24px;
+  margin-top: 30px;     
+  margin-bottom: 20px;
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .combined-stock-container {
   display: flex;
   align-items: center;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
+  border-radius: 10px;
   box-sizing: border-box;
-  width: 100%;
+  padding: 5px 10px;
+  width: 265px;
   background-color: #ffffff;
   transition: border-color 0.2s;
   overflow: hidden;
@@ -162,26 +165,28 @@
   flex: 1;
   display: flex;
   flex-direction: column;   
-  align-items: flex-start;  
-  padding: 8px 14px;        
-  height: 72px;             
+  padding: 8px 14px;      
+  height: 70px;             
   box-sizing: border-box;
 }
 
-/* 入庫の外枠（薄緑） */
+/* 入庫の外枠 */
 .inflow-field {
   background-color: #ffffff; 
+  padding: 8px 14px 8px 2px;
+  align-items: flex-start; 
 }
 
-/* 出庫の外枠（薄赤） */
+/* 出庫の外枠 */
 .outflow-field {
   background-color: #ffffff; 
+  padding: 8px 2px 8px 14px;
+  align-items: flex-end;
 }
 
 /* 左上の小さなラベル文字 */
 .field-prefix-label {
   font-size: 0.75rem;
-  font-weight: bold;
   margin-bottom: 4px;       
   white-space: nowrap;
   background: transparent;  
@@ -197,15 +202,20 @@
 
 /* 文字の下に配置する「薄い青色の数字用ボックス」 */
 .combined-input-box {
-  width: 100%;
+  width: 85px;
   background-color: #B8EAFF; 
-  border: 1px solid #B8EAFF; 
-  border-radius: 4px;        
+  border-radius: 10px;        
   padding: 2px 8px;          
   box-sizing: border-box;
   display: flex;
   align-items: center;
   height: 28px;
+}
+
+.outflow-field .field-prefix-label {
+  color: #000000;
+  width: 85px;   
+  text-align: left;    /* 85pxの幅の中で「左寄せ」にする*/
 }
 
 /* 入出庫のinput（左寄せ） */
@@ -225,33 +235,31 @@
 /* 中央を隔てる垂直の区切り線 */
 .combined-divider {
   width: 1px;
-  height: 72px;
+  height: 50px;
   background-color: #B8EAFF;
   flex-shrink: 0;
 }
 
 /* --- 下部アクション（一体型在庫数量・登録ボタン） --- */
-/* --- 下部アクション（一体型在庫数量・登録ボタン） --- */
 .bottom-actions-row {
   display: flex;
-  align-items: flex-end;   
-  gap: 15px;               
-  width: 100%;
-  margin-top: auto;       
-  justify-content: flex-start; 
+  align-items: flex-end;               
+  width: 265px;
+  margin: 45px auto 0 auto;       
+  justify-content:  space-between; 
 }
 
 /* 在庫数を包む読み取り専用のコンテナ */
 .readonly-stock-box {
   display: flex;
   flex-direction: column;   
-  align-items: stretch;      /* 横幅いっぱいに広げて右寄せを有効に */
+  align-items: flex-start;  
   border: 1px solid #B8EAFF;
-  border-radius: 6px;
+  border-radius: 9px;
   background-color: #ffffff; /* 全体がグレーの「変更不可」デザイン */
-  padding: 8px 12px;
-  height: 72px;             /* 入出庫ボックスと高さを同期 */
-  width: 140px; 
+  padding: 8px 9px 0 9px;
+  height: 55px;             /* 入出庫ボックスと高さを同期 */
+  width: 120px; 
   box-sizing: border-box;
   cursor: not-allowed;
 }
@@ -259,11 +267,12 @@
 /* 在庫数の文字（左上） */
 .readonly-prefix-label {
   font-size: 0.75rem;
-  font-weight: bold;
   color: #000000;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   white-space: nowrap;
   text-align: left;
+  width: 100%;
+  line-height: 12px;
 }
 
 /* 在庫数の実際の数字（右側表示・薄青枠なしのダイレクト配置） */
@@ -271,13 +280,14 @@
   width: 100%;
   border: none !important;
   outline: none !important;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   background: transparent;
   box-sizing: border-box;
   padding: 0;
-  height: 28px;
+  height: 32px;
+  line-height: 32px;
   text-align: right;         /* ご指定通りしっかり右側に */
-  font-weight: bold;
+  margin-top: -4px;
   color: #000000;
 }
 
@@ -300,7 +310,6 @@ input.no-spin {
   border: none;            
   border-radius: 15px;
   font-size: 1rem;
-  font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s;
   display: flex;
