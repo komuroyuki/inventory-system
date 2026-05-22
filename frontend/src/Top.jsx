@@ -1,5 +1,6 @@
 import React from 'react';
 import useSWR from 'swr';
+import { useNavigate } from "react-router-dom";
 import './Top.css';
 import Header from './Header/Header.jsx';
 
@@ -8,7 +9,7 @@ const fetcher = async (url) => {
     const response = await fetch(url);
 
     if (!response.ok) {
-      throw new Error('データの取得に失敗しました');
+      throw new Error('HTTP error! status: ${response.status}');
     }
     
     return await response.json();
@@ -23,23 +24,22 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
   const { data: products, error, isLoading } = useSWR('http://localhost:8080/product', fetcher);
 
   const filteredProducts = (products || []).filter((product) => {
-    const matchesSearch = searchQuery === '' || Object.values(product).some(value => 
-      value !== undefined && 
-      value !== null && 
-      String(value).toUpperCase().includes(searchQuery.toUpperCase())
-    );
+    const productName = product.name || product.productName || product.product_name || '';
+    const matchesSearch = 
+      searchQuery === '' || 
+      String(productName).toUpperCase().includes(searchQuery.toUpperCase());
 
     const matchesCategory = 
       selectedCategory === '' || 
       selectedCategory === 'all' || 
       product.category === selectedCategory ||
-      product.categoryId === selectedCategory;
+      String(product.categoryId) === String(selectedCategory);
 
     return matchesSearch && matchesCategory;
   });
 
   const handleProductClick = (productId) => {
-    window.location.href = `/products/${productId}`; 
+    navigate(`/products/${productId}`); {/* ← 修正箇所3: navigateを使って画面遷移させる */}
   };
 
   return (
@@ -58,27 +58,26 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
             <h2>商品一覧</h2>
             <div className="grid">
               {filteredProducts.map((product) => (
-                <div key={product.id || product.productId || product.product_id} className="card">
+                <div key={product.productId} className="card">
                   <div className="product-header">
-                    <div className="id">{product.id || product.productId || product.product_id}</div>
+                    <div className="id">{product.id}</div>
                       <div 
                         className="name" 
-                        onClick={() => handleProductClick(product.id || product.productId || product.product_id)}
+                        onClick={() => handleProductClick(product.id)}
                         style={{ cursor: 'pointer' }} 
                       >
-                        {product.name || product.productName || product.product_name}
+                        {product.name}
                       </div>
                     </div>
                     <div className="stockBox1">
                       <span>在庫数</span>
-                    <div/>
+                    </div>
                     <div className="stockBox2">
                       <span>
-                        {product.quantity ?? product.stock ?? product.productQuantity ?? product.product_quantity}
+                        {product.quantity}
                       </span>
                     </div>
                   </div>
-                </div>
               ))}
             </div>
             
