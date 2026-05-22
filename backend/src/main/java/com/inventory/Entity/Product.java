@@ -41,7 +41,6 @@ public class Product {
     private Integer quantity;
 
     @Column(name = "product_image_url")
-    @NotBlank
     private String image;
 
     @Column(name = "product_updated_at")
