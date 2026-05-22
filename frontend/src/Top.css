@@ -1,4 +1,3 @@
-/* 💡 ページ全体の背景を水色にし、高さを画面いっぱいに広げます */
 .product_container {
   background-color: #B8EAFF;
   /* min-height: 100vh; */
@@ -14,11 +13,9 @@
 
 .container {
   padding: 20px;
-  /* 💡 固定されたヘッダーの下にコンテンツが隠れないよう、上部に余白を設けます */
   padding-top: 50px; 
   font-family: sans-serif;
   color: #000;
-  /* background-color: #B8EAFF; は .product_container に移動しました */
 }
 
 h2{

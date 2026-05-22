@@ -39,16 +39,14 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
   });
 
   const handleProductClick = (productId) => {
-    navigate(`/products/${productId}`); {/* ← 修正箇所3: navigateを使って画面遷移させる */}
+    navigate(`/products/${productId}`); 
   };
 
   return (
     <div className="product_container">
-      {/* 💡 ヘッダーを常に一番上に表示 */}
       <Header />
 
       <div className="container">
-        {/* 💡 データの状態（ロード中・エラー・成功）によって中身だけを切り替える */}
         {isLoading ? (
           <div>読み込み中...</div>
         ) : error ? (
@@ -89,7 +87,6 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
           </>
         )}
 
-        {/* 💡 フッターも常に一番下に表示 */}
         <div className="footer">
           <p>© 2026 TeamB All rights reserved.</p>
         </div>
