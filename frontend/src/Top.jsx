@@ -1,77 +1,95 @@
-import React, { useState, useEffect } from 'react';
-import './Top.css'
+import React from 'react';
+import useSWR from 'swr';
+import { useNavigate } from "react-router-dom";
+import './Top.css';
+import Header from './Header/Header.jsx';
 
-// ヘッダーの検索ボックス・プルダウンの値を受け取るようにpropsを設定
+const fetcher = async (url) => {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('HTTP error! status: ${response.status}');
+    }
+    
+    return await response.json();
+  } catch (err) {
+    console.error('API通信エラーの本当の原因:', err);
+    throw new Error('データの取得に失敗しました');
+  }
+};
+
 const Top = ({ searchQuery = '', selectedCategory = '' }) => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // 1. DB上の商品情報をAPI経由で取得（API完成までは仮データを使用）
-  useEffect(() => {
-    // APIやDBが未完成のため、6項目の仮データをセット
-    const mockData = [
-      { id: 1, name: '商品A', category: 'カテゴリ1', stock: 50 },
-      { id: 2, name: '商品B', category: 'カテゴリ2', stock: 120 },
-      { id: 3, name: '商品C', category: 'カテゴリ1', stock: 0 },
-      { id: 4, name: '商品D', category: 'カテゴリ3', stock: 15 },
-      { id: 5, name: '商品E', category: 'カテゴリ2', stock: 8 },
-      { id: 6, name: '商品F', category: 'カテゴリ1', stock: 300 },
-      { id: 7, name: '商品G', category: 'カテゴリ3', stock: 20 },
-      { id: 1, name: '商品A', category: 'カテゴリ1', stock: 50 },
-      { id: 2, name: '商品B', category: 'カテゴリ2', stock: 120 },
-      { id: 3, name: '商品C', category: 'カテゴリ1', stock: 0 },
-      { id: 4, name: '商品D', category: 'カテゴリ3', stock: 15 },
-      { id: 5, name: '商品E', category: 'カテゴリ2', stock: 8 },
-      { id: 6, name: '商品F', category: 'カテゴリ1', stock: 300 },
-      { id: 7, name: '商品G', category: 'カテゴリ3', stock: 20 },
-    ];
-    
-    setProducts(mockData);
-    setLoading(false);
-  }, []); // 初回レンダリング時のみ実行
+  const { data: products, error, isLoading } = useSWR('http://localhost:8080/product', fetcher);
 
-  // 2. 検索ワードとカテゴリによる絞り込み処理
-  const filteredProducts = products.filter((product) => {
-    // product.name が存在しない場合のエラーを防ぐ安全処理
-    const productName = product.name ? String(product.name) : '';
-    const matchesSearch = productName.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    // カテゴリが一致しているか（プルダウンが未選択の場合はすべてマッチ）
-    const matchesCategory = selectedCategory === '' || product.category === selectedCategory;
-    
+  const filteredProducts = (products || []).filter((product) => {
+    const productName = product.name || product.productName || product.product_name || '';
+    const matchesSearch = 
+      searchQuery === '' || 
+      String(productName).toUpperCase().includes(searchQuery.toUpperCase());
+
+    const matchesCategory = 
+      selectedCategory === '' || 
+      selectedCategory === 'all' || 
+      product.category === selectedCategory ||
+      String(product.categoryId) === String(selectedCategory);
+
     return matchesSearch && matchesCategory;
   });
 
-  // 【書き換え箇所】外部CSS適用のため className="container" に修正
-  if (loading) return <div className="container">読み込み中...</div>;
-  if (error) return <div className="container">エラー: {error}</div>;
+  const handleProductClick = (productId) => {
+    navigate(`/products/${productId}`); 
+  };
 
   return (
-    // 【書き換え箇所】style={styles.xxx} から className="xxx" にすべて修正
-    <div className="container">
-      <h2>商品在庫一覧</h2>
-      <div className="grid">
-        {filteredProducts.map((product) => (
-          <div key={product.id} className="card">
-            <div className="product-header">
-                <div className="id">{product.id}</div>
-                <div className="name">{product.name}</div>
+    <div className="product_container">
+      <Header />
+
+      <div className="container">
+        {isLoading ? (
+          <div>読み込み中...</div>
+        ) : error ? (
+          <div>エラー: {error.message}</div>
+        ) : (
+          <>
+            <h2>商品一覧</h2>
+            <div className="grid">
+              {filteredProducts.map((product) => (
+                <div key={product.productId} className="card">
+                  <div className="product-header">
+                    <div className="id">{product.id}</div>
+                      <div 
+                        className="name" 
+                        onClick={() => handleProductClick(product.id)}
+                        style={{ cursor: 'pointer' }} 
+                      >
+                        {product.name}
+                      </div>
+                    </div>
+                    <div className="stockBox1">
+                      <span>在庫数</span>
+                    </div>
+                    <div className="stockBox2">
+                      <span>
+                        {product.quantity}
+                      </span>
+                    </div>
+                  </div>
+              ))}
             </div>
-            <div className="stockBox">
-              <span>在庫数</span>
-              {/* 詳細ページでの増減が反映された在庫数を枠に入れて表示 */}
-              {/* <span className="stockBox"> */}
-              <span>
-                {product.stock}
-              </span>
-            {/* </div> */}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="footer">
-        <p>© 2026 TeamB All rights reserved.</p>
+            
+            {filteredProducts.length === 0 && (
+              <p style={{ textAlign: 'center', marginTop: '20px', color: '#666' }}>
+                該当する商品は見つかりませんでした
+              </p>
+            )}
+          </>
+        )}
+
+        <div className="footer">
+          <p>© 2026 TeamB All rights reserved.</p>
+        </div>
       </div>
     </div>
   );
