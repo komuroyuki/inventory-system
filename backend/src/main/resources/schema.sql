@@ -1,3 +1,11 @@
+CREATE TABLE IF NOT EXISTS category_m (
+    category_id INTEGER NOT NULL AUTO_INCREMENT,
+    category_name VARCHAR(50) NOT NULL,
+
+    PRIMARY KEY (category_id),
+    UNIQUE (category_name)
+);
+
 CREATE TABLE IF NOT EXISTS product_m (
     product_id INTEGER NOT NULL AUTO_INCREMENT,
     product_name VARCHAR(50) NOT NULL,
@@ -14,12 +22,4 @@ CREATE TABLE IF NOT EXISTS product_m (
     FOREIGN KEY (category_id) REFERENCES category_m(category_id),
 
     UNIQUE (product_name)
-);
-
-CREATE TABLE IF NOT EXISTS category_m (
-    category_id INTEGER NOT NULL AUTO_INCREMENT,
-    category_name VARCHAR(50) NOT NULL,
-
-    PRIMARY KEY (category_id),
-    UNIQUE (category_name)
 );
