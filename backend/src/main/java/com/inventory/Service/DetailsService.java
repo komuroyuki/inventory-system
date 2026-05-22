@@ -3,7 +3,6 @@ package com.inventory.Service;
 import org.springframework.stereotype.Service;
 import com.inventory.Repository.ProductRepository;
 import com.inventory.DTO.ProductDetailsResponse;
-import java.util.Optional;
 
 @Service
 public class DetailsService {
