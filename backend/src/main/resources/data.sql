@@ -1,4 +1,4 @@
-INSERT INTO category_m (category_id, category_name) VALUES
+INSERT IGNORE INTO category_m (category_id, category_name) VALUES
 (1, '水'),
 (2, 'お茶飲料'),
 (3, 'コーヒー飲料'),
@@ -10,7 +10,7 @@ INSERT INTO category_m (category_id, category_name) VALUES
 (9, '乳性・乳酸菌飲料'),
 (10, 'その他');
 
-INSERT INTO product_m (
+INSERT IGNORE INTO product_m (
     product_id,
     product_name,
     product_quantity,
