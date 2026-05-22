@@ -25,6 +25,7 @@ const fetcher = async (...args) => {
 
 const Product_details = () => {
     const { productId } = useParams();
+    const [productQuantity, setProductQuantity] = useState(0);
     const currentId = Number(productId) || 1;
     const navigate = useNavigate();
 
@@ -41,11 +42,6 @@ const Product_details = () => {
         data?.productName ??
         data?.product_name ??
         '';
-
-    const quantity =
-        data?.productQuantity ??
-        data?.product_quantity ??
-        0;
 
     const productImages = useMemo(() => {
         if (!data) return [];
@@ -142,13 +138,19 @@ const Product_details = () => {
     const handleRegister = () => {
         const inf = Number(inflow) || 0;
         const outf = Number(outflow) || 0;
+        const newQuantity = productQuantity + inf - outf;
+
+        setProductQuantity(newQuantity);
+        setInflow('');
+        setOutflow('');
 
         alert(
             `【変更を保存しました】\n` +
             `商品ID: ${currentId}\n` +
             `商品名: ${productName}\n` +
             `入庫数: ${inf}\n` +
-            `出庫数: ${outf}`
+            `出庫数: ${outf}\n` +
+            `在庫数: ${newQuantity}`
         );
     };
 
@@ -287,7 +289,7 @@ const Product_details = () => {
                                     <div className="readonly-input-box">
                                         <input
                                             type="number"
-                                            value={quantity}
+                                            value={productQuantity}
                                             readOnly
                                             className="combined-input no-spin short-input"
                                         />
