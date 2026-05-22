@@ -21,7 +21,7 @@ public class ProductReplaceService {
         Category category = categoryRepository.findById(newProduct.categoryId()).orElse(null);
 
         if (category == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("カテゴリIDが存在しません。" + System.lineSeparator());
         }
 
         Product updatedProduct = productRepository.findById(id).map(product -> {
