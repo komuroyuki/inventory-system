@@ -18,7 +18,7 @@ public class ProductListController {
         this.productListService = productListService;
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin("https://localhost:5173")
     @GetMapping("/products")
     public List<Product> getProductList() {
         return productListService.getProductList();
