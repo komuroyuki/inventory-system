@@ -19,7 +19,7 @@ public class ProductListController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("/product")
+    @GetMapping("/products")
     public List<Product> getProductList() {
         return productListService.getProductList();
     }
