@@ -1,4 +1,4 @@
-INSERT IGNORE INTO category_m (category_id, category_name) VALUES
+INSERT INTO category_m (category_id, category_name) VALUES
 (1, '水'),
 (2, 'お茶飲料'),
 (3, 'コーヒー飲料'),
@@ -8,9 +8,11 @@ INSERT IGNORE INTO category_m (category_id, category_name) VALUES
 (7, '健康飲料'),
 (8, 'エナジードリンク'),
 (9, '乳性・乳酸菌飲料'),
-(10, 'その他');
+(10, 'その他')
+ON DUPLICATE KEY UPDATE
+category_name = VALUES(category_name);
 
-INSERT IGNORE INTO product_m (
+INSERT INTO product_m (
     product_id,
     product_name,
     product_quantity,
@@ -69,5 +71,10 @@ INSERT IGNORE INTO product_m (
  (50, 'ソフトカツゲン', 0, 'frontend/public/images/milky/50.png', 9),
  (51, 'コーンポタージュ', 0, 'frontend/public/images/others/51.png', 10),
  (52, 'おしるこ', 0, 'frontend/public/images/others/52.png', 10),
- (53, '一風堂ラーメンスープ', 0, 'frontend/public/images/others/53.png', 10);
+ (53, '一風堂ラーメンスープ', 0, 'frontend/public/images/others/53.png', 10)
+ON DUPLICATE KEY UPDATE
+product_name = VALUES(product_name),
+product_quantity = VALUES(product_quantity),
+product_image_url = VALUES(product_image_url),
+category_id = VALUES(category_id);
 
