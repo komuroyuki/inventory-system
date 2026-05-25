@@ -1,8 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import useSWR from 'swr';
 import './product_details.css';
+
+const globalStockRegistry = {};
 
 const allImagesGlob = import.meta.glob(
     '/public/images/**/*.{png,jpeg,jpg,PNG,JPEG,JPG}',
@@ -24,7 +26,7 @@ const fetcher = async (...args) => {
 };
 
 const Product_details = () => {
-    const { productId } = useParams();
+    const {productId} = useParams();
     const [productQuantity, setProductQuantity] = useState(0);
     const currentId = Number(productId) || 1;
     const navigate = useNavigate();
@@ -34,9 +36,19 @@ const Product_details = () => {
     const [imageIndex, setImageIndex] = useState(0);
 
     const { data, error, isLoading } = useSWR(
-        `http://localhost:8080/products?product_id=${currentId}`,
+        `http://localhost:8080/products/${currentId}`,
         fetcher
     );
+
+     useEffect(() => {
+    if (globalStockRegistry[currentId] !== undefined) {
+        setProductQuantity(globalStockRegistry[currentId]);
+    } else if (data) {
+        const initialStock = data?.productQuantity ?? 0;
+        setProductQuantity(initialStock);
+    }
+    setImageIndex(0);
+}, [data, currentId]);
 
     const productName =
         data?.productName ??
@@ -87,18 +99,6 @@ const Product_details = () => {
             ? productImages[imageIndex]
             : null;
 
-    if (error) {
-        return (
-            <div className="error">
-                データの読み込みに失敗しました。
-            </div>
-        );
-    }
-
-    if (isLoading) {
-        return <div className="loading">読み込み中...</div>;
-    }
-
     const handleNextImage = () => {
         if (productImages.length === 0) return;
 
@@ -131,27 +131,39 @@ const Product_details = () => {
 
     const handleNext = () => {
         if (!nextProductId) return;
-
-        navigate(`/product/${nextProductId}`);
+    navigate(`/product/${nextProductId}`);
     };
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         const inf = Number(inflow) || 0;
         const outf = Number(outflow) || 0;
         const newQuantity = productQuantity + inf - outf;
 
         setProductQuantity(newQuantity);
+        globalStockRegistry[currentId] = newQuantity;
         setInflow('');
         setOutflow('');
 
-        alert(
-            `【変更を保存しました】\n` +
-            `商品ID: ${currentId}\n` +
-            `商品名: ${productName}\n` +
-            `入庫数: ${inf}\n` +
-            `出庫数: ${outf}\n` +
-            `在庫数: ${newQuantity}`
-        );
+    const updatedProductPayload = {
+            categoryId: data?.categoryId?.id ?? data?.categoryId ?? 1,
+            name: productName,
+            quantity: newQuantity,
+            image: data?.productImageUrl ?? ''
+        };
+       const response = await fetch(`http://localhost:8080/products/${currentId}`, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedProductPayload),
+    });
+
+    if (!response.ok) {
+        console.error('PUT失敗');
+        return;
+        }
+        
+        const result = await response.json();
     };
 
     return (
