@@ -38,24 +38,12 @@ public class DetailsService {
         response.setProductName(product.getName());
         response.setProductQuantity(product.getQuantity());
         response.setProductImageUrl(product.getImage());
+        response.setCategoryId(product.getCategoryId().getId());
 
         if (product.getLastModifiedDate() != null) {
             response.setProductUpdatedAt(product.getLastModifiedDate().toString());
         } else {
             response.setProductUpdatedAt("");
-        }
-
-        // 【無限ループ対策】
-        // 本来は DTO 側の型を「Category (Entity)」ではなく「Integer categoryId」や「String
-        // categoryName」にするのが鉄則です。
-        // 現在のDTO定義（Category型）のまま安全に渡すために、新しくプレーンなCategoryオブジェクトを作ってセットします。
-        if (product.getCategoryId() != null) {
-            com.inventory.Entity.Category dtoCategory = new com.inventory.Entity.Category();
-            dtoCategory.setId(product.getCategoryId().getId());
-            dtoCategory.setName(product.getCategoryId().getName());
-            response.setCategoryId(dtoCategory);
-        } else {
-            response.setCategoryId(null);
         }
 
         return response;
