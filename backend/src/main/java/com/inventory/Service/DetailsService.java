@@ -1,5 +1,6 @@
 package com.inventory.Service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.inventory.Repository.ProductRepository;
 import com.inventory.DTO.ProductDetailsResponse;
@@ -13,7 +14,7 @@ public class DetailsService {
         this.productRepository = productRepository;
     }
 
-    public ProductDetailsResponse getDetails(Integer id) {
+    public ResponseEntity<?> getDetails(Integer id) {
 
         // 存在チェック（.orElse(null) に変更し、データがなくても500エラーで落とさないようにします）
         com.inventory.Entity.Product product = productRepository
@@ -24,13 +25,7 @@ public class DetailsService {
 
         // 【安全策】データベースに該当の商品がない場合の処理
         if (product == null) {
-            response.setProductId(id);
-            response.setProductName("未登録の商品（ID: " + id + "）");
-            response.setProductQuantity(0);
-            response.setProductImageUrl("");
-            response.setProductUpdatedAt("");
-            response.setCategoryId(null); // データがないのでnull
-            return response;
+            return ResponseEntity.badRequest().body("カテゴリIDが存在しません。" + System.lineSeparator());
         }
 
         // 【正常系】データがある場合はDTOへ詰め替え
@@ -46,6 +41,6 @@ public class DetailsService {
             response.setProductUpdatedAt("");
         }
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 }
