@@ -1,5 +1,6 @@
 package com.inventory.Service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class ProductReplaceService {
         }).orElse(null);
 
         if (updatedProduct == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("IDが存在しません。" + System.lineSeparator());
         }
 
         return ResponseEntity.ok(updatedProduct);

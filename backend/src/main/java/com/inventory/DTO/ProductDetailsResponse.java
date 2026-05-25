@@ -1,7 +1,5 @@
 package com.inventory.DTO;
 
-import com.inventory.Entity.Category;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +17,5 @@ public class ProductDetailsResponse {
 
     private String productUpdatedAt;
 
-    private Category categoryId;
-
-    private Integer nextProductId;
+    private Integer categoryId;
 }
