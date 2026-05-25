@@ -58,7 +58,7 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
             <h2>商品一覧</h2>
             <div className="grid">
               {filteredProduct.map((product) => (
-                <div key={product.productId} className="card">
+                <div key={product.id} className="card">
                   <div className="product-header">
                     <div className="id">{product.id}</div>
                       <div 
