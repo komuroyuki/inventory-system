@@ -25,7 +25,7 @@ public class DetailsService {
 
         // 【安全策】データベースに該当の商品がない場合の処理
         if (product == null) {
-            return ResponseEntity.badRequest().body("カテゴリIDが存在しません。" + System.lineSeparator());
+            return ResponseEntity.badRequest().body("IDが存在しません。" + System.lineSeparator());
         }
 
         // 【正常系】データがある場合はDTOへ詰め替え
