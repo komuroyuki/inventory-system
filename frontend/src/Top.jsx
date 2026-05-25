@@ -1,4 +1,4 @@
-import React from 'react';
+
 import useSWR from 'swr';
 import { useNavigate } from "react-router-dom";
 import './Top.css';
@@ -9,13 +9,17 @@ const fetcher = async (url) => {
     const response = await fetch(url);
 
     if (!response.ok) {
-      throw new Error('HTTP error! status: ${response.status}');
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return await response.json();
   } catch (err) {
+    if (err instanceof TypeError) {
+      throw new Error('ネットワーク接続に失敗しました', { cause: err });
+    }
+
     console.error('API通信エラーの本当の原因:', err);
-    throw new Error('データの取得に失敗しました');
+    throw err;
   }
 };
 
@@ -23,7 +27,7 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
 
   const navigate = useNavigate();
 
-  const { data: product, error, isLoading } = useSWR('http://localhost:8080/product', fetcher);
+  const { data: product, error, isLoading } = useSWR('http://localhost:8080/products', fetcher);
 
   const filteredProduct = (product || []).filter((product) => {
     const productName = product.name || product.productName || product.product_name || '';
