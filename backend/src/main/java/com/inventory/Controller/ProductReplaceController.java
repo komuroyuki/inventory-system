@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class ProductReplaceController {
     private final ProductReplaceService productReplaceService;
 
-    @CrossOrigin("http://localhost:5173")
+    @CrossOrigin("https://localhost:5173")
     @PutMapping("/{id}")
     public ResponseEntity<?> replaceProduct(@Validated @RequestBody ProductRequest newProduct,
             @PathVariable Integer id) {
