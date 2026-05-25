@@ -13,19 +13,7 @@ public class DetailsService {
         this.productRepository = productRepository;
     }
 
-    public ProductDetailsResponse getDetails(String productId) {
-
-        // 不正値チェック
-        if (!productId.matches("\\d+")) {
-            throw new IllegalArgumentException("E500003");
-        }
-
-        int id = Integer.parseInt(productId);
-
-        // 桁数チェック
-        if (id > 9999) {
-            throw new IllegalArgumentException("E500004");
-        }
+    public ProductDetailsResponse getDetails(Integer id) {
 
         // 存在チェック（.orElse(null) に変更し、データがなくても500エラーで落とさないようにします）
         com.inventory.Entity.Product product = productRepository
