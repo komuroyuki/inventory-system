@@ -21,7 +21,7 @@ public class FilterController {
     }
 
     @GetMapping("/products/category")
-    public List<ProductFilterResponse> productDetailsResponse(
+    public List<ProductFilterResponse> productFilterResponse(
             @RequestParam("category_id") String categoryId) {
 
         return filterService.getDetails(categoryId);

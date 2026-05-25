@@ -18,4 +18,6 @@ public class ProductDetailsResponse {
     private String productUpdatedAt;
 
     private Integer categoryId;
+
+    private Integer nextProductId;
 }
