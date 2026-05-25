@@ -6,11 +6,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.inventory.Repository.ProductRepository;
-import com.inventory.Repository.CategoryRepository;
-
 import com.inventory.DTO.ProductFilterResponse;
 import com.inventory.Entity.Product;
+import com.inventory.Repository.CategoryRepository;
+import com.inventory.Repository.FilterRepository;
+import com.inventory.Repository.ProductRepository;
 
 @Service
 public class FilterService {
@@ -19,54 +19,58 @@ public class FilterService {
 
         private final CategoryRepository categoryRepository;
 
+        private final FilterRepository filterRepository;
+
         public FilterService(
                         ProductRepository productRepository,
-                        CategoryRepository categoryRepository) {
+                        CategoryRepository categoryRepository,
+                        FilterRepository filterRepository) {
 
                 this.productRepository = productRepository;
                 this.categoryRepository = categoryRepository;
+                this.filterRepository = filterRepository;
         }
 
         public List<ProductFilterResponse> getDetails(
                         String categoryId) {
 
-                // 不正値チェック
-                if (!categoryId.matches("\\d+")) {
+                int id;
+
+                // 数値変換
+                try {
+
+                        id = Integer.parseInt(categoryId);
+
+                } catch (NumberFormatException e) {
 
                         throw new IllegalArgumentException(
-                                        "E500003");
+                                        "E500003 : invalid categoryId");
                 }
-
-                int id = Integer.parseInt(categoryId);
 
                 // 桁数チェック
                 if (id > 9999) {
 
                         throw new IllegalArgumentException(
-                                        "E500004");
+                                        "E500004 : categoryId too large");
                 }
-
-                // 全取得
-                List<Product> products = productRepository.findAll();
 
                 List<Product> filteredProducts;
 
+                // 0なら全件取得
                 if (id == 0) {
 
-                        filteredProducts = products;
+                        filteredProducts = productRepository.findAll();
 
                 } else {
 
-                        // 存在チェック
+                        // カテゴリ存在確認
                         categoryRepository.findById(id)
                                         .orElseThrow(() -> new RuntimeException(
-                                                        "E500002"));
+                                                        "E500002 : category not found"));
 
-                        // カテゴリ絞り込み
-                        filteredProducts = products.stream()
-                                        .filter(product -> product.getCategoryId()
-                                                        .getId() == id)
-                                        .collect(Collectors.toList());
+                        // DB側で絞り込み
+                        filteredProducts = filterRepository
+                                        .findByCategoryId_Id(id);
                 }
 
                 // 更新日降順ソート
@@ -75,42 +79,44 @@ public class FilterService {
                                                 Comparator.comparing(
                                                                 Product::getLastModifiedDate,
                                                                 Comparator.nullsLast(
-                                                                                Comparator.naturalOrder()))
-                                                                .reversed())
+                                                                                Comparator.reverseOrder())))
                                 .collect(Collectors.toList());
 
                 // DTO変換
                 return filteredProducts.stream()
-                                .map(product -> {
-
-                                        ProductFilterResponse productResponse = new ProductFilterResponse();
-
-                                        productResponse.setProductId(
-                                                        product.getId());
-
-                                        productResponse.setProductName(
-                                                        product.getName());
-
-                                        productResponse.setProductQuantity(
-                                                        product.getQuantity());
-
-                                        productResponse.setCategoryId(
-                                                        product.getCategoryId()
-                                                                        .getId());
-
-                                        if (product.getLastModifiedDate() != null) {
-
-                                                productResponse.setLastModifiedDate(
-                                                                product.getLastModifiedDate()
-                                                                                .toString());
-
-                                        } else {
-
-                                                productResponse.setLastModifiedDate("");
-                                        }
-
-                                        return productResponse;
-                                })
+                                .map(this::convertToResponse)
                                 .collect(Collectors.toList());
+        }
+
+        // DTO変換メソッド
+        private ProductFilterResponse convertToResponse(
+                        Product product) {
+
+                ProductFilterResponse response = new ProductFilterResponse();
+
+                response.setProductId(
+                                product.getId());
+
+                response.setProductName(
+                                product.getName());
+
+                response.setProductQuantity(
+                                product.getQuantity());
+
+                response.setCategoryId(
+                                product.getCategoryId().getId());
+
+                if (product.getLastModifiedDate() != null) {
+
+                        response.setLastModifiedDate(
+                                        product.getLastModifiedDate()
+                                                        .toString());
+
+                } else {
+
+                        response.setLastModifiedDate("");
+                }
+
+                return response;
         }
 }

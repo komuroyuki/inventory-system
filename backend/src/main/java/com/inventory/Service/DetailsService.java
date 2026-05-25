@@ -3,7 +3,6 @@ package com.inventory.Service;
 import org.springframework.stereotype.Service;
 import com.inventory.Repository.ProductRepository;
 import com.inventory.DTO.ProductDetailsResponse;
-import java.util.Optional;
 
 @Service
 public class DetailsService {
@@ -59,7 +58,9 @@ public class DetailsService {
                 }
 
                 // 【無限ループ対策】
-                // 本来は DTO 側の型を「Category (Entity)」ではなく「Integer categoryId」や「String categoryName」にするのが鉄則です。
+                
+                // 本来は DTO 側の型を「Category (Entity)」ではなく「Integer categoryId」や「String
+                // categoryName」にするのが鉄則です。
                 // 現在のDTO定義（Category型）のまま安全に渡すために、新しくプレーンなCategoryオブジェクトを作ってセットします。
                 if (product.getCategoryId() != null) {
                         com.inventory.Entity.Category dtoCategory = new com.inventory.Entity.Category();
