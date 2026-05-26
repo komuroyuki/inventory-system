@@ -25,4 +25,5 @@ public class ProductSearchService {
 
         return productRepository.findByNameContaining(trimmedKeyword);
     }
+
 }
