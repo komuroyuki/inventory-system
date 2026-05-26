@@ -7,6 +7,7 @@
   border: none !important;
   box-shadow: none !important;
   outline: none !important;
+  box-sizing: border-box;
 }
 
 .product-main {
@@ -30,6 +31,7 @@
   flex: 1;
   max-width: 1000px;
   background-color: #B8EAFF;
+  width: 100%;
 }
 
 /* --- ページ移動ボタン --- */
@@ -73,7 +75,8 @@
 
 /* --- 画像セクション --- */
 .image-section {
-  flex: 0 0 400px; 
+  flex: 0 1 400px; 
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,6 +86,7 @@
   position: relative; 
   width: 100%;
   max-width: 400px;
+  aspect-ratio: 1 / 1;
   height: 400px;
   border-radius: 12px;
   overflow: hidden;
@@ -115,6 +119,8 @@
   padding: 20px;
   display: flex;
   flex-direction: column;  
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 【新設】商品IDと商品名を横並びにして下に点線をつけるスタイル */
