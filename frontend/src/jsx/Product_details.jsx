@@ -30,7 +30,7 @@ const Product_details = () => {
     const [productQuantity, setProductQuantity] = useState(0);
     const currentId = Number(productId) || 1;
     const navigate = useNavigate();
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [inflow, setInflow] = useState('');
     const [outflow, setOutflow] = useState('');
     const [imageIndex, setImageIndex] = useState(0);
@@ -125,9 +125,13 @@ const Product_details = () => {
         }
     };
 
-    const nextProductId =
+    const rawNextProductId =
         data?.nextProductId ??
         data?.next_product_id;
+
+    const nextProductId = (rawNextProductId && Number(rawNextProductId) <= 53) 
+        ? rawNextProductId 
+        : null;
 
     const handleNext = () => {
         if (!nextProductId) return;
@@ -135,9 +139,38 @@ const Product_details = () => {
     };
 
     const handleRegister = async () => {
+
+        if (isSubmitting) return;
+
+        const Regex = /^\d+$/;
+
+        if ((inflow !== '' && !Regex.test(inflow)) || 
+        (outflow !== '' && !Regex.test(outflow))) {
+            alert('半角数字・整数で入力してください');
+            return;}
+
+        if(inflow.includes('.') || outflow.includes('.')){
+            alert('整数で入力してください');
+            return;}
+
+        if(inflow.length > 4 || outflow.length > 4){
+            alert('最大桁数を超えています');
+            return;}
+
+        if(inflow < 0 || outflow < 0){
+            alert('0以上の数値を入力してください');
+            return;}
+
+        if(outflow > productQuantity){
+            alert('出庫数が在庫数を超えています');
+            return;}
+
         const inf = Number(inflow) || 0;
         const outf = Number(outflow) || 0;
         const newQuantity = productQuantity + inf - outf;
+
+    try{
+        setIsSubmitting(true);
 
         setProductQuantity(newQuantity);
         globalStockRegistry[currentId] = newQuantity;
@@ -162,9 +195,50 @@ const Product_details = () => {
         console.error('PUT失敗');
         return;
         }
-        
         const result = await response.json();
+
+        } catch (error) {
+            console.error('通信エラー:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
+
+if (isLoading) {
+        return (
+            <div className="product-container">
+                <Header showSearch={false} showCategory={false} />
+                <main className="product-main">
+                    <div style={{ textAlign: 'center', padding: '40px', fontSize: '18px' }}>
+                        商品データを読み込み中...
+                    </div>
+                </main>
+            </div>
+        );
+    }
+
+    if (error || !data) { //商品0件の時の表示
+        return (
+            <div className="product-container">
+                <Header showSearch={false} showCategory={false} />
+                <main className="product-main">
+                    <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+                        <h2 style={{ color: '#ff4d4f', marginBottom: '16px' }}>対象の商品データがありません</h2>
+                        <p style={{ color: '#666', marginBottom: '24px' }}>
+                            指定されたID（ID: {currentId}）の商品データは見つかりませんでした。
+                        </p>
+                        <button 
+                            onClick={() => navigate(-1)} // 前のページに戻る、または一覧へ
+                            className="register-btn" 
+                            style={{ width: 'auto', padding: '10px 24px', cursor: 'pointer' }}
+                        >
+                            前のページに戻る
+                        </button>
+                    </div>
+                </main>
+            </div>
+        );
+    }
 
     return (
         <div className="product-container">
