@@ -22,7 +22,7 @@ public class FilterController {
 
     @GetMapping("/products/category")
     public List<ProductFilterResponse> productFilterResponse(
-            @RequestParam("category_id") String categoryId) {
+            @RequestParam("category_id") Integer categoryId) {
 
         return filterService.getDetails(categoryId);
     }

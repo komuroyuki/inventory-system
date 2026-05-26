@@ -32,23 +32,10 @@ public class FilterService {
         }
 
         public List<ProductFilterResponse> getDetails(
-                        String categoryId) {
-
-                int id;
-
-                // 数値変換
-                try {
-
-                        id = Integer.parseInt(categoryId);
-
-                } catch (NumberFormatException e) {
-
-                        throw new IllegalArgumentException(
-                                        "E500003 : invalid categoryId");
-                }
+                        Integer id) {
 
                 // 桁数チェック
-                if (id > 9999) {
+                if (id > 9999 && id >= 0) {
 
                         throw new IllegalArgumentException(
                                         "E500004 : categoryId too large");
