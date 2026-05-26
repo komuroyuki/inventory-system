@@ -13,11 +13,15 @@ public class ProductSearchService {
     private final ProductRepository productRepository;
 
     public List<Product> searchProduct(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
+        if (keyword == null) {
             return List.of();
         }
 
         String trimmedKeyword = keyword.trim();
+
+        if (trimmedKeyword.isEmpty()) {
+            return List.of();
+        }
 
         return productRepository.findByNameContaining(trimmedKeyword);
     }
