@@ -4,15 +4,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.inventory.Repository.ProductRepository;
+import com.inventory.Repository.DetailsRepository;
 import com.inventory.DTO.ProductDetailsResponse;
 
 @Service
 public class DetailsService {
 
     private final ProductRepository productRepository;
+    private final DetailsRepository detailsRepository;
 
     public DetailsService(ProductRepository productRepository) {
         this.productRepository = productRepository;
+        this.detailsRepository = null; // DetailsRepositoryはコンストラクタで注入されていないため、nullをセット
     }
 
     public ResponseEntity<?> getDetails(Integer id) {
@@ -35,7 +38,14 @@ public class DetailsService {
         response.setProductQuantity(product.getQuantity());
         response.setProductImageUrl(product.getImage());
         response.setCategoryId(product.getCategoryId().getId());
-        response.setNextProductId(product.getId() + 1);
+        // response.setNextProductId(product.getId() + 1);
+
+        com.inventory.Entity.Product nextProduct = detailsRepository.findFirstByIdGreaterThanOrderByIdAsc(product.getId());
+        if (nextProduct != null) {
+            response.setNextProductId(nextProduct.getId());
+        } else {
+            response.setNextProductId(null); // 次の商品がない場合はnullをセット
+        }
 
         if (product.getLastModifiedDate() != null) {
             response.setProductUpdatedAt(product.getLastModifiedDate().toString());

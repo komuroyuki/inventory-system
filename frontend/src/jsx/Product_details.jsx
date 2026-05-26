@@ -125,13 +125,13 @@ const Product_details = () => {
         }
     };
 
-    const rawNextProductId =
+    const NextProductId =
         data?.nextProductId ??
         data?.next_product_id;
 
-    const nextProductId = (rawNextProductId && Number(rawNextProductId) <= 53) 
-        ? rawNextProductId 
-        : null;
+    // const nextProductId = (rawNextProductId && Number(rawNextProductId) <= 53) 
+    //     ? rawNextProductId 
+    //     : null;
 
     const handleNext = () => {
         if (!nextProductId) return;
@@ -153,7 +153,7 @@ const Product_details = () => {
             alert('整数で入力してください');
             return;}
 
-        if(inflow.length > 4 || outflow.length > 4){
+        if(inflow.length > 5 || outflow.length > 5){
             alert('最大桁数を超えています');
             return;}
 
