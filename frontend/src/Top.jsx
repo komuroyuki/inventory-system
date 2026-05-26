@@ -1,48 +1,51 @@
-
 import useSWR from 'swr';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import './Top.css';
 import Header from './Header/Header.jsx';
+import React, { useMemo } from 'react';
 
 const fetcher = async (url) => {
   try {
     const response = await fetch(url);
-
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
     return await response.json();
   } catch (err) {
     if (err instanceof TypeError) {
       throw new Error('ネットワーク接続に失敗しました', { cause: err });
     }
-
-    console.error('API通信エラーの本当の原因:', err);
+    console.error('API通信エラー:', err);
     throw err;
   }
 };
 
-const Top = ({ searchQuery = '', selectedCategory = '' }) => {
-
+const Top = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const { data: product, error, isLoading } = useSWR('http://localhost:8080/products', fetcher);
+  // URLパラメータを取得
+  const keyword = searchParams.get('keyword') || '';
+  const categoryId = searchParams.get('category_id') || '';
 
-  const filteredProduct = (product || []).filter((product) => {
-    const productName = product.name || product.productName || product.product_name || '';
-    const matchesSearch = 
-      searchQuery === '' || 
-      String(productName).toUpperCase().includes(searchQuery.toUpperCase());
+  // API用のURLを生成
+  const apiUrl = useMemo(() => {
+    // カテゴリIDがある場合はカテゴリ検索API、キーワードのみなら検索API、どちらもなければ全件
+    if (categoryId && categoryId !== '0') {
+      return `http://localhost:8080/products/category?category_id=${encodeURIComponent(categoryId)}`;
+    } else if (keyword) {
+      return `http://localhost:8080/product/search?keyword=${encodeURIComponent(keyword)}`;
+    } else {
+      return 'http://localhost:8080/products';
+    }
+  }, [keyword, categoryId]);
 
-    const matchesCategory = 
-      selectedCategory === '' || 
-      selectedCategory === 'all' || 
-      product.category === selectedCategory ||
-      String(product.categoryId) === String(selectedCategory);
+  // ★ここで isLoading を確実に受け取ります
+  const { data: product, error, isLoading } = useSWR(apiUrl, fetcher);
 
-    return matchesSearch && matchesCategory;
-  });
+  // Top.jsx 内
+const displayProducts = product || [];
+console.log("バックエンドから届いたデータ:", displayProducts); // この1行を追加
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`); 
@@ -53,6 +56,7 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
       <Header />
 
       <div className="container">
+        {/* isLoading 変数がここで使われます */}
         {isLoading ? (
           <div>読み込み中...</div>
         ) : error ? (
@@ -61,31 +65,36 @@ const Top = ({ searchQuery = '', selectedCategory = '' }) => {
           <>
             <h2>商品一覧</h2>
             <div className="grid">
-              {filteredProduct.map((product) => (
-                <div key={product.id} className="card">
-                  <div className="product-header">
-                    <div className="id">{product.id}</div>
-                      <div 
-                        className="name" 
-                        onClick={() => handleProductClick(product.id)}
-                        style={{ cursor: 'pointer' }} 
-                      >
-                        {product.name}
-                      </div>
-                    </div>
-                    <div className="stockBox1">
-                      <span>在庫数</span>
-                    </div>
-                    <div className="stockBox2">
-                      <span>
-                        {product.quantity}
-                      </span>
-                    </div>
-                  </div>
-              ))}
-            </div>
+  {displayProducts.map((p) => {
+    // 【重要】APIごとにキー名が違うことを考慮して、正しい値を探すロジック
+    const displayId = p.id || p.productId || '---';
+    const displayName = p.productName || p.name || '名前なし';
+    const displayQuantity = p.productQuantity !== undefined ? p.productQuantity : (p.quantity !== undefined ? p.quantity : 0);
+
+    return (
+      <div key={displayId} className="card">
+        <div className="product-header">
+          <div className="id">{displayId}</div>
+          <div 
+            className="name" 
+            onClick={() => handleProductClick(displayId)}
+            style={{ cursor: 'pointer' }} 
+          >
+            {displayName}
+          </div>
+        </div>
+        <div className="stockBox1">
+          <span>在庫数</span>
+        </div>
+        <div className="stockBox2">
+          <span>{displayQuantity}</span>
+        </div>
+      </div>
+    );
+  })}
+</div>
             
-            {filteredProduct.length === 0 && (
+            {displayProducts.length === 0 && (
               <p style={{ textAlign: 'center', marginTop: '20px', color: '#666' }}>
                 該当する商品は見つかりませんでした
               </p>
