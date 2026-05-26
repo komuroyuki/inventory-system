@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProductDetailsResponse {
+public class ProductFilterResponse {
 
     private Integer productId;
 
@@ -13,11 +13,8 @@ public class ProductDetailsResponse {
 
     private Integer productQuantity;
 
-    private String productImageUrl;
-
-    private String productUpdatedAt;
+    private String lastModifiedDate;
 
     private Integer categoryId;
 
-    private Integer nextProductId;
 }

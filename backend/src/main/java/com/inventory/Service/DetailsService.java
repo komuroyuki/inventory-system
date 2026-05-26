@@ -35,6 +35,7 @@ public class DetailsService {
         response.setProductQuantity(product.getQuantity());
         response.setProductImageUrl(product.getImage());
         response.setCategoryId(product.getCategoryId().getId());
+        response.setNextProductId(product.getId() + 1);
 
         if (product.getLastModifiedDate() != null) {
             response.setProductUpdatedAt(product.getLastModifiedDate().toString());
