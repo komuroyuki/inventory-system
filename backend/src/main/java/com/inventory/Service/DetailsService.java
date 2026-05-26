@@ -13,9 +13,11 @@ public class DetailsService {
     private final ProductRepository productRepository;
     private final DetailsRepository detailsRepository;
 
-    public DetailsService(ProductRepository productRepository) {
+    public DetailsService(
+            ProductRepository productRepository,
+            DetailsRepository detailsRepository) {
         this.productRepository = productRepository;
-        this.detailsRepository = null; // DetailsRepositoryはコンストラクタで注入されていないため、nullをセット
+        this.detailsRepository = detailsRepository;
     }
 
     public ResponseEntity<?> getDetails(Integer id) {
@@ -40,7 +42,8 @@ public class DetailsService {
         response.setCategoryId(product.getCategoryId().getId());
         // response.setNextProductId(product.getId() + 1);
 
-        com.inventory.Entity.Product nextProduct = detailsRepository.findFirstByIdGreaterThanOrderByIdAsc(product.getId());
+        com.inventory.Entity.Product nextProduct = detailsRepository
+                .findFirstByIdGreaterThanOrderByIdAsc(product.getId());
         if (nextProduct != null) {
             response.setNextProductId(nextProduct.getId());
         } else {

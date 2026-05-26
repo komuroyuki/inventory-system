@@ -125,17 +125,13 @@ const Product_details = () => {
         }
     };
 
-    const NextProductId =
+    const nextProductId =
         data?.nextProductId ??
         data?.next_product_id;
 
-    // const nextProductId = (rawNextProductId && Number(rawNextProductId) <= 53) 
-    //     ? rawNextProductId 
-    //     : null;
-
     const handleNext = () => {
-        if (!nextProductId) return;
-    navigate(`/product/${nextProductId}`);
+        if (!nextProductId) return; 
+        navigate(`/product/${nextProductId}`);
     };
 
     const handleRegister = async () => {
