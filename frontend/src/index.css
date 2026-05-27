@@ -61,6 +61,8 @@ body {
   min-height: 100vh;
   flex-direction: column;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
 }
 
 h1,
