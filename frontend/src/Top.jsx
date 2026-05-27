@@ -21,6 +21,7 @@ const fetcher = async (url) => {
 };
 
 const Top = () => {
+  const isDirty = false;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -53,7 +54,13 @@ const Top = () => {
 
   return (
     <div className="product_container">
-      <Header />
+      <Header
+showSearch={true}
+showCategory={true}
+confirmLeave={() => {
+return true;
+}}
+/>
 
       <div className="container">
         {/* isLoading 変数がここで使われます */}
