@@ -26,8 +26,8 @@ const Top = () => {
   const [searchParams] = useSearchParams();
 
   // URLパラメータを取得
-  const keyword = searchParams.get("keyword") || "";
-  const categoryId = searchParams.get("category_id") || "";
+  const keyword = searchParams.get("keyword") ?? "";
+  const categoryId = searchParams.get("category_id") ?? "";
 
   // API用のURLを生成
   const apiUrl = useMemo(() => {
@@ -45,7 +45,7 @@ const Top = () => {
   const { data: product, error, isLoading } = useSWR(apiUrl, fetcher);
 
   // Top.jsx 内
-  const displayProducts = product || [];
+  const displayProducts = product ?? [];
   console.log("バックエンドから届いたデータ:", displayProducts); // この1行を追加
 
   const handleProductClick = (productId) => {
@@ -74,8 +74,8 @@ return true;
             <div className="grid">
               {displayProducts.map((p) => {
                 // 【重要】APIごとにキー名が違うことを考慮して、正しい値を探すロジック
-                const displayId = p.id || p.productId || "---";
-                const displayName = p.productName || p.name || "名前なし";
+                const displayId = p.id ?? p.productId ?? "---";
+                const displayName = p.productName ?? p.name ?? "名前なし";
                 const displayQuantity =
                   p.productQuantity !== undefined
                     ? p.productQuantity
@@ -87,13 +87,12 @@ return true;
                   <div key={displayId} className="card">
                     <div className="product-header">
                       <div className="id">{displayId}</div>
-                      <div
+                      <button
                         className="name"
                         onClick={() => handleProductClick(displayId)}
-                        style={{ cursor: "pointer" }}
                       >
                         {displayName}
-                      </div>
+                      </button>
                     </div>
                     <div className="stockBox1">
                       <span>在庫数</span>
@@ -129,3 +128,4 @@ return true;
 };
 
 export default Top;
+

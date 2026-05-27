@@ -36,7 +36,6 @@ h2 {
 
 .grid {
   display: grid;
-  /* カードサイズを330pxに固定し、入る分だけ並べる */
   grid-template-columns: repeat(auto-fit, 330px);
   gap: 20px;
   max-width: 1030px;
@@ -72,13 +71,24 @@ h2 {
   font-weight: bold;
   margin-bottom: 12px;
   margin-left: 20px;
-  transition-duration: 0.4s;
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  color: #000000;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  text-align: left;
 }
 
 .name:hover {
-  transform: scale(1.1);
-  background: #fff;
-  color: #3d64a3;
+  background-color: #e6f4ff;
+  transform: translateY(-2px);
+  color: #09aced;
+}
+
+.name:active {
+  transform: translateY(0);
 }
 
 .stockBox1 {
