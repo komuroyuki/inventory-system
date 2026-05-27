@@ -1,50 +1,51 @@
 .product_container {
-  background-color: #B8EAFF;
-  min-height: 100vh; /* 画面の高さ最低100%を確保 */
-  display: flex;     /* Flexboxを有効化 */
-  flex-direction: column; /* 中身を縦に並べる */
+  background-color: #b8eaff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
   padding-bottom: 60px;
 }
 
 .product_container .header {
-position: sticky;
-top: 0;
-z-index: 9999;
-top: 50px;
-margin: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  top: 50px;
+  margin: 20px;
 }
 
 .container {
-  flex: 1; /* ここが重要！フッターを押し下げて、コンテンツ領域を広げる */
+  flex: 1;
   padding: 20px;
-  padding-top: 20px; 
+  padding-top: 20px;
   font-family: sans-serif;
   color: #000;
   max-width: 1200px;
   margin: 0 auto;
-  width: 100%; /* 幅を確保 */
+  width: 100%;
 }
 
-h2{
+h2 {
   margin-bottom: 40px;
+  margin-top: 40px;
   font-weight: bold;
   font-size: 30px;
-  text-align: center; /* 見出しも中央に寄せる場合 */
+  text-align: center;
 }
 
-/* グリッドの修正：中央寄せとレイアウト調整 */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  grid-template-columns: repeat(auto-fit, 330px);
   gap: 20px;
-  margin: 20px auto; /* 左右をautoにすることで中央寄せ */
-  max-width: 1100px; /* ここを調整してグリッドの最大幅を管理 */
-  justify-content: center; /* 要素を中央に寄せる */
+  max-width: 1030px;
+  margin: 20px auto;
+  justify-content: start;
 }
 
 /* カードの修正：線の削除 */
 .card {
-  border: 3px dashed #688AC0;
+  border: 3px dashed #688ac0;
   border-radius: 8px;
   padding: 16px;
   background-color: #fff;
@@ -70,6 +71,24 @@ h2{
   font-weight: bold;
   margin-bottom: 12px;
   margin-left: 20px;
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  color: #000000;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.name:hover {
+  background-color: #e6f4ff;
+  transform: translateY(-2px);
+  color: #09aced;
+}
+
+.name:active {
+  transform: translateY(0);
 }
 
 .stockBox1 {
@@ -80,7 +99,7 @@ h2{
   border-top-right-radius: 4px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
-  background-color: #B8EAFF;
+  background-color: #b8eaff;
   font-weight: bold;
   overflow-wrap: break-word;
   font-size: larger;
@@ -94,17 +113,27 @@ h2{
   border-top-right-radius: 0px;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
-  background-color: #B8EAFF;
+  background-color: #b8eaff;
   font-weight: bold;
   overflow-wrap: break-word;
   font-size: larger;
 }
 
 .footer {
-  padding-top: 200px;
+  position: absolute;
+  bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #B8EAFF; 
+  height: 60px;
+  box-sizing: border-box;
+  background-color: #b8eaff;
   font-size: small;
   text-align: center;
+  padding: 20px 0;
+}
+
+@media screen and (max-width: 600px) {
+  .grid {
+    justify-content: center;
+  }
 }

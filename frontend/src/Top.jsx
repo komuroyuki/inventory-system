@@ -1,8 +1,8 @@
-import useSWR from 'swr';
+import useSWR from "swr";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import './Top.css';
-import Header from './Header/Header.jsx';
-import React, { useMemo } from 'react';
+import "./Top.css";
+import Header from "./Header/Header.jsx";
+import React, { useMemo } from "react";
 
 const fetcher = async (url) => {
   try {
@@ -13,30 +13,31 @@ const fetcher = async (url) => {
     return await response.json();
   } catch (err) {
     if (err instanceof TypeError) {
-      throw new Error('ネットワーク接続に失敗しました', { cause: err });
+      throw new Error("ネットワーク接続に失敗しました", { cause: err });
     }
-    console.error('API通信エラー:', err);
+    console.error("API通信エラー:", err);
     throw err;
   }
 };
 
 const Top = () => {
+  const isDirty = false;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   // URLパラメータを取得
-  const keyword = searchParams.get('keyword') || '';
-  const categoryId = searchParams.get('category_id') || '';
+  const keyword = searchParams.get("keyword") ?? "";
+  const categoryId = searchParams.get("category_id") ?? "";
 
   // API用のURLを生成
   const apiUrl = useMemo(() => {
     // カテゴリIDがある場合はカテゴリ検索API、キーワードのみなら検索API、どちらもなければ全件
-    if (categoryId && categoryId !== '0') {
+    if (categoryId && categoryId !== "0") {
       return `http://localhost:8080/products/category?category_id=${encodeURIComponent(categoryId)}`;
     } else if (keyword) {
       return `http://localhost:8080/product/search?keyword=${encodeURIComponent(keyword)}`;
     } else {
-      return 'http://localhost:8080/products';
+      return "http://localhost:8080/products";
     }
   }, [keyword, categoryId]);
 
@@ -44,16 +45,22 @@ const Top = () => {
   const { data: product, error, isLoading } = useSWR(apiUrl, fetcher);
 
   // Top.jsx 内
-const displayProducts = product || [];
-console.log("バックエンドから届いたデータ:", displayProducts); // この1行を追加
+  const displayProducts = product ?? [];
+  console.log("バックエンドから届いたデータ:", displayProducts); // この1行を追加
 
   const handleProductClick = (productId) => {
-    navigate(`/product/${productId}`); 
+    navigate(`/product/${productId}`);
   };
 
   return (
     <div className="product_container">
-      <Header />
+      <Header
+showSearch={true}
+showCategory={true}
+confirmLeave={() => {
+return true;
+}}
+/>
 
       <div className="container">
         {/* isLoading 変数がここで使われます */}
@@ -65,37 +72,47 @@ console.log("バックエンドから届いたデータ:", displayProducts); // 
           <>
             <h2>商品一覧</h2>
             <div className="grid">
-  {displayProducts.map((p) => {
-    // 【重要】APIごとにキー名が違うことを考慮して、正しい値を探すロジック
-    const displayId = p.id || p.productId || '---';
-    const displayName = p.productName || p.name || '名前なし';
-    const displayQuantity = p.productQuantity !== undefined ? p.productQuantity : (p.quantity !== undefined ? p.quantity : 0);
+              {displayProducts.map((p) => {
+                // 【重要】APIごとにキー名が違うことを考慮して、正しい値を探すロジック
+                const displayId = p.id ?? p.productId ?? "---";
+                const displayName = p.productName ?? p.name ?? "名前なし";
+                const displayQuantity =
+                  p.productQuantity !== undefined
+                    ? p.productQuantity
+                    : p.quantity !== undefined
+                      ? p.quantity
+                      : 0;
 
-    return (
-      <div key={displayId} className="card">
-        <div className="product-header">
-          <div className="id">{displayId}</div>
-          <div 
-            className="name" 
-            onClick={() => handleProductClick(displayId)}
-            style={{ cursor: 'pointer' }} 
-          >
-            {displayName}
-          </div>
-        </div>
-        <div className="stockBox1">
-          <span>在庫数</span>
-        </div>
-        <div className="stockBox2">
-          <span>{displayQuantity}</span>
-        </div>
-      </div>
-    );
-  })}
-</div>
-            
+                return (
+                  <div key={displayId} className="card">
+                    <div className="product-header">
+                      <div className="id">{displayId}</div>
+                      <button
+                        className="name"
+                        onClick={() => handleProductClick(displayId)}
+                      >
+                        {displayName}
+                      </button>
+                    </div>
+                    <div className="stockBox1">
+                      <span>在庫数</span>
+                    </div>
+                    <div className="stockBox2">
+                      <span>{displayQuantity}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
             {displayProducts.length === 0 && (
-              <p style={{ textAlign: 'center', marginTop: '20px', color: '#666' }}>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: "20px",
+                  color: "#666",
+                }}
+              >
                 該当する商品は見つかりませんでした
               </p>
             )}
@@ -111,3 +128,4 @@ console.log("バックエンドから届いたデータ:", displayProducts); // 
 };
 
 export default Top;
+
