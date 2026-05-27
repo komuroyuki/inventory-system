@@ -192,15 +192,13 @@ const Product_details = () => {
                alert('出庫数が在庫数を超えています');
                return;}
 
-        if (newQuantity > 9999) {
-            alert('在庫数が上限（9999）を超えています');
+        if (newQuantity > 1000) {
+            alert('在庫数が上限（1000）を超えています');
             return;
         }
 
     try{
-        setIsSubmitting(true);
-        setProductQuantity(newQuantity);
-        
+
     const updatedProductPayload = {
             categoryId: data?.categoryId?.id ?? data?.categoryId ?? 1,
             name: productName,
@@ -214,6 +212,9 @@ const Product_details = () => {
     },
     body: JSON.stringify(updatedProductPayload),
     });
+
+        setIsSubmitting(true);
+        setProductQuantity(newQuantity);
 
     if (!response.ok) {
         console.error('PUT失敗');
