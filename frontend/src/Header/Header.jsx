@@ -1,13 +1,14 @@
 import './Header.css';
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
-const Header = ({ showSearch = true, showCategory = true }) => {
+const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
     const [keyword, setKeyword] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('すべて');
     // 配列名を labels に変更して分かりやすくしました
     const categoryLabels = ['すべて','水','お茶飲料','コーヒー飲料','炭酸飲料','果実・野菜飲料','スポーツドリンク','健康飲料','エナジードリンク','乳性・乳酸菌飲料','その他'];
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
     
     const [, setSearchParams] = useSearchParams();
 
@@ -45,11 +46,19 @@ const Header = ({ showSearch = true, showCategory = true }) => {
         setSearchParams(params);
     };
 
+    const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (confirmLeave && !confirmLeave()) {
+        return;
+    }
+    navigate('/');
+};
+
     return (
         <header className='header'>
             <div className='header-logo'>
                 <h1>
-                    <a href='/'>
+                   <a href='/' onClick={handleLogoClick}>
                         <img src='/logo.png' alt='マイサイトのロゴ' className='logo-image' />
                     </a>
                 </h1>

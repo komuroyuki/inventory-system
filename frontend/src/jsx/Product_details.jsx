@@ -236,7 +236,7 @@ const Product_details = () => {
 if (isLoading) {
         return (
             <div className="product-container">
-                <Header showSearch={false} showCategory={false} />
+                <Header showSearch={false} showCategory={false} confirmLeave={confirmBeforeLeave} />
                 <main className="product-main">
                     <div style={{ textAlign: 'center', padding: '40px', fontSize: '18px' }}>
                         商品データを読み込み中...
@@ -271,7 +271,7 @@ if (isLoading) {
 
     return (
         <div className="product-container">
-            <Header showSearch={false} showCategory={false} />
+            <Header showSearch={false} showCategory={false} confirmLeave={confirmBeforeLeave}  />
 
             <main className="product-main">
                 <div className="main-content-wrapper">
