@@ -4,8 +4,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import useSWR from 'swr';
 import './product_details.css';
 
-const globalStockRegistry = {};
-
 const allImagesGlob = import.meta.glob(
     '/public/images/**/*.{png,jpeg,jpg,PNG,JPEG,JPG}',
     { eager: true }
@@ -35,18 +33,16 @@ const Product_details = () => {
     const [outflow, setOutflow] = useState('');
     const [imageIndex, setImageIndex] = useState(0);
 
-    const { data, error, isLoading } = useSWR(
+    const { data, error, isLoading, mutate } = useSWR(
         `http://localhost:8080/products/${currentId}`,
         fetcher
     );
 
      useEffect(() => {
-    if (globalStockRegistry[currentId] !== undefined) {
-        setProductQuantity(globalStockRegistry[currentId]);
-    } else if (data) {
-        const initialStock = data?.productQuantity ?? 0;
+    if (data) {
+        const initialStock = data?.productQuantity ?? data?.quantity ?? 0;
         setProductQuantity(initialStock);
-    }
+        }
     setImageIndex(0);
 }, [data, currentId]);
 
@@ -149,7 +145,7 @@ const Product_details = () => {
             alert('整数で入力してください');
             return;}
 
-        if(inflow.length > 5 || outflow.length > 5){
+        if(inflow >= 9999 || outflow >= 9999){
             alert('最大桁数を超えています');
             return;}
 
@@ -165,14 +161,15 @@ const Product_details = () => {
         const outf = Number(outflow) || 0;
         const newQuantity = productQuantity + inf - outf;
 
+        if (newQuantity > 9999) {
+            alert('在庫数が上限（9999）を超えています');
+            return;
+        }
+
     try{
         setIsSubmitting(true);
-
         setProductQuantity(newQuantity);
-        globalStockRegistry[currentId] = newQuantity;
-        setInflow('');
-        setOutflow('');
-
+        
     const updatedProductPayload = {
             categoryId: data?.categoryId?.id ?? data?.categoryId ?? 1,
             name: productName,
@@ -191,7 +188,11 @@ const Product_details = () => {
         console.error('PUT失敗');
         return;
         }
-        const result = await response.json();
+
+        await mutate(); 
+
+        setInflow('');
+        setOutflow('');
 
         } catch (error) {
             console.error('通信エラー:', error);
