@@ -1,11 +1,11 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate} from 'react-router-dom';
 import Header from '../Header/Header';
 import React, { useState, useMemo, useEffect } from 'react';
 import useSWR from 'swr';
 import './product_details.css';
 
 const allImagesGlob = import.meta.glob(
-    '/public/images/**/*.{png,jpeg,jpg,PNG,JPEG,JPG}',
+    '/src/images/**/*.{png,jpeg,jpg,PNG,JPEG,JPG}',
     { eager: true }
 );
 
@@ -38,13 +38,39 @@ const Product_details = () => {
         fetcher
     );
 
+    const isDirty = inflow !== '' || outflow !== '';
+    
+    const confirmBeforeLeave = () => {
+    if (!isDirty) return true;
+
+    return window.confirm(
+        '入力中の内容がありますが、登録しなくてよろしいですか？'
+    );};
+
      useEffect(() => {
     if (data) {
         const initialStock = data?.productQuantity ?? data?.quantity ?? 0;
         setProductQuantity(initialStock);
         }
     setImageIndex(0);
+
+    setInflow('');
+    setOutflow('');
+
 }, [data, currentId]);
+
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+        if (!isDirty) return;
+
+        e.preventDefault();
+        e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+    }, [isDirty]);
 
     const productName =
         data?.productName ??
@@ -116,6 +142,8 @@ const Product_details = () => {
     };
 
     const handlePrev = () => {
+        if (!confirmBeforeLeave()) return;
+
         if (currentId > 1) {
             navigate(`/product/${currentId - 1}`);
         }
@@ -126,7 +154,10 @@ const Product_details = () => {
         data?.next_product_id;
 
     const handleNext = () => {
+        
+        if (!confirmBeforeLeave()) return;
         if (!nextProductId) return; 
+
         navigate(`/product/${nextProductId}`);
     };
 
@@ -145,21 +176,21 @@ const Product_details = () => {
             alert('整数で入力してください');
             return;}
 
-        if(inflow >= 9999 || outflow >= 9999){
+        if(Number(inflow) >= 9999 || Number(outflow) >= 9999){
             alert('最大桁数を超えています');
             return;}
 
-        if(inflow < 0 || outflow < 0){
+        if(Number(inflow) < 0 || Number(outflow) < 0){
             alert('0以上の数値を入力してください');
-            return;}
-
-        if(outflow > productQuantity){
-            alert('出庫数が在庫数を超えています');
             return;}
 
         const inf = Number(inflow) || 0;
         const outf = Number(outflow) || 0;
         const newQuantity = productQuantity + inf - outf;
+
+        if (newQuantity < 0) {
+               alert('出庫数が在庫数を超えています');
+               return;}
 
         if (newQuantity > 9999) {
             alert('在庫数が上限（9999）を超えています');
