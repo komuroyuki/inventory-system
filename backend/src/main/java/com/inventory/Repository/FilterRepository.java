@@ -9,5 +9,6 @@ import com.inventory.Entity.Product;
 public interface FilterRepository
         extends JpaRepository<Product, Integer> {
 
-    List<Product> findByCategoryId_Id(Integer categoryId);
+    List<Product> findByCategoryIdId(Integer categoryId);
+    List<Product> findByCategoryIdIdAndNameContaining(Integer categoryId, String keyword);
 }
