@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1779954917385" clover="3.2.0">
+  <project timestamp="1779954917385" name="All files">
+    <metrics statements="117" coveredstatements="52" conditionals="100" coveredconditionals="25" methods="21" coveredmethods="7" elements="238" coveredelements="84" complexity="0" loc="117" ncloc="117" packages="11" files="55" classes="55"/>
+    <package name="images.carbonated">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="22.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/carbonated/22.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="23.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/carbonated/23.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="24.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/carbonated/24.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="25.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/carbonated/25.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="26.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/carbonated/26.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="27.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/carbonated/27.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="images.coffe">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="19.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/coffe/19.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="20.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/coffe/20.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="21.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/coffe/21.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="images.energy">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="43.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/energy/43.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="44.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/energy/44.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="45.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/energy/45.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="images.fruits">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="28.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/fruits/28.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="29.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/fruits/29.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="30.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/fruits/30.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="31.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/fruits/31.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="32.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/fruits/32.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="33.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/fruits/33.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="images.health">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="40.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/health/40.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="41.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/health/41.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="42.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/health/42.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="images.milky">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="46.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/milky/46.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="47.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/milky/47.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="48.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/milky/48.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="49.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/milky/49.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="50.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/milky/50.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="images.others">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="51.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/others/51.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="52.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/others/52.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="53.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/others/53.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="images.sports">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="34.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/sports/34.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="35.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/sports/35.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="36.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/sports/36.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="37.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/sports/37.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="38.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/sports/38.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="39.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/sports/39.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="images.tea">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="10.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/10.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="11.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/11.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="12.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/12.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="13.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/13.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="14.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/14.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="15.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/15.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="16.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/16.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="17.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/17.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="18.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/18.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="9.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/tea/9.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="images.water">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="1.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/water/1.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="2.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/water/2.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="3.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/water/3.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="4.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/water/4.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="5.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/water/5.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="6.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/water/6.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="7.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/water/7.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="8.png" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/images/water/8.png">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="jsx">
+      <metrics statements="117" coveredstatements="52" conditionals="100" coveredconditionals="25" methods="21" coveredmethods="7"/>
+      <file name="Product_details.jsx" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/jsx/Product_details.jsx">
+        <metrics statements="117" coveredstatements="52" conditionals="100" coveredconditionals="25" methods="21" coveredmethods="7"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="53" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="28" count="3" type="stmt"/>
+        <line num="29" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="30" count="3" type="stmt"/>
+        <line num="31" count="3" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="41" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="3" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="50" count="3" type="stmt"/>
+        <line num="51" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="52" count="2" type="cond" truecount="1" falsecount="2"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="62" count="3" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="76" count="3" type="cond" truecount="1" falsecount="2"/>
+        <line num="80" count="3" type="stmt"/>
+        <line num="81" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="84" count="3" type="cond" truecount="3" falsecount="0"/>
+        <line num="88" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="92" count="3" type="cond" truecount="2" falsecount="2"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="96" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="100" count="3" type="stmt"/>
+        <line num="102" count="3" type="stmt"/>
+        <line num="103" count="159" type="stmt"/>
+        <line num="104" count="159" type="stmt"/>
+        <line num="106" count="159" type="stmt"/>
+        <line num="112" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="113" count="3" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="120" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="124" count="3" type="stmt"/>
+        <line num="125" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="127" count="0" type="stmt"/>
+        <line num="128" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="134" count="3" type="stmt"/>
+        <line num="135" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="138" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="144" count="3" type="stmt"/>
+        <line num="145" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="147" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="153" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="156" count="3" type="stmt"/>
+        <line num="158" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="159" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="161" count="0" type="stmt"/>
+        <line num="164" count="3" type="stmt"/>
+        <line num="166" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="170" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="175" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="176" count="0" type="stmt"/>
+        <line num="177" count="0" type="stmt"/>
+        <line num="179" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="180" count="0" type="stmt"/>
+        <line num="181" count="0" type="stmt"/>
+        <line num="183" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="184" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="187" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="188" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="189" count="0" type="stmt"/>
+        <line num="191" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="192" count="0" type="stmt"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="195" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="196" count="0" type="stmt"/>
+        <line num="197" count="0" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="202" count="0" type="stmt"/>
+        <line num="208" count="0" type="stmt"/>
+        <line num="216" count="0" type="stmt"/>
+        <line num="217" count="0" type="stmt"/>
+        <line num="219" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="220" count="0" type="stmt"/>
+        <line num="221" count="0" type="stmt"/>
+        <line num="224" count="0" type="stmt"/>
+        <line num="226" count="0" type="stmt"/>
+        <line num="227" count="0" type="stmt"/>
+        <line num="230" count="0" type="stmt"/>
+        <line num="232" count="0" type="stmt"/>
+        <line num="236" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="237" count="0" type="stmt"/>
+        <line num="249" count="3" type="cond" truecount="3" falsecount="1"/>
+        <line num="250" count="0" type="stmt"/>
+        <line num="260" count="0" type="stmt"/>
+        <line num="272" count="3" type="stmt"/>
+        <line num="308" count="0" type="stmt"/>
+        <line num="366" count="0" type="stmt"/>
+        <line num="386" count="0" type="stmt"/>
+      </file>
+      <file name="product_details.css" path="/Users/implmbp142/Desktop/inventory-system/frontend/src/jsx/product_details.css">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+  </project>
+</coverage>
