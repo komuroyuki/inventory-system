@@ -5,12 +5,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.inventory.Entity.Product;
+import java.util.List;
 
 import com.inventory.Service.FilterAndSearchService;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin(origins = "http://localhost:5173") // フロントエンドのURLに合わせてください
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequiredArgsConstructor
 public class FilterAndSearchController {
@@ -21,6 +23,19 @@ public class FilterAndSearchController {
     public ResponseEntity<?> getProducts(
             @RequestParam(value = "category_id", required = false) Integer categoryId,
             @RequestParam(value = "keyword", required = false) String keyword) {
-        return filterAndSearchService.filterAndSearch(categoryId, keyword);
+        
+        String trimmedKeyword = (keyword == null) ? "" : keyword.replace("　", " ").trim();
+
+        if (!trimmedKeyword.isEmpty()) {
+            if (trimmedKeyword.length() > 50) {
+                return ResponseEntity.badRequest().body("検索文字は50文字以内で入力してください。");
+            }
+            if (!trimmedKeyword.matches("^[ぁ-んァ-ヶ一-龠a-zA-Z0-9ー・\\s]+$")) {
+                return ResponseEntity.badRequest().body("使用できない文字が含まれています。");
+            }
+        }
+
+        List<Product> products = filterAndSearchService.filterAndSearch(categoryId, trimmedKeyword);
+        return ResponseEntity.ok(products);
     }
 }
