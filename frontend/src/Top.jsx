@@ -24,29 +24,32 @@ const Top = () => {
   const isDirty = false;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
-  // URLパラメータを取得
   const keyword = searchParams.get("keyword") ?? "";
   const categoryId = searchParams.get("category_id") ?? "";
 
-  // API用のURLを生成
   const apiUrl = useMemo(() => {
-    // カテゴリIDがある場合はカテゴリ検索API、キーワードのみなら検索API、どちらもなければ全件
-    if (categoryId && categoryId !== "0") {
-      return `http://localhost:8080/products/category?category_id=${encodeURIComponent(categoryId)}`;
-    } else if (keyword) {
-      return `http://localhost:8080/product/search?keyword=${encodeURIComponent(keyword)}`;
-    } else {
-      return "http://localhost:8080/products";
+    // カテゴリとキーワードの両方
+    if (categoryId && categoryId !== "0" && keyword && keyword.trim() !== "") {
+      return `http://localhost:8080/products/search-filter?category_id=${encodeURIComponent(categoryId)}&keyword=${encodeURIComponent(keyword)}`;
+    }
+    // カテゴリのみ
+    else if (categoryId && categoryId !== "0") {
+      return `http://localhost:8080/products/search-filter?category_id=${encodeURIComponent(categoryId)}`;
+    }
+    // 検索ワードのみ
+    else if (keyword && keyword.trim() !== "") {
+      return `http://localhost:8080/products/search-filter?keyword=${encodeURIComponent(keyword)}`;
+    }
+    // 全件取得
+    else {
+      return "http://localhost:8080/products/search-filter";
     }
   }, [keyword, categoryId]);
 
-  // ★ここで isLoading を確実に受け取ります
   const { data: product, error, isLoading } = useSWR(apiUrl, fetcher);
 
-  // Top.jsx 内
   const displayProducts = product ?? [];
-  console.log("バックエンドから届いたデータ:", displayProducts); // この1行を追加
+  console.log("バックエンドから届いたデータ:", displayProducts);
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
@@ -55,15 +58,14 @@ const Top = () => {
   return (
     <div className="product_container">
       <Header
-showSearch={true}
-showCategory={true}
-confirmLeave={() => {
-return true;
-}}
-/>
+        showSearch={true}
+        showCategory={true}
+        confirmLeave={() => {
+          return true;
+        }}
+      />
 
       <div className="container">
-        {/* isLoading 変数がここで使われます */}
         {isLoading ? (
           <div>読み込み中...</div>
         ) : error ? (
@@ -73,7 +75,6 @@ return true;
             <h2>商品一覧</h2>
             <div className="grid">
               {displayProducts.map((p) => {
-                // 【重要】APIごとにキー名が違うことを考慮して、正しい値を探すロジック
                 const displayId = p.id ?? p.productId ?? "---";
                 const displayName = p.productName ?? p.name ?? "名前なし";
                 const displayQuantity =
@@ -128,4 +129,3 @@ return true;
 };
 
 export default Top;
-
