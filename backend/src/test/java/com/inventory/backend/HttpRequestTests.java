@@ -5,21 +5,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.web.servlet.client.RestTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.inventory.DTO.ProductRequest;
 import com.inventory.Entity.Product;
 import com.inventory.Repository.ProductRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@AutoConfigureRestTestClient
+@AutoConfigureWebTestClient
 class HttpRequestTests {
 
     @Autowired
-    private RestTestClient restTestClient;
+    private WebTestClient webTestClient;
 
     @Autowired
     private ProductRepository productRepository;
@@ -28,9 +28,9 @@ class HttpRequestTests {
     void replaceProductShouldReplaceRecord() {
         ProductRequest productRequest = new ProductRequest("Test", 10, "", 2);
 
-        restTestClient.put()
+        webTestClient.put()
                 .uri("/products/1")
-                .body(productRequest)
+                .bodyValue(productRequest)
                 .exchange()
                 .expectStatus().isOk();
 
@@ -46,9 +46,9 @@ class HttpRequestTests {
     void replaceProductShouldReturnErrorIfIdNotExist() {
         ProductRequest productRequest = new ProductRequest("Error", 100, "error", 3);
 
-        restTestClient.put()
+        webTestClient.put()
                 .uri("/products/1000")
-                .body(productRequest)
+                .bodyValue(productRequest)
                 .exchange()
                 .expectStatus().isNotFound();
 
@@ -61,9 +61,9 @@ class HttpRequestTests {
     void replaceProductShouldReturnErrorIfCategoryIdNotExist() {
         ProductRequest productRequest = new ProductRequest("Error", 100, "error", 100);
 
-        restTestClient.put()
+        webTestClient.put()
                 .uri("/products/1")
-                .body(productRequest)
+                .bodyValue(productRequest)
                 .exchange()
                 .expectStatus().isBadRequest();
 
@@ -79,9 +79,9 @@ class HttpRequestTests {
     void replaceProductShouldReturnErrorIfNameIsBlank() {
         ProductRequest productRequest = new ProductRequest("", 100, "error", 3);
 
-        restTestClient.put()
+        webTestClient.put()
                 .uri("/products/1")
-                .body(productRequest)
+                .bodyValue(productRequest)
                 .exchange()
                 .expectStatus().isBadRequest();
 
@@ -97,9 +97,9 @@ class HttpRequestTests {
     void replaceProductShouldReturnErrorIfQuantityIsNegative() {
         ProductRequest productRequest = new ProductRequest("Error", -1, "error", 3);
 
-        restTestClient.put()
+        webTestClient.put()
                 .uri("/products/1")
-                .body(productRequest)
+                .bodyValue(productRequest)
                 .exchange()
                 .expectStatus().isBadRequest();
 
@@ -115,9 +115,9 @@ class HttpRequestTests {
     void replaceProductShouldReturnErrorIfCategoryIdIsNull() {
         ProductRequest productRequest = new ProductRequest("Error", 100, "error", null);
 
-        restTestClient.put()
+        webTestClient.put()
                 .uri("/products/1")
-                .body(productRequest)
+                .bodyValue(productRequest)
                 .exchange()
                 .expectStatus().isBadRequest();
 
