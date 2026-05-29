@@ -161,7 +161,7 @@ const Product_details = () => {
         navigate(`/product/${nextProductId}`);
     };
 
-    const handleRegister = async () => {
+    const handleRegister = async () => { //エラー処理
 
         if (isSubmitting) return;
 
@@ -169,19 +169,21 @@ const Product_details = () => {
 
         if ((inflow !== '' && !Regex.test(inflow)) || 
         (outflow !== '' && !Regex.test(outflow))) {
-            alert('半角数字・整数で入力してください');
+            alert('半角数字・整数・0以上の値で入力してください');
             return;}
 
-        if(inflow.includes('.') || outflow.includes('.')){
-            alert('整数で入力してください');
-            return;}
+
+if ((inflow !== '' && (!Regex.test(inflow) || inflow.includes('.'))) ||
+(outflow !== '' && (!Regex.test(outflow) || outflow.includes('.')))) {
+    alert('半角数字・整数・0以上の値で入力してください');
+    return;}
 
         if(Number(inflow) >= 9999 || Number(outflow) >= 9999){
             alert('最大桁数を超えています');
             return;}
 
         if(Number(inflow) < 0 || Number(outflow) < 0){
-            alert('0以上の数値を入力してください');
+            alert('半角数字・整数・0以上の値で入力してください');
             return;}
 
         const inf = Number(inflow) || 0;
@@ -360,11 +362,9 @@ if (isLoading) {
 
                                         <div className="combined-input-box">
                                             <input
-                                                type="number"
+                                                type="text"
                                                 value={inflow}
-                                                onChange={(e) =>
-                                                    setInflow(e.target.value)
-                                                }
+                                                onChange={(e) => setInflow(e.target.value)}
                                                 className="combined-input no-spin"
                                                 placeholder="0"
                                             />
@@ -380,11 +380,9 @@ if (isLoading) {
 
                                         <div className="combined-input-box">
                                             <input
-                                                type="number"
+                                                type="text"
                                                 value={outflow}
-                                                onChange={(e) =>
-                                                    setOutflow(e.target.value)
-                                                }
+                                                onChange={(e) => setOutflow(e.target.value)}
                                                 className="combined-input no-spin"
                                                 placeholder="0"
                                             />
