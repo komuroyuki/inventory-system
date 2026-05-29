@@ -4,6 +4,21 @@ import "./Top.css";
 import Header from "./Header/Header.jsx";
 import React, { useMemo } from "react";
 
+export const getApiUrl = (categoryId, keyword) => {
+  const cat = categoryId ?? "";
+  const key = keyword ?? "";
+
+  if (cat && cat !== "0" && key && key.trim() !== "") {
+    return `http://localhost:8080/products/search-filter?category_id=${encodeURIComponent(cat)}&keyword=${encodeURIComponent(key)}`;
+  } else if (cat && cat !== "0") {
+    return `http://localhost:8080/products/search-filter?category_id=${encodeURIComponent(cat)}`;
+  } else if (key && key.trim() !== "") {
+    return `http://localhost:8080/products/search-filter?keyword=${encodeURIComponent(key)}`;
+  } else {
+    return "http://localhost:8080/products/search-filter";
+  }
+};
+
 const fetcher = async (url) => {
   try {
     const response = await fetch(url);
@@ -27,24 +42,7 @@ const Top = () => {
   const keyword = searchParams.get("keyword") ?? "";
   const categoryId = searchParams.get("category_id") ?? "";
 
-  const apiUrl = useMemo(() => {
-    // カテゴリとキーワードの両方
-    if (categoryId && categoryId !== "0" && keyword && keyword.trim() !== "") {
-      return `http://localhost:8080/products/search-filter?category_id=${encodeURIComponent(categoryId)}&keyword=${encodeURIComponent(keyword)}`;
-    }
-    // カテゴリのみ
-    else if (categoryId && categoryId !== "0") {
-      return `http://localhost:8080/products/search-filter?category_id=${encodeURIComponent(categoryId)}`;
-    }
-    // 検索ワードのみ
-    else if (keyword && keyword.trim() !== "") {
-      return `http://localhost:8080/products/search-filter?keyword=${encodeURIComponent(keyword)}`;
-    }
-    // 全件取得
-    else {
-      return "http://localhost:8080/products/search-filter";
-    }
-  }, [keyword, categoryId]);
+  const apiUrl = useMemo(() => getApiUrl(categoryId, keyword), [categoryId, keyword]);
 
   const { data: product, error, isLoading } = useSWR(apiUrl, fetcher);
 
