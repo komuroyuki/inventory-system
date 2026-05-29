@@ -199,6 +199,17 @@ if ((inflow !== '' && (!Regex.test(inflow) || inflow.includes('.'))) ||
             return;
         }
 
+        const confirmed = window.confirm(
+            `以下の内容で登録しますか？
+            商品名: ${productName}
+            入庫数: ${inf}
+            出庫数: ${outf}
+            更新後在庫数: ${newQuantity}`
+        );
+        
+        if (!confirmed) { //登録キャンセルコード
+            return;}
+
     try{
 
     const updatedProductPayload = {
@@ -224,6 +235,8 @@ if ((inflow !== '' && (!Regex.test(inflow) || inflow.includes('.'))) ||
         }
 
         await mutate(); 
+
+        alert('登録が完了しました');
 
         setInflow('');
         setOutflow('');

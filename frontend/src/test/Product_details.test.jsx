@@ -160,4 +160,53 @@ describe('test product details ボタン操作',() => {
     expect(nextButton).toBeDisabled();
 });
 });
+
+    it('データ取得中のローディング表示がされること', () => {
+        // このテストだけ一時的にisLoadingをtrueにする
+        vi.spyOn(useSWR, 'default').mockReturnValue({
+            data: null,
+            error: null,
+            isLoading: true,
+            mutate: vi.fn(),
+        });
+        render(<Product_details />);
+        expect(screen.getByText('商品データを読み込み中...')).toBeInTheDocument();
+    });
+
+    it('商品データが存在しない（エラー）のときの表示がされること', () => {
+        // このテストだけ一時的にerrorを発生させる
+        vi.spyOn(useSWR, 'default').mockReturnValue({
+            data: null,
+            error: new Error('API error'),
+            isLoading: false,
+            mutate: vi.fn(),
+        });
+        render(<Product_details />);
+        expect(screen.getByText('対象の商品データがありません')).toBeInTheDocument();
+    });
+
+    it('サーバーへの登録（PUT）が失敗したときにエラーログが出ること', async () => {
+        render(<Product_details />);
+        const user = userEvent.setup();
+
+        // fetchが「失敗（ok: false）」を返すようにこのテストだけ上書き
+        global.fetch = vi.fn().mockResolvedValue({
+            ok: false,
+            status: 500,
+        });
+        
+        // console.errorを見張る
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        const inflowWrapper = screen.getByText('入庫数').closest('.inflow-field');
+        const inputElement = within(inflowWrapper).getByPlaceholderText('0');
+        const buttonElement = screen.getByRole('button', { name: '登録' });
+
+        await user.type(inputElement, '5');
+        await user.click(buttonElement);
+
+        // 本番コードの「console.error('PUT失敗')」が動いたか確認
+        expect(consoleSpy).toHaveBeenCalledWith('PUT失敗');
+        consoleSpy.mockRestore();
+    });
 });
