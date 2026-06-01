@@ -64,7 +64,7 @@ public class DetailsServiceTest {
         // ステータスコードがHttpStatus.NOT_FOUNDであることをアサート
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         // レスポンスボディが期待通りのエラーメッセージであることをアサート
-        assertEquals("IDが存在しません。\n", response.getBody());
+        assertEquals("IDが存在しません。", response.getBody());
         // productRepository.findById()が一度だけ指定したIDで呼ばれたことを検証
         verify(productRepository, times(1)).findById(101);
         // detailsRepositoryが一切呼び出されなかったことを検証

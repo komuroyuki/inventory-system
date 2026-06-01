@@ -2,12 +2,12 @@ package com.inventory.backend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.inventory.DTO.ProductRequest;
@@ -15,7 +15,6 @@ import com.inventory.Entity.Product;
 import com.inventory.Repository.ProductRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebTestClient
 class HttpRequestTests {
 
     @Autowired
@@ -25,107 +24,139 @@ class HttpRequestTests {
     private ProductRepository productRepository;
 
     @Test
-    void replaceProductShouldReplaceRecord() {
-        ProductRequest productRequest = new ProductRequest("Test", 10, "", 2);
+    @DisplayName("商品更新成功")
+    void shouldReplaceProduct() {
+
+        ProductRequest request =
+                new ProductRequest("Test", 10, "", 2);
 
         webTestClient.put()
                 .uri("/products/1")
-                .bodyValue(productRequest)
+                .bodyValue(request)
                 .exchange()
                 .expectStatus().isOk();
 
-        Product product = productRepository.findById(1).orElseThrow();
+        Product updatedProduct =
+                productRepository.findById(1).orElseThrow();
 
-        assertThat(product.getName()).isEqualTo(productRequest.name());
-        assertThat(product.getQuantity()).isEqualTo(productRequest.quantity());
-        assertThat(product.getImage()).isEqualTo(productRequest.image());
-        assertThat(product.getCategoryId().getId()).isEqualTo(productRequest.categoryId());
+        assertThat(updatedProduct.getName())
+                .isEqualTo(request.name());
+
+        assertThat(updatedProduct.getQuantity())
+                .isEqualTo(request.quantity());
+
+        assertThat(updatedProduct.getImage())
+                .isEqualTo(request.image());
+
+        assertThat(updatedProduct.getCategoryId().getId())
+                .isEqualTo(request.categoryId());
     }
 
     @Test
-    void replaceProductShouldReturnErrorIfIdNotExist() {
-        ProductRequest productRequest = new ProductRequest("Error", 100, "error", 3);
+    @DisplayName("存在しない商品IDなら404")
+    void shouldReturnNotFoundWhenProductIdDoesNotExist() {
+
+        ProductRequest request =
+                new ProductRequest("Error", 100, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1000")
-                .bodyValue(productRequest)
+                .bodyValue(request)
                 .exchange()
                 .expectStatus().isNotFound();
 
-        Product product = productRepository.findById(1000).orElse(null);
+        Product product =
+                productRepository.findById(1000).orElse(null);
 
-        assertThat(product).isEqualTo(null);
+        assertThat(product).isNull();
     }
 
     @Test
-    void replaceProductShouldReturnErrorIfCategoryIdNotExist() {
-        ProductRequest productRequest = new ProductRequest("Error", 100, "error", 100);
+    @DisplayName("存在しないカテゴリIDなら400")
+    void shouldReturnBadRequestWhenCategoryIdDoesNotExist() {
+
+        ProductRequest request =
+                new ProductRequest("Error", 100, "error", 100);
 
         webTestClient.put()
                 .uri("/products/1")
-                .bodyValue(productRequest)
+                .bodyValue(request)
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product = productRepository.findById(1).orElseThrow();
+        Product product =
+                productRepository.findById(1).orElseThrow();
 
-        assertThat(product.getName()).isNotEqualTo(productRequest.name());
-        assertThat(product.getQuantity()).isNotEqualTo(productRequest.quantity());
-        assertThat(product.getImage()).isNotEqualTo(productRequest.image());
-        assertThat(product.getCategoryId().getId()).isNotEqualTo(productRequest.categoryId());
+        assertThat(product.getName())
+                .isNotEqualTo(request.name());
+
+        assertThat(product.getQuantity())
+                .isNotEqualTo(request.quantity());
+
+        assertThat(product.getImage())
+                .isNotEqualTo(request.image());
+
+        assertThat(product.getCategoryId().getId())
+                .isNotEqualTo(request.categoryId());
     }
 
     @Test
-    void replaceProductShouldReturnErrorIfNameIsBlank() {
-        ProductRequest productRequest = new ProductRequest("", 100, "error", 3);
+    @DisplayName("商品名が空文字なら400")
+    void shouldReturnBadRequestWhenNameIsBlank() {
+
+        ProductRequest request =
+                new ProductRequest("", 100, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1")
-                .bodyValue(productRequest)
+                .bodyValue(request)
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product = productRepository.findById(1).orElseThrow();
+        Product product =
+                productRepository.findById(1).orElseThrow();
 
-        assertThat(product.getName()).isNotEqualTo(productRequest.name());
-        assertThat(product.getQuantity()).isNotEqualTo(productRequest.quantity());
-        assertThat(product.getImage()).isNotEqualTo(productRequest.image());
-        assertThat(product.getCategoryId().getId()).isNotEqualTo(productRequest.categoryId());
+        assertThat(product.getName())
+                .isNotEqualTo(request.name());
     }
 
     @Test
-    void replaceProductShouldReturnErrorIfQuantityIsNegative() {
-        ProductRequest productRequest = new ProductRequest("Error", -1, "error", 3);
+    @DisplayName("在庫数が負数なら400")
+    void shouldReturnBadRequestWhenQuantityIsNegative() {
+
+        ProductRequest request =
+                new ProductRequest("Error", -1, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1")
-                .bodyValue(productRequest)
+                .bodyValue(request)
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product = productRepository.findById(1).orElseThrow();
+        Product product =
+                productRepository.findById(1).orElseThrow();
 
-        assertThat(product.getName()).isNotEqualTo(productRequest.name());
-        assertThat(product.getQuantity()).isNotEqualTo(productRequest.quantity());
-        assertThat(product.getImage()).isNotEqualTo(productRequest.image());
-        assertThat(product.getCategoryId().getId()).isNotEqualTo(productRequest.categoryId());
+        assertThat(product.getQuantity())
+                .isNotEqualTo(request.quantity());
     }
 
     @Test
-    void replaceProductShouldReturnErrorIfCategoryIdIsNull() {
-        ProductRequest productRequest = new ProductRequest("Error", 100, "error", null);
+    @DisplayName("カテゴリIDがnullなら400")
+    void shouldReturnBadRequestWhenCategoryIdIsNull() {
+
+        ProductRequest request =
+                new ProductRequest("Error", 100, "error", null);
 
         webTestClient.put()
                 .uri("/products/1")
-                .bodyValue(productRequest)
+                .bodyValue(request)
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product = productRepository.findById(1).orElseThrow();
+        Product product =
+                productRepository.findById(1).orElseThrow();
 
-        assertThat(product.getName()).isNotEqualTo(productRequest.name());
-        assertThat(product.getQuantity()).isNotEqualTo(productRequest.quantity());
-        assertThat(product.getImage()).isNotEqualTo(productRequest.image());
-        assertThat(product.getCategoryId().getId()).isNotEqualTo(productRequest.categoryId());
+        assertThat(product.getCategoryId().getId())
+                .isNotEqualTo(request.categoryId());
     }
 }
