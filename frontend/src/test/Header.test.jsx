@@ -1,170 +1,195 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import Header from '../Header/Header.jsx';
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, fireEvent, cleanup } from "@testing-library/react";
+import "@testing-library/jest-dom/vitest";
+import { Router } from "react-router-dom";
+import Header from "../Header/Header.jsx";
 
 const mockSetSearchParams = vi.fn();
+const mockNavigate = vi.fn();
 
-vi.mock('react-router-dom', async (importOriginal) => {
+const mockNavigator = {
+  createHref: vi.fn(),
+  go: vi.fn(),
+  push: vi.fn(),
+  replace: vi.fn(),
+};
+
+vi.mock("react-router-dom", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
-    useNavigate: vi.fn(),
+    useNavigate: () => mockNavigate,
     useSearchParams: () => [new URLSearchParams(), mockSetSearchParams],
   };
 });
 
-describe('Headerコンポーネントのテスト', () => {
-  const originalLocation = window.location;
-
+describe("Headerコンポーネントのテスト", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    
     global.alert = vi.fn();
-
-    delete window.location;
-    window.location = { href: '' };
   });
 
   afterEach(() => {
-    window.location = originalLocation;
+    cleanup();
+    document.body.innerHTML = "";
   });
 
-  describe('初期表示とpropsの制御', () => {
-    it('デフォルトで検索バーとカテゴリが表示されること', () => {
+  describe("初期表示とpropsの制御", () => {
+    it("デフォルトで検索バーとカテゴリが表示されること", () => {
       const { getByPlaceholderText, getByText } = render(
-        <BrowserRouter><Header /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header />
+        </Router>,
       );
-      expect(getByPlaceholderText('商品名を入力')).toBeDefined();
-      expect(getByText('すべて')).toBeDefined();
+      expect(getByPlaceholderText("商品名を入力")).toBeInTheDocument();
+      expect(getByText("すべて")).toBeInTheDocument();
     });
 
-    it('showSearchとshowCategoryがfalseの場合、非表示になること', () => {
+    it("showSearchとshowCategoryがfalseの場合、非表示になること", () => {
       const { queryByPlaceholderText, queryByText } = render(
-        <BrowserRouter><Header showSearch={false} showCategory={false} /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header showSearch={false} showCategory={false} />
+        </Router>,
       );
-      expect(queryByPlaceholderText('商品名を入力')).toBeNull();
-      expect(queryByText('すべて')).toBeNull();
+      expect(queryByPlaceholderText("商品名を入力")).not.toBeInTheDocument();
+      expect(queryByText("すべて")).not.toBeInTheDocument();
     });
   });
 
-  describe('検索機能（handleSearch, handleKeyDown）のテスト', () => {
-    it('入力したキーワードで検索が実行されること', () => {
+  describe("検索機能（handleSearch, handleKeyDown）のテスト", () => {
+    it("入力したキーワードで検索が実行されること", () => {
       const { getByPlaceholderText, getByAltText } = render(
-        <BrowserRouter><Header /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header />
+        </Router>,
       );
-      
-      const input = getByPlaceholderText('商品名を入力');
-      fireEvent.change(input, { target: { value: 'お茶' } });
-      
-      const searchButton = getByAltText('検索');
+
+      const input = getByPlaceholderText("商品名を入力");
+      fireEvent.change(input, { target: { value: "お茶" } });
+
+      const searchButton = getByAltText("検索");
       fireEvent.click(searchButton);
 
-      expect(mockSetSearchParams).toHaveBeenCalled();
-      const params = mockSetSearchParams.mock.calls[0][0];
-      expect(params.get('keyword')).toBe('お茶');
-      expect(params.get('category_id')).toBe('0');
+      const expectedParams = new URLSearchParams({
+        keyword: "お茶",
+        category_id: "0",
+      });
+      expect(mockSetSearchParams).toHaveBeenCalledWith(expectedParams);
     });
 
-    it('Enterキーで検索が実行されること', () => {
+    it("Enterキーで検索が実行されること", () => {
       const { getByPlaceholderText } = render(
-        <BrowserRouter><Header /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header />
+        </Router>,
       );
-      
-      const input = getByPlaceholderText('商品名を入力');
-      fireEvent.change(input, { target: { value: 'コーヒー' } });
-      fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+
+      const input = getByPlaceholderText("商品名を入力");
+      fireEvent.change(input, { target: { value: "コーヒー" } });
+      fireEvent.keyDown(input, { key: "Enter", code: "Enter" });
 
       expect(mockSetSearchParams).toHaveBeenCalled();
     });
 
-    it('IME入力中（変換中）はEnterキーを押しても検索されないこと', () => {
+    it("IME入力中（変換中）はEnterキーを押しても検索されないこと", () => {
       const { getByPlaceholderText } = render(
-        <BrowserRouter><Header /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header />
+        </Router>,
       );
-      
-      const input = getByPlaceholderText('商品名を入力');
-      fireEvent.change(input, { target: { value: 'みず' } });
-      
-      fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', keyCode: 229 });
+
+      const input = getByPlaceholderText("商品名を入力");
+      fireEvent.change(input, { target: { value: "みず" } });
+
+      fireEvent.keyDown(input, { key: "Enter", code: "Enter", keyCode: 229 });
       expect(mockSetSearchParams).not.toHaveBeenCalled();
 
-      fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', keyCode: 13 });
+      fireEvent.keyDown(input, { key: "Enter", code: "Enter", keyCode: 13 });
       expect(mockSetSearchParams).toHaveBeenCalled();
     });
 
-    it('50文字を超えるキーワードを入力した場合、アラートが出て検索が中断されること', () => {
+    it("50文字を超えるキーワードを入力した場合、アラートが出て検索が中断されること", () => {
       const { getByPlaceholderText, getByAltText } = render(
-        <BrowserRouter><Header /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header />
+        </Router>,
       );
-      
-      const input = getByPlaceholderText('商品名を入力');
-      fireEvent.change(input, { target: { value: 'a'.repeat(51) } });
-      
-      const searchButton = getByAltText('検索');
+
+      const input = getByPlaceholderText("商品名を入力");
+      fireEvent.change(input, { target: { value: "a".repeat(51) } });
+
+      const searchButton = getByAltText("検索");
       fireEvent.click(searchButton);
 
-      expect(global.alert).toHaveBeenCalledWith('50文字以内で入力してください');
+      expect(global.alert).toHaveBeenCalledWith("50文字以内で入力してください");
       expect(mockSetSearchParams).not.toHaveBeenCalled();
     });
   });
 
-  describe('カテゴリ選択機能（handleCategorySelect）のテスト', () => {
-    it('カテゴリを選択すると、即座に正しいIDに変換されて検索が実行されること', () => {
+  describe("カテゴリ選択機能（handleCategorySelect）のテスト", () => {
+    it("カテゴリを選択すると、即座に正しいIDに変換されて検索が実行されること", () => {
       const { getByText } = render(
-        <BrowserRouter><Header /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header />
+        </Router>,
       );
 
-      const currentCategory = getByText('すべて');
+      const currentCategory = getByText("すべて");
       fireEvent.click(currentCategory);
-      
-      const waterCategory = getByText('水');
+
+      const waterCategory = getByText("水");
       fireEvent.click(waterCategory);
 
-      expect(mockSetSearchParams).toHaveBeenCalled();
-      const params = mockSetSearchParams.mock.calls[0][0];
-      expect(params.get('category_id')).toBe('1');
+      const expectedParams = new URLSearchParams({
+        keyword: "",
+        category_id: "1",
+      });
+      expect(mockSetSearchParams).toHaveBeenCalledWith(expectedParams);
     });
   });
 
-  describe('ロゴクリックによる遷移（handleLogoClick）のテスト', () => {
-    it('confirmLeaveが設定されていない場合、無条件でトップへ遷移すること', () => {
+  describe("ロゴクリックによる遷移（handleLogoClick）のテスト", () => {
+    it("confirmLeaveが設定されていない場合、無条件でトップへ遷移すること", () => {
       const { getByAltText } = render(
-        <BrowserRouter><Header /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header />
+        </Router>,
       );
-      
-      const logo = getByAltText('マイサイトのロゴ');
+
+      const logo = getByAltText("マイサイトのロゴ");
       fireEvent.click(logo);
 
-      expect(window.location.href).toBe('/');
+      expect(mockNavigate).toHaveBeenCalledWith("/");
     });
 
-    it('confirmLeaveがtrueを返した場合、トップへ遷移すること', () => {
+    it("confirmLeaveがtrueを返した場合、トップへ遷移すること", () => {
       const mockConfirmLeave = vi.fn(() => true);
       const { getByAltText } = render(
-        <BrowserRouter><Header confirmLeave={mockConfirmLeave} /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header confirmLeave={mockConfirmLeave} />
+        </Router>,
       );
-      
-      const logo = getByAltText('マイサイトのロゴ');
+
+      const logo = getByAltText("マイサイトのロゴ");
       fireEvent.click(logo);
 
       expect(mockConfirmLeave).toHaveBeenCalled();
-      expect(window.location.href).toBe('/');
+      expect(mockNavigate).toHaveBeenCalledWith("/");
     });
 
-    it('confirmLeaveがfalseを返した場合、遷移がキャンセルされること', () => {
+    it("confirmLeaveがfalseを返した場合、遷移がキャンセルされること", () => {
       const mockConfirmLeave = vi.fn(() => false);
       const { getByAltText } = render(
-        <BrowserRouter><Header confirmLeave={mockConfirmLeave} /></BrowserRouter>
+        <Router location="/" navigator={mockNavigator}>
+          <Header confirmLeave={mockConfirmLeave} />
+        </Router>,
       );
-      
-      window.location.href = 'current-page';
 
-      const logo = getByAltText('マイサイトのロゴ');
+      const logo = getByAltText("マイサイトのロゴ");
       fireEvent.click(logo);
 
       expect(mockConfirmLeave).toHaveBeenCalled();
-      expect(window.location.href).toBe('current-page');
+      expect(mockNavigate).not.toHaveBeenCalled();
     });
   });
 });

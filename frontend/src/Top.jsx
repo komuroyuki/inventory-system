@@ -42,7 +42,10 @@ const Top = () => {
   const keyword = searchParams.get("keyword") ?? "";
   const categoryId = searchParams.get("category_id") ?? "";
 
-  const apiUrl = useMemo(() => getApiUrl(categoryId, keyword), [categoryId, keyword]);
+  const apiUrl = useMemo(
+    () => getApiUrl(categoryId, keyword),
+    [categoryId, keyword],
+  );
 
   const { data: product, error, isLoading } = useSWR(apiUrl, fetcher);
 

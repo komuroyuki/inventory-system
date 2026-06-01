@@ -76,7 +76,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
     if (confirmLeave && !confirmLeave()) {
       return;
     }
-    window.location.href = "/";
+    navigate("/");
   };
 
   return (
