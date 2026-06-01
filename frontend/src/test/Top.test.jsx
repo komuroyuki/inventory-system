@@ -1,40 +1,46 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
-import Top from '../Top.jsx';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, fireEvent } from '@testing-library/react';
+import Top,{ fetcher, getApiUrl } from '../Top.jsx';
+import { BrowserRouter } from 'react-router-dom';
+import useSWR from 'swr';
+import * as router from 'react-router-dom'; 
 
 vi.mock("../Header/Header.jsx", () => {
   return {
-    default: () => <div>Header</div>,
+    default: (props) => {
+      if (props.confirmLeave) {
+        props.confirmLeave();
+      }
+      return <div>Header</div>;
+    },
+  };
+});
+
+vi.mock('footer', () => {
+  return {
+    default: () => <div>footer</div>,
   };
 });
 
 vi.mock('swr', () => ({
-  default: () => ({
+  default: vi.fn(() => ({
     data: [],
     error: null,
     isLoading: false,
-  }),
+  })),
 }));
 
-vi.mock('react-router-dom', () => ({
-  useNavigate: () => vi.fn(),
-  useSearchParams: () => [new URLSearchParams()],
-}));
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+    useSearchParams: vi.fn(() => [new URLSearchParams()]),
+  };
+});
 
-const getApiUrl = (categoryId, keyword) => {
-  const cat = categoryId ?? "";
-  const key = keyword ?? "";
+global.fetch = vi.fn();
 
-  if (cat && cat !== "0" && key && key.trim() !== "") {
-    return `http://localhost:8080/products/search-filter?category_id=${encodeURIComponent(cat)}&keyword=${encodeURIComponent(key)}`;
-  } else if (cat && cat !== "0") {
-    return `http://localhost:8080/products/search-filter?category_id=${encodeURIComponent(cat)}`;
-  } else if (key && key.trim() !== "") {
-    return `http://localhost:8080/products/search-filter?keyword=${encodeURIComponent(key)}`;
-  } else {
-    return "http://localhost:8080/products/search-filter";
-  }
-};
 
 describe('TopコンポーネントのURL生成ロジック', () => {
   it('カテゴリとキーワードの両方が指定されている場合、正しいURLを生成する', () => {
@@ -68,9 +74,75 @@ describe('TopコンポーネントのURL生成ロジック', () => {
   });
 });
 
+describe('Topコンポーネントの操作', () => {
+  it('商品リストがレンダリングされ、クリックで画面遷移関数が呼ばれること', () => {
+    const mockNavigate = vi.fn();
+    router.useNavigate.mockReturnValue(mockNavigate);
+
+    const mockProducts = [
+      { id: '101', productName: 'テスト水', productQuantity: 50 },
+      { productId: '102', name: 'テストお茶', quantity: 20 },
+      {} 
+    ];
+    useSWR.mockReturnValue({ data: mockProducts, error: undefined, isLoading: false });
+
+    const { getByText } = render(<BrowserRouter><Top /></BrowserRouter>);
+
+    const productButton = getByText('テスト水');
+    fireEvent.click(productButton);
+
+    expect(mockNavigate).toHaveBeenCalledWith('/product/101');
+  });
+});
+
+describe('fetcher', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ key: 'value' }),
+    });
+  });
+
+  it('通信が成功した場合、JSONデータが返却されること', async () => {
+    const url = 'http://localhost:8080/products/search-filter';
+    const res = await fetcher(url);
+    
+    expect(global.fetch).toHaveBeenCalledWith(url);
+    expect(res).toEqual({ key: 'value' });
+  });
+
+  it('HTTPエラー(404など)の場合、例外がスローされること', async () => {
+    const url = 'http://localhost:8080/products/search-filter?keyword=test';
+    
+    global.fetch.mockResolvedValue({
+      ok: false,
+      status: 404,
+    });
+
+    await expect(fetcher(url)).rejects.toThrow('HTTP error! status: 404');
+  });
+
+  it('ネットワークエラーが発生した場合、カスタムエラーがスローされること', async () => {
+    const url = 'http://localhost:8080/products/search-filter?category_id=1';
+
+    global.fetch.mockRejectedValue(new TypeError('Failed to fetch'));
+
+    await expect(fetcher(url)).rejects.toThrow('ネットワーク接続に失敗しました');
+  });
+});
+
 describe('Topコンポーネントの表示', () => {
   it('Headerが正しく表示されること', () => {
-    const { getByText } = render(<Top />);
+    const { getByText } = render(<BrowserRouter><Top /></BrowserRouter>);
     expect(getByText('Header')).toBeDefined();
+  });
+});
+
+describe('Topコンポーネントの表示', () => {
+  it('footerが正しく表示されること', () => {
+    const { getByText } = render(<BrowserRouter><Top /></BrowserRouter>);
+    expect(getByText('© 2026 TeamB All rights reserved.')).toBeDefined();
   });
 });

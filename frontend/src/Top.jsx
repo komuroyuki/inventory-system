@@ -19,7 +19,7 @@ export const getApiUrl = (categoryId, keyword) => {
   }
 };
 
-const fetcher = async (url) => {
+export const fetcher = async (url) => {
   try {
     const response = await fetch(url);
     if (!response.ok) {
