@@ -380,6 +380,7 @@ if (isLoading) {
                                                 onChange={(e) => setInflow(e.target.value)}
                                                 className="combined-input no-spin"
                                                 placeholder="0"
+                                                aria-label="入庫数"
                                             />
                                         </div>
                                     </div>
@@ -398,6 +399,7 @@ if (isLoading) {
                                                 onChange={(e) => setOutflow(e.target.value)}
                                                 className="combined-input no-spin"
                                                 placeholder="0"
+                                                aria-label="出庫数"
                                             />
                                         </div>
                                     </div>
