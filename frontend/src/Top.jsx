@@ -121,7 +121,7 @@ const Top = () => {
           </>
         )}
 
-        <div className="footer">
+        <div className="footer" data-testid="footer-area">
           <p>© 2026 TeamB All rights reserved.</p>
         </div>
       </div>

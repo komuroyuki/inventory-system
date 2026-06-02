@@ -12,12 +12,6 @@ vi.mock("../Header/Header.jsx", () => {
   };
 });
 
-vi.mock("footer", () => {
-  return {
-    default: () => <div>footer</div>,
-  };
-});
-
 vi.mock("swr", () => ({
   default: vi.fn(() => ({
     data: [],
@@ -151,10 +145,8 @@ describe("Topコンポーネントの表示", () => {
 
 describe("Topコンポーネントの表示", () => {
   it("footerが正しく表示されること", () => {
-    // Routerラッパーを削除
-    const { container } = render(<Top />);
-
-    const footerElement = container.querySelector(".footer");
-    expect(footerElement).toBeInTheDocument();
+  
+    const { getByTestId } = render(<Top/>);
+    expect(getByTestId('footer-area')).toBeInTheDocument();
   });
 });
