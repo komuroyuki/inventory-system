@@ -23,9 +23,6 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
 
   const [, setSearchParams] = useSearchParams();
 
-  const [isComposing, setIsComposing] = useState(false);
-
-  // IDのマッピング表
   const categoryMapping = {
     すべて: "0",
     水: "1",
@@ -54,7 +51,11 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && !isComposing) {
+    if (event.nativeEvent.isComposing || event.keyCode === 229) {
+      return;
+    }
+
+    if (event.key === "Enter") {
       handleSearch();
     }
   };
@@ -65,7 +66,6 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
 
     const params = new URLSearchParams();
     params.append("keyword", keyword);
-    // ★ここでラベル(label)をIDに変換して送信
     params.append("category_id", categoryMapping[label] || "0");
 
     setSearchParams(params);
@@ -76,7 +76,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
     if (confirmLeave && !confirmLeave()) {
       return;
     }
-    window.location.href = "/";
+    navigate("/");
   };
 
   return (
@@ -104,8 +104,6 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
                 onChange={(e) => setKeyword(e.target.value)}
                 className="header-keyword-input"
                 onKeyDown={handleKeyDown}
-                onCompositionStart={() => setIsComposing(true)}
-                onCompositionEnd={() => setIsComposing(false)}
               />
               <button
                 type="button"

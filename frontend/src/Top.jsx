@@ -19,7 +19,7 @@ export const getApiUrl = (categoryId, keyword) => {
   }
 };
 
-const fetcher = async (url) => {
+export const fetcher = async (url) => {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -42,7 +42,10 @@ const Top = () => {
   const keyword = searchParams.get("keyword") ?? "";
   const categoryId = searchParams.get("category_id") ?? "";
 
-  const apiUrl = useMemo(() => getApiUrl(categoryId, keyword), [categoryId, keyword]);
+  const apiUrl = useMemo(
+    () => getApiUrl(categoryId, keyword),
+    [categoryId, keyword],
+  );
 
   const { data: product, error, isLoading } = useSWR(apiUrl, fetcher);
 
@@ -118,7 +121,7 @@ const Top = () => {
           </>
         )}
 
-        <div className="footer">
+        <div className="footer" data-testid="footer-area">
           <p>© 2026 TeamB All rights reserved.</p>
         </div>
       </div>
