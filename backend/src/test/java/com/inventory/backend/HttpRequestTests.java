@@ -27,8 +27,7 @@ class HttpRequestTests {
     @DisplayName("商品更新成功")
     void shouldReplaceProduct() {
 
-        ProductRequest request =
-                new ProductRequest("Test", 10, "", 2);
+        ProductRequest request = new ProductRequest("Test", 10, "", 2);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -36,8 +35,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isOk();
 
-        Product updatedProduct =
-                productRepository.findById(1).orElseThrow();
+        Product updatedProduct = productRepository.findById(1).orElseThrow();
 
         assertThat(updatedProduct.getName())
                 .isEqualTo(request.name());
@@ -56,8 +54,7 @@ class HttpRequestTests {
     @DisplayName("存在しない商品IDなら404")
     void shouldReturnNotFoundWhenProductIdDoesNotExist() {
 
-        ProductRequest request =
-                new ProductRequest("Error", 100, "error", 3);
+        ProductRequest request = new ProductRequest("Error", 100, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1000")
@@ -65,8 +62,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isNotFound();
 
-        Product product =
-                productRepository.findById(1000).orElse(null);
+        Product product = productRepository.findById(1000).orElse(null);
 
         assertThat(product).isNull();
     }
@@ -75,8 +71,7 @@ class HttpRequestTests {
     @DisplayName("存在しないカテゴリIDなら400")
     void shouldReturnBadRequestWhenCategoryIdDoesNotExist() {
 
-        ProductRequest request =
-                new ProductRequest("Error", 100, "error", 100);
+        ProductRequest request = new ProductRequest("Error", 100, "error", 100);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -84,8 +79,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product =
-                productRepository.findById(1).orElseThrow();
+        Product product = productRepository.findById(1).orElseThrow();
 
         assertThat(product.getName())
                 .isNotEqualTo(request.name());
@@ -104,8 +98,7 @@ class HttpRequestTests {
     @DisplayName("商品名が空文字なら400")
     void shouldReturnBadRequestWhenNameIsBlank() {
 
-        ProductRequest request =
-                new ProductRequest("", 100, "error", 3);
+        ProductRequest request = new ProductRequest("", 100, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -113,8 +106,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product =
-                productRepository.findById(1).orElseThrow();
+        Product product = productRepository.findById(1).orElseThrow();
 
         assertThat(product.getName())
                 .isNotEqualTo(request.name());
@@ -124,8 +116,7 @@ class HttpRequestTests {
     @DisplayName("在庫数が負数なら400")
     void shouldReturnBadRequestWhenQuantityIsNegative() {
 
-        ProductRequest request =
-                new ProductRequest("Error", -1, "error", 3);
+        ProductRequest request = new ProductRequest("Error", -1, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -133,8 +124,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product =
-                productRepository.findById(1).orElseThrow();
+        Product product = productRepository.findById(1).orElseThrow();
 
         assertThat(product.getQuantity())
                 .isNotEqualTo(request.quantity());
@@ -144,8 +134,7 @@ class HttpRequestTests {
     @DisplayName("カテゴリIDがnullなら400")
     void shouldReturnBadRequestWhenCategoryIdIsNull() {
 
-        ProductRequest request =
-                new ProductRequest("Error", 100, "error", null);
+        ProductRequest request = new ProductRequest("Error", 100, "error", null);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -153,8 +142,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product =
-                productRepository.findById(1).orElseThrow();
+        Product product = productRepository.findById(1).orElseThrow();
 
         assertThat(product.getCategoryId().getId())
                 .isNotEqualTo(request.categoryId());
