@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
 import Top, { fetcher, getApiUrl } from "../Top.jsx";
 import { Router } from "react-router-dom";
 import useSWR from "swr";
@@ -137,16 +137,18 @@ describe("fetcher", () => {
 
 describe("Topコンポーネントの表示", () => {
   it("Headerが正しく表示されること", () => {
-    // Routerラッパーを削除し、getByTestId で取得
-    const { getByTestId } = render(<Top />);
-    expect(getByTestId("mock-header")).toBeInTheDocument();
+    render(<Top/>);
+
+    const header = screen.getByTestId("mock-header");
+    expect(header).toBeInTheDocument();
   });
 });
 
 describe("Topコンポーネントの表示", () => {
   it("footerが正しく表示されること", () => {
-  
-    const { getByTestId } = render(<Top/>);
-    expect(getByTestId('footer-area')).toBeInTheDocument();
+    render(<Top/>);
+
+    const footer = screen.getByTestId("footer-area");
+    expect(footer).toBeInTheDocument();
   });
 });
