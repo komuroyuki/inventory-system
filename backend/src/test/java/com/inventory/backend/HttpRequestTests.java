@@ -2,12 +2,18 @@ package com.inventory.backend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.inventory.DTO.ProductRequest;
@@ -15,7 +21,12 @@ import com.inventory.Entity.Product;
 import com.inventory.Repository.ProductRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
+@Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 class HttpRequestTests {
+
+    @LocalServerPort
+    private int port;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -146,5 +157,87 @@ class HttpRequestTests {
 
         assertThat(product.getCategoryId().getId())
                 .isNotEqualTo(request.categoryId());
+    }
+
+    @Test
+    void postProductShouldPostProduct() {
+
+        ProductRequest request = new ProductRequest("Post", 10, "", 1);
+
+        EntityExchangeResult<Product> result = webTestClient.post()
+                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Product.class)
+                .returnResult();
+
+        int id = Objects.requireNonNull(result.getResponseBody()).getId();
+        Product updatedProduct = productRepository.findById(id).orElseThrow();
+
+        assertThat(updatedProduct.getName()).isEqualTo(request.name());
+        assertThat(updatedProduct.getQuantity()).isEqualTo(request.quantity());
+        assertThat(updatedProduct.getImage()).isEqualTo(request.image());
+        assertThat(updatedProduct.getCategoryId().getId()).isEqualTo(request.categoryId());
+    }
+
+    @Test
+    void shouldReturnBadRequestIfCategoryIdDoesNotExist() {
+
+        long count = productRepository.count();
+        ProductRequest request = new ProductRequest("Error", 100, "error", 100);
+
+        webTestClient.post()
+                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        assertThat(productRepository.count()).isEqualTo(count);
+    }
+
+    @Test
+    void postProductShouldReturnBadRequestIfNameIsBlank() {
+
+        long count = productRepository.count();
+        ProductRequest request = new ProductRequest("", 100, "error", 3);
+
+        webTestClient.post()
+                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        assertThat(productRepository.count()).isEqualTo(count);
+    }
+
+    @Test
+    void postProductShouldReturnBadRequestIfQuantityIsNegative() {
+
+        long count = productRepository.count();
+        ProductRequest request = new ProductRequest("Error", -1, "error", 3);
+
+        webTestClient.post()
+                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        assertThat(productRepository.count()).isEqualTo(count);
+    }
+
+    @Test
+    void postProductShouldReturnBadRequestIfCategoryIdIsNull() {
+
+        long count = productRepository.count();
+        ProductRequest request = new ProductRequest("Error", 100, "error", null);
+
+        webTestClient.post()
+                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        assertThat(productRepository.count()).isEqualTo(count);
     }
 }
