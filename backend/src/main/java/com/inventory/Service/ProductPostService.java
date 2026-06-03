@@ -1,13 +1,14 @@
 package com.inventory.Service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.inventory.DTO.ProductRequest;
+import com.inventory.DTO.ProductResponse;
 import com.inventory.Entity.Category;
 import com.inventory.Entity.Product;
 import com.inventory.Repository.CategoryRepository;
 import com.inventory.Repository.ProductRepository;
+import com.inventory.exception.BadRequestException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,12 +19,12 @@ public class ProductPostService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public ResponseEntity<?> postProduct(ProductRequest request) {
+    public ProductResponse postProduct(ProductRequest request) {
 
         Category category = categoryRepository.findById(request.categoryId()).orElse(null);
 
         if (category == null) {
-            return ResponseEntity.badRequest().body("カテゴリIDが存在しません。" + System.lineSeparator());
+            throw new BadRequestException("カテゴリIDが存在しません。");
         }
 
         Product product = new Product();
@@ -34,7 +35,12 @@ public class ProductPostService {
         product.setCategoryId(category);
 
         Product newProduct = productRepository.save(product);
+        ProductResponse response = new ProductResponse(
+                newProduct.getName(),
+                newProduct.getQuantity(),
+                newProduct.getImage(),
+                newProduct.getCategoryId().getId());
 
-        return ResponseEntity.ok(newProduct);
+        return response;
     }
 }
