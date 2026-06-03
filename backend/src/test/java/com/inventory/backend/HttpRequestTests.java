@@ -165,7 +165,7 @@ class HttpRequestTests {
         ProductRequest request = new ProductRequest("Post", 10, "", 1);
 
         EntityExchangeResult<Product> result = webTestClient.post()
-                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .uri("/products")
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isOk()
@@ -188,7 +188,7 @@ class HttpRequestTests {
         ProductRequest request = new ProductRequest("Error", 100, "error", 100);
 
         webTestClient.post()
-                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .uri("/products")
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -203,7 +203,7 @@ class HttpRequestTests {
         ProductRequest request = new ProductRequest("", 100, "error", 3);
 
         webTestClient.post()
-                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .uri("/products")
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -218,7 +218,7 @@ class HttpRequestTests {
         ProductRequest request = new ProductRequest("Error", -1, "error", 3);
 
         webTestClient.post()
-                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .uri("/products")
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -233,7 +233,7 @@ class HttpRequestTests {
         ProductRequest request = new ProductRequest("Error", 100, "error", null);
 
         webTestClient.post()
-                .uri(Objects.requireNonNull("http://localhost:%d/products".formatted(port)))
+                .uri("/products")
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isBadRequest();
