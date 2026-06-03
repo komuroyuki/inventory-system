@@ -182,7 +182,7 @@ class HttpRequestTests {
     }
 
     @Test
-    void shouldReturnBadRequestIfCategoryIdDoesNotExist() {
+    void postProductShouldReturnBadRequestIfCategoryIdDoesNotExist() {
 
         long count = productRepository.count();
         ProductRequest request = new ProductRequest("Error", 100, "error", 100);
