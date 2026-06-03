@@ -1,5 +1,6 @@
 package com.inventory.Controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,6 @@ public class ProductPostController {
     @PostMapping("/products")
     public ResponseEntity<ProductResponse> postProduct(@RequestBody @Valid ProductRequest request) {
 
-        return ResponseEntity.ok(service.postProduct(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.postProduct(request));
     }
 }

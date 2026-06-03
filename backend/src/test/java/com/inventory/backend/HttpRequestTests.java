@@ -170,7 +170,7 @@ class HttpRequestTests {
                 .uri("/products")
                 .bodyValue(request)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isCreated();
 
         assertThat(productRepository.count()).isEqualTo(count + 1);
     }
