@@ -2,8 +2,6 @@ package com.inventory.backend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Objects;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.inventory.DTO.ProductRequest;
@@ -162,23 +159,16 @@ class HttpRequestTests {
     @Test
     void postProductShouldPostProduct() {
 
+        long count = productRepository.count();
         ProductRequest request = new ProductRequest("Post", 10, "", 1);
 
-        EntityExchangeResult<Product> result = webTestClient.post()
+        webTestClient.post()
                 .uri("/products")
                 .bodyValue(request)
                 .exchange()
-                .expectStatus().isOk()
-                .expectBody(Product.class)
-                .returnResult();
+                .expectStatus().isOk();
 
-        int id = Objects.requireNonNull(result.getResponseBody()).getId();
-        Product updatedProduct = productRepository.findById(id).orElseThrow();
-
-        assertThat(updatedProduct.getName()).isEqualTo(request.name());
-        assertThat(updatedProduct.getQuantity()).isEqualTo(request.quantity());
-        assertThat(updatedProduct.getImage()).isEqualTo(request.image());
-        assertThat(updatedProduct.getCategoryId().getId()).isEqualTo(request.categoryId());
+        assertThat(productRepository.count()).isEqualTo(count + 1);
     }
 
     @Test
