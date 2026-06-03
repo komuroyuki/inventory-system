@@ -1,7 +1,5 @@
 package com.inventory.Service;
 
-import java.util.Objects;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ public class ProductPostService {
 
     public ResponseEntity<?> postProduct(ProductRequest request) {
 
-        Category category = categoryRepository.findById(Objects.requireNonNull(request.categoryId())).orElse(null);
+        Category category = categoryRepository.findById(request.categoryId()).orElse(null);
 
         if (category == null) {
             return ResponseEntity.badRequest().body("カテゴリIDが存在しません。" + System.lineSeparator());
