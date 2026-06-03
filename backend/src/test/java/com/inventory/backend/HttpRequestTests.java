@@ -31,6 +31,10 @@ class HttpRequestTests {
     @Autowired
     private ProductRepository productRepository;
 
+    private ProductRequest createProductRequest(String name, Integer quantity, String image, Integer categoryId) {
+        return new ProductRequest(name, quantity, image, categoryId);
+    }
+
     @Test
     @DisplayName("商品更新成功")
     void shouldReplaceProduct() {
@@ -160,7 +164,7 @@ class HttpRequestTests {
     void postProductShouldPostProduct() {
 
         long count = productRepository.count();
-        ProductRequest request = new ProductRequest("Post", 10, "", 1);
+        ProductRequest request = createProductRequest("Post", 10, "", 1);
 
         webTestClient.post()
                 .uri("/products")
@@ -175,7 +179,7 @@ class HttpRequestTests {
     void postProductShouldReturnBadRequestIfCategoryIdDoesNotExist() {
 
         long count = productRepository.count();
-        ProductRequest request = new ProductRequest("Error", 100, "error", 100);
+        ProductRequest request = createProductRequest("Error", 100, "error", 100);
 
         webTestClient.post()
                 .uri("/products")
@@ -190,7 +194,7 @@ class HttpRequestTests {
     void postProductShouldReturnBadRequestIfNameIsBlank() {
 
         long count = productRepository.count();
-        ProductRequest request = new ProductRequest("", 100, "error", 3);
+        ProductRequest request = createProductRequest("", 100, "error", 3);
 
         webTestClient.post()
                 .uri("/products")
@@ -205,7 +209,7 @@ class HttpRequestTests {
     void postProductShouldReturnBadRequestIfQuantityIsNegative() {
 
         long count = productRepository.count();
-        ProductRequest request = new ProductRequest("Error", -1, "error", 3);
+        ProductRequest request = createProductRequest("Error", -1, "error", 3);
 
         webTestClient.post()
                 .uri("/products")
@@ -220,7 +224,7 @@ class HttpRequestTests {
     void postProductShouldReturnBadRequestIfCategoryIdIsNull() {
 
         long count = productRepository.count();
-        ProductRequest request = new ProductRequest("Error", 100, "error", null);
+        ProductRequest request = createProductRequest("Error", 100, "error", null);
 
         webTestClient.post()
                 .uri("/products")
