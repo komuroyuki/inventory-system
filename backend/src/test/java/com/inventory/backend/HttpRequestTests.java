@@ -6,16 +6,25 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.inventory.DTO.ProductRequest;
+import com.inventory.DTO.ProductResponse;
 import com.inventory.Entity.Product;
 import com.inventory.Repository.ProductRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
+@Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 class HttpRequestTests {
+
+    @LocalServerPort
+    private int port;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -23,12 +32,15 @@ class HttpRequestTests {
     @Autowired
     private ProductRepository productRepository;
 
+    private ProductRequest createProductRequest(String name, Integer quantity, String image, Integer categoryId) {
+        return new ProductRequest(name, quantity, image, categoryId);
+    }
+
     @Test
     @DisplayName("商品更新成功")
     void shouldReplaceProduct() {
 
-        ProductRequest request =
-                new ProductRequest("Test", 10, "", 2);
+        ProductRequest request = new ProductRequest("Test", 10, "", 2);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -36,8 +48,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isOk();
 
-        Product updatedProduct =
-                productRepository.findById(1).orElseThrow();
+        Product updatedProduct = productRepository.findById(1).orElseThrow();
 
         assertThat(updatedProduct.getName())
                 .isEqualTo(request.name());
@@ -56,8 +67,7 @@ class HttpRequestTests {
     @DisplayName("存在しない商品IDなら404")
     void shouldReturnNotFoundWhenProductIdDoesNotExist() {
 
-        ProductRequest request =
-                new ProductRequest("Error", 100, "error", 3);
+        ProductRequest request = new ProductRequest("Error", 100, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1000")
@@ -65,8 +75,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isNotFound();
 
-        Product product =
-                productRepository.findById(1000).orElse(null);
+        Product product = productRepository.findById(1000).orElse(null);
 
         assertThat(product).isNull();
     }
@@ -75,8 +84,7 @@ class HttpRequestTests {
     @DisplayName("存在しないカテゴリIDなら400")
     void shouldReturnBadRequestWhenCategoryIdDoesNotExist() {
 
-        ProductRequest request =
-                new ProductRequest("Error", 100, "error", 100);
+        ProductRequest request = new ProductRequest("Error", 100, "error", 100);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -84,8 +92,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product =
-                productRepository.findById(1).orElseThrow();
+        Product product = productRepository.findById(1).orElseThrow();
 
         assertThat(product.getName())
                 .isNotEqualTo(request.name());
@@ -104,8 +111,7 @@ class HttpRequestTests {
     @DisplayName("商品名が空文字なら400")
     void shouldReturnBadRequestWhenNameIsBlank() {
 
-        ProductRequest request =
-                new ProductRequest("", 100, "error", 3);
+        ProductRequest request = new ProductRequest("", 100, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -113,8 +119,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product =
-                productRepository.findById(1).orElseThrow();
+        Product product = productRepository.findById(1).orElseThrow();
 
         assertThat(product.getName())
                 .isNotEqualTo(request.name());
@@ -124,8 +129,7 @@ class HttpRequestTests {
     @DisplayName("在庫数が負数なら400")
     void shouldReturnBadRequestWhenQuantityIsNegative() {
 
-        ProductRequest request =
-                new ProductRequest("Error", -1, "error", 3);
+        ProductRequest request = new ProductRequest("Error", -1, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -133,8 +137,7 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product =
-                productRepository.findById(1).orElseThrow();
+        Product product = productRepository.findById(1).orElseThrow();
 
         assertThat(product.getQuantity())
                 .isNotEqualTo(request.quantity());
@@ -144,8 +147,7 @@ class HttpRequestTests {
     @DisplayName("カテゴリIDがnullなら400")
     void shouldReturnBadRequestWhenCategoryIdIsNull() {
 
-        ProductRequest request =
-                new ProductRequest("Error", 100, "error", null);
+        ProductRequest request = new ProductRequest("Error", 100, "error", null);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -153,10 +155,91 @@ class HttpRequestTests {
                 .exchange()
                 .expectStatus().isBadRequest();
 
-        Product product =
-                productRepository.findById(1).orElseThrow();
+        Product product = productRepository.findById(1).orElseThrow();
 
         assertThat(product.getCategoryId().getId())
                 .isNotEqualTo(request.categoryId());
+    }
+
+    @Test
+    void postProductShouldPostProduct() {
+
+        ProductRequest request = createProductRequest("Post", 10, "", 1);
+
+        ProductResponse response = webTestClient.post()
+                .uri("/products")
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(ProductResponse.class)
+                .returnResult()
+                .getResponseBody();
+
+        Product product = productRepository.findById(response.id()).orElseThrow();
+
+        assertThat(product.getName()).isEqualTo(request.name());
+        assertThat(product.getQuantity()).isEqualTo(request.quantity());
+        assertThat(product.getImage()).isEqualTo(request.image());
+        assertThat(product.getCategoryId().getId()).isEqualTo(request.categoryId());
+    }
+
+    @Test
+    void postProductShouldReturnBadRequestIfCategoryIdDoesNotExist() {
+
+        long count = productRepository.count();
+        ProductRequest request = createProductRequest("Error", 100, "error", 100);
+
+        webTestClient.post()
+                .uri("/products")
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        assertThat(productRepository.count()).isEqualTo(count);
+    }
+
+    @Test
+    void postProductShouldReturnBadRequestIfNameIsBlank() {
+
+        long count = productRepository.count();
+        ProductRequest request = createProductRequest("", 100, "error", 3);
+
+        webTestClient.post()
+                .uri("/products")
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        assertThat(productRepository.count()).isEqualTo(count);
+    }
+
+    @Test
+    void postProductShouldReturnBadRequestIfQuantityIsNegative() {
+
+        long count = productRepository.count();
+        ProductRequest request = createProductRequest("Error", -1, "error", 3);
+
+        webTestClient.post()
+                .uri("/products")
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        assertThat(productRepository.count()).isEqualTo(count);
+    }
+
+    @Test
+    void postProductShouldReturnBadRequestIfCategoryIdIsNull() {
+
+        long count = productRepository.count();
+        ProductRequest request = createProductRequest("Error", 100, "error", null);
+
+        webTestClient.post()
+                .uri("/products")
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isBadRequest();
+
+        assertThat(productRepository.count()).isEqualTo(count);
     }
 }
