@@ -14,6 +14,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.inventory.DTO.ProductRequest;
+import com.inventory.DTO.ProductResponse;
 import com.inventory.Entity.Product;
 import com.inventory.Repository.ProductRepository;
 
@@ -163,16 +164,23 @@ class HttpRequestTests {
     @Test
     void postProductShouldPostProduct() {
 
-        long count = productRepository.count();
         ProductRequest request = createProductRequest("Post", 10, "", 1);
 
-        webTestClient.post()
+        ProductResponse response = webTestClient.post()
                 .uri("/products")
                 .bodyValue(request)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isCreated()
+                .expectBody(ProductResponse.class)
+                .returnResult()
+                .getResponseBody();
 
-        assertThat(productRepository.count()).isEqualTo(count + 1);
+        Product product = productRepository.findById(response.id()).orElseThrow();
+
+        assertThat(product.getName()).isEqualTo(request.name());
+        assertThat(product.getQuantity()).isEqualTo(request.quantity());
+        assertThat(product.getImage()).isEqualTo(request.image());
+        assertThat(product.getCategoryId().getId()).isEqualTo(request.categoryId());
     }
 
     @Test
