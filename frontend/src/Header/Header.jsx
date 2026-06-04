@@ -1,10 +1,21 @@
 import "./Header.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-
-const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
+ 
+const Header = ({ showSearch = true, showCategory = true, confirmLeave, className = "" }) => {
   const [keyword, setKeyword] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("すべて");
+  const fixedHeader = className.includes("product-detail-page-header");
+  const headerStyle = fixedHeader
+    ? {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        width: "100%",
+        zIndex: 9999,
+      }
+    : undefined;
   const categoryLabels = [
     "すべて",
     "水",
@@ -20,9 +31,9 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
   ];
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-
+ 
   const [, setSearchParams] = useSearchParams();
-
+ 
   const categoryMapping = {
     すべて: "0",
     水: "1",
@@ -36,41 +47,41 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
     "乳性・乳酸菌飲料": "9",
     その他: "10",
   };
-
+ 
   const handleSearch = () => {
     if (keyword.length > 50) {
       alert("50文字以内で入力してください");
       return;
     }
-
+ 
     const params = new URLSearchParams();
     params.append("keyword", keyword);
     params.append("category_id", categoryMapping[selectedCategory] || "0");
-
+ 
     setSearchParams(params);
   };
-
+ 
   const handleKeyDown = (event) => {
     if (event.nativeEvent.isComposing || event.keyCode === 229) {
       return;
     }
-
+ 
     if (event.key === "Enter") {
       handleSearch();
     }
   };
-
+ 
   const handleCategorySelect = (label) => {
     setSelectedCategory(label);
     setIsOpen(false);
-
+ 
     const params = new URLSearchParams();
     params.append("keyword", keyword);
     params.append("category_id", categoryMapping[label] || "0");
-
+ 
     setSearchParams(params);
   };
-
+ 
   const handleLogoClick = (e) => {
     e.preventDefault();
     if (confirmLeave && !confirmLeave()) {
@@ -78,21 +89,29 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
     }
     navigate("/");
   };
-
+ 
+  const handleAddProduct = () => {
+    if (confirmLeave && !confirmLeave()) {
+      return;
+    }
+    navigate("/products/add");
+  };
+ 
+  const handleLogout = () => {
+    alert("ログアウトしました");
+    // TODO: 実装時にはここに実際のログアウト処理を追加
+  };
+ 
   return (
-    <header className="header">
+    <header className={`header ${className}`.trim()} style={headerStyle}>
       <div className="header-logo">
         <h1>
-          <a href="/" onClick={handleLogoClick}>
-            <img
-              src="/logo.png"
-              alt="マイサイトのロゴ"
-              className="logo-image"
-            />
+          <a href="/" onClick={handleLogoClick} className="site-title">
+            quickstock
           </a>
         </h1>
       </div>
-
+ 
       {(showSearch || showCategory) && (
         <div className="header-area">
           {showSearch && (
@@ -118,7 +137,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
               </button>
             </div>
           )}
-
+ 
           {showCategory && (
             <div className="category">
               <div className="category-list" onClick={() => setIsOpen(!isOpen)}>
@@ -141,8 +160,17 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave }) => {
           )}
         </div>
       )}
+ 
+      <div className="header-logout">
+        <button className="add-product-btn" onClick={handleAddProduct}>
+          ＋ 商品追加
+        </button>
+        <button className="logout-btn" onClick={handleLogout}>
+          ログアウト
+        </button>
+      </div>
     </header>
   );
 };
-
+ 
 export default Header;

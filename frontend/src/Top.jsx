@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Top.css";
 import Header from "./Header/Header.jsx";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 export const getApiUrl = (categoryId, keyword) => {
   const cat = categoryId ?? "";
@@ -36,7 +36,6 @@ export const fetcher = async (url) => {
 };
 
 const Top = () => {
-  const isDirty = false;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword") ?? "";

@@ -3,7 +3,7 @@
   width: 100%;
   min-height: 100vh;      
   margin: 0;
-  padding: 40px 20px;
+  padding: 64px 20px 40px;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background-color: #B8EAFF;
   border: none !important;
@@ -12,10 +12,22 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.product-detail-page-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin: 0;
+  z-index: 9999;
 }
 
 .product-main {
-  margin-top: 10px;
+  margin-top: 0;
+  padding-top: 0;
   width: 100%;  
   flex: 1;
   display: flex;
@@ -351,7 +363,7 @@ input.no-spin {
    全体のレイアウトや「左右のボタン配置」を崩さずに、画像だけを上に遷移させます*/
 @media (max-width: 900px) {
   .product-container {
-    padding: 20px 10px; 
+    padding: 56px 10px 20px;
   }
 
   .main-content-wrapper {

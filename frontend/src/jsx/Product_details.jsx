@@ -1,6 +1,6 @@
 import { useParams, useNavigate} from 'react-router-dom';
 import Header from '../Header/Header';
-import React, { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import useSWR from 'swr';
 import './product_details.css';
 
@@ -49,14 +49,16 @@ const Product_details = () => {
 
      useEffect(() => {
     if (data) {
-        const initialStock = data?.productQuantity ?? data?.quantity ?? 0;
-        setProductQuantity(initialStock);
-        }
-    setImageIndex(0);
+        const initialStock =
+            Number(data?.productQuantity ?? data?.quantity ?? 0) || 0;
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setProductQuantity(initialStock);
+    }
+
+    setImageIndex(0);
     setInflow('');
     setOutflow('');
-
 }, [data, currentId]);
 
     useEffect(() => {
@@ -188,11 +190,13 @@ if ((inflow !== '' && (!Regex.test(inflow) || inflow.includes('.'))) ||
 
         const inf = Number(inflow) || 0;
         const outf = Number(outflow) || 0;
-        const newQuantity = productQuantity + inf - outf;
+        const currentQuantity = Number(productQuantity) || 0;
+        const newQuantity = currentQuantity + inf - outf;
 
         if (newQuantity < 0) {
-               alert('出庫数が在庫数を超えています');
-               return;}
+            alert('出庫数が在庫数を超えています');
+            return;
+        }
 
         if (newQuantity > 1000) {
             alert('在庫数が上限（1000）を超えています');
@@ -210,48 +214,51 @@ if ((inflow !== '' && (!Regex.test(inflow) || inflow.includes('.'))) ||
         if (!confirmed) { //登録キャンセルコード
             return;}
 
-    try{
+    try {
+        setIsSubmitting(true);
 
-    const updatedProductPayload = {
+        const updatedProductPayload = {
             categoryId: data?.categoryId?.id ?? data?.categoryId ?? 1,
             name: productName,
             quantity: newQuantity,
             image: data?.productImageUrl ?? ''
         };
-       const response = await fetch(`http://localhost:8080/products/${currentId}`, {
-    method: 'PUT',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(updatedProductPayload),
-    });
 
-        setIsSubmitting(true);
+        const response = await fetch(`http://localhost:8080/products/${currentId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedProductPayload),
+        });
+
+        if (!response.ok) {
+            console.error('PUT失敗');
+            return;
+        }
+
+        await mutate();
         setProductQuantity(newQuantity);
 
-    if (!response.ok) {
-        console.error('PUT失敗');
-        return;
-        }
-
-        await mutate(); 
-
         alert('登録が完了しました');
-
         setInflow('');
         setOutflow('');
-
-        } catch (error) {
-            console.error('通信エラー:', error);
-        } finally {
-            setIsSubmitting(false);
-        }
+    } catch (error) {
+        console.error('通信エラー:', error);
+    } finally {
+        setIsSubmitting(false);
+    }
     };
 
 if (isLoading) {
         return (
             <div className="product-container">
-                <Header showSearch={false} showCategory={false} confirmLeave={confirmBeforeLeave} />
+                <Header
+                    showSearch={false}
+                    showCategory={false}
+                    confirmLeave={confirmBeforeLeave}
+                    className="product-detail-page-header"
+                />
                 <main className="product-main">
                     <div style={{ textAlign: 'center', padding: '40px', fontSize: '18px' }}>
                         商品データを読み込み中...
@@ -264,7 +271,11 @@ if (isLoading) {
     if (error || !data) { //商品0件の時の表示
         return (
             <div className="product-container">
-                <Header showSearch={false} showCategory={false} />
+                <Header
+                    showSearch={false}
+                    showCategory={false}
+                    className="product-detail-page-header"
+                />
                 <main className="product-main">
                     <div style={{ textAlign: 'center', padding: '60px 20px' }}>
                         <h2 style={{ color: '#ff4d4f', marginBottom: '16px' }}>対象の商品データがありません</h2>
@@ -286,7 +297,12 @@ if (isLoading) {
 
     return (
         <div className="product-container">
-            <Header showSearch={false} showCategory={false} confirmLeave={confirmBeforeLeave}  />
+            <Header
+              showSearch={false}
+              showCategory={false}
+              confirmLeave={confirmBeforeLeave}
+              className="product-detail-page-header"
+            />
 
             <main className="product-main">
                 <div className="main-content-wrapper">

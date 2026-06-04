@@ -1,172 +1,375 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+ 
+/* ── ヘッダー本体 ── */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  height: 40px;
-  background-color: #688ac0;
+  height: 56px;
+  min-height: 56px;
+  background: linear-gradient(135deg, #3173b8 0%, #64a0e0 52%, #9cc7fb 100%);
   color: #fff;
-  margin: 15px 20px;
-  border-radius: 8px;
-  position: relative;
-  z-index: 9999;
+  margin: 0;
+  border-radius: 12px;
   position: sticky;
   top: 0;
+  z-index: 9999;
+  gap: 16px;
+  box-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.20) inset;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
 }
-
-.logo-image {
-  height: 25px;
-  width: auto;
-  display: block;
-  transition:
-    transform 0.2s,
-    opacity 0.2s;
-  cursor: pointer;
-}
-
-.logo-image:hover {
-  transform: scale(1.1);
-}
-
-.header-area {
+ 
+/* ヘッダー上端のハイライトライン */
+.header::before {
+  content: "";
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 25px;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  pointer-events: none;
+}
+ 
+/* ── ロゴエリア ── */
+.header-logo {
   display: flex;
-  align-items: flex-start;
-  border-radius: 5px;
-  gap: 12px;
-  width: max-content;
+  align-items: center;
+  flex-shrink: 0;
+}
+ 
+.header-logo h1 {
+  margin: 0;
+  font-size: 0;
+  line-height: 0;
+}
+ 
+.header-logo a {
+  display: inline-flex;
+  align-items: center;
+}
+ 
+/* ── 検索・カテゴリエリア ── */
+.header-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 820px;
+  justify-content: flex-start;
 }
 
+/* 検索バー（グラスモーフィズム） */
 .header-keyword {
   position: relative;
-  height: 25px;
+  height: 36px;
   display: flex;
   align-items: center;
   border-radius: 10px;
-  background-color: #ffffff;
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   overflow: hidden;
+  flex: 1 1 auto;
+  min-width: 240px;
+  /* lighter focus state handled below */
 }
-
+ 
 .header-keyword-input {
-  width: 200px;
+  width: 100%;
   height: 100%;
-  padding: 0 30px 0 10px;
+  padding: 0 40px 0 14px;
   box-sizing: border-box;
   border: none;
+  background: transparent;
+  color: #111;
+  font-size: 13px;
+  outline: none;
 }
-
+ 
+.header-keyword-input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+ 
 .header-keyword-button {
   position: absolute;
-  right: 0px;
-  width: 25px;
+  right: 0;
   top: 0;
   bottom: 0;
-  height: 100%;
-  background-color: #b8eaff;
+  width: 38px;
+  background: #f7f9fb;
   border: none;
+  border-left: 1px solid #e6e6e6;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0;
+  transition: background 0.2s;
 }
 
+.header-keyword-button:hover {
+  background: #eef4ff;
+}
+ 
 .header-keyword-button-icon {
-  right: 14px;
   height: 14px;
   object-fit: contain;
+  /* 検索アイコン画像を白く表示 */
+  filter: none;
+  opacity: 0.9;
 }
-
+ 
+/* カテゴリドロップダウン（グラスモーフィズム） */
 .category {
-  width: 100px;
-  height: 25px;
+  width: 118px;
+  height: 36px;
   position: relative;
+  flex-shrink: 0;
 }
-
+ 
 .category-list {
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
-  border: 1px solid #ffffff;
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
   border-radius: 10px;
   display: flex;
   align-items: center;
   cursor: pointer;
   box-sizing: border-box;
-  padding: 0 12px 0 6px;
-  font-size: 9px;
-  letter-spacing: -0.5px;
+  padding: 0 26px 0 12px;
+  font-size: 12px;
   font-family: sans-serif;
-  color: #333;
+  color: #333333;
   position: relative;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s, border-color 0.2s;
 }
-
+ 
+.category-list:hover {
+  background: #f7fbff;
+  border-color: #dfeefe;
+}
+ 
 .category-list::after {
   content: "";
   position: absolute;
-  right: 6px;
-  top: 57%;
+  right: 9px;
+  top: 50%;
   transform: translateY(-50%);
   width: 10px;
   height: 10px;
   background-image: url(./pull.png);
   background-repeat: no-repeat;
   background-size: contain;
+  filter: none;
+  opacity: 0.6;
 }
-
+ 
 .category-option {
   position: absolute;
-  top: calc(100% + 4px);
-  left: auto;
-  right: auto;
-  width: max-content;
-  width: 120%;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
   box-sizing: border-box;
   max-height: 300px;
   overflow-y: auto;
-  background-color: #ffffff;
+  background: #ffffff;
+  border: 1px solid rgba(200, 200, 200, 0.30);
+  border-radius: 10px;
   list-style: none;
   margin: 0;
-  padding: 4px 20px;
+  padding: 6px 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+  z-index: 1;
 }
-
+ 
 .category-item {
-  padding: 0px 0px;
-  font-size: 10px;
-  color: #333;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: #333333;
   cursor: pointer;
-  white-space: nowrap;
   list-style: none;
-  text-align: left;
+  transition: background 0.15s, color 0.15s;
 }
 
-.header-nav ul {
-  display: flex;
-  list-style: none;
-  gap: 20px;
+.category-item:hover {
+  background: #e8f4ff;
+  color: #1976d2;
 }
 
-.header-nav a {
-  color: #fff;
+@media screen and (max-width: 820px) {
+  .header {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    height: auto;
+    min-height: auto;
+    gap: 12px;
+  }
+
+  .header-logo,
+  .header-logout {
+    width: 100%;
+  }
+
+  .header-area {
+    order: 2;
+    width: 100%;
+    max-width: none;
+    justify-content: stretch;
+  }
+
+  .header-keyword {
+    min-width: auto;
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .category {
+    flex-shrink: 0;
+  }
+
+  .header-logout {
+    order: 3;
+    justify-content: flex-end;
+  }
+}
+
+.site-title {
+  color: #ffffff;
   text-decoration: none;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
-.header-nav a:hover {
+.site-title:hover {
   text-decoration: underline;
 }
 
-@media screen and (max-width: 600px) {
-  .header-area {
-    position: static;
-    transform: none;
-    width: auto;
-    margin: 0 10px;
-  }
+/* ── ボタンエリア ── */
+.header-logout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+ 
+/* 商品追加ボタン（ログアウトと同じスタイル） */
+.add-product-btn {
+  padding: 0 16px;
+  height: 34px;
+  background: #ffffff;
+  color: #1976d2;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  font-family: sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+}
 
-  .header-keyword-input {
-    width: 120px;
+.add-product-btn:hover {
+  background: #f2f8ff;
+  border-color: #dfeefe;
+  color: #0b63b5;
+  transform: translateY(-1px);
+}
+
+.add-product-btn:active {
+  transform: translateY(0);
+}
+ 
+/* ログアウトボタン（ゴーストスタイル） */
+.logout-btn {
+  padding: 0 16px;
+  height: 34px;
+  background: #ffffff;
+  color: #1976d2;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  font-family: sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+}
+ 
+.logout-btn:hover {
+  background: #f2f8ff;
+  border-color: #dfeefe;
+  color: #0b63b5;
+  transform: translateY(-1px);
+}
+ 
+.logout-btn:active {
+  transform: translateY(0);
+}
+ 
+/* ── レスポンシブ ── */
+@media screen and (max-width: 900px) {
+  .header-area {
+    max-width: 100%;
+  }
+ 
+  .header-keyword {
+    min-width: 200px;
+  }
+}
+ 
+@media screen and (max-width: 600px) {
+  .header {
+    flex-wrap: wrap;
+    padding: 8px 12px 10px;
+    height: auto;
+    gap: 8px;
+  }
+ 
+  .header-area {
+    order: 2;
+    width: 100%;
+    max-width: none;
+  }
+ 
+  .header-keyword {
+    min-width: auto;
+    flex: 1;
+  }
+ 
+  .header-logout {
+    order: 3;
+  }
+ 
+  .add-product-btn,
+  .logout-btn {
+    height: 32px;
+    font-size: 12px;
+    padding: 0 12px;
   }
 }
