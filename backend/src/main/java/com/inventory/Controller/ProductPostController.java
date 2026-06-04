@@ -13,9 +13,11 @@ import com.inventory.Service.ProductPostService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProductPostController {
 
     private final ProductPostService service;
