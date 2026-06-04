@@ -36,6 +36,7 @@ public class ProductPostService {
 
         Product newProduct = productRepository.save(product);
         ProductResponse response = new ProductResponse(
+                newProduct.getId(),
                 newProduct.getName(),
                 newProduct.getQuantity(),
                 newProduct.getImage(),
