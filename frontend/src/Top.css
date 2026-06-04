@@ -11,8 +11,10 @@
   position: sticky;
   top: 0;
   z-index: 9999;
-  top: 50px;
-  margin: 20px;
+  margin: 0;
+  width: 100%;
+  left: 0;
+  right: 0;
 }
 
 .container {
