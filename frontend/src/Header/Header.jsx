@@ -94,7 +94,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
     if (confirmLeave && !confirmLeave()) {
       return;
     }
-    navigate("/products/add");
+    navigate("/AddProduct");
   };
  
   const handleLogout = () => {
@@ -105,12 +105,12 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
   return (
     <header className={`header ${className}`.trim()} style={headerStyle}>
       <div className="header-logo">
-        <h1>
-          <a href="/" onClick={handleLogoClick} className="site-title">
-            quickstock
-          </a>
-        </h1>
-      </div>
+  <h1>
+    <a href="/" onClick={handleLogoClick} className="site-title">
+      在庫管理システム
+    </a>
+  </h1>
+</div>
  
       {(showSearch || showCategory) && (
         <div className="header-area">
