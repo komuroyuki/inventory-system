@@ -1,6 +1,6 @@
 import "./Header.css";
 import { useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom"; // 💡 useLocation を追加
  
 const Header = ({ showSearch = true, showCategory = true, confirmLeave, className = "" }) => {
   const [keyword, setKeyword] = useState("");
@@ -31,7 +31,8 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
   ];
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
- 
+  const location = useLocation(); // 💡 現在のURLの場所を取得
+
   const [, setSearchParams] = useSearchParams();
  
   const categoryMapping = {
@@ -99,18 +100,28 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
  
   const handleLogout = () => {
     alert("ログアウトしました");
-    // TODO: 実装時にはここに実際のログアウト処理を追加
   };
  
+  // 現在のURLパスに基づいて、ロゴ画像を出すべき画面かどうかを判定する
+  // パスが 「/AddProduct」 または 「/product/〜 (商品詳細)」 の場合に true になります
+  const isTargetPage = 
+    location.pathname === "/AddProduct" || 
+    location.pathname.startsWith("/product/");
+
   return (
     <header className={`header ${className}`.trim()} style={headerStyle}>
       <div className="header-logo">
-  <h1>
-    <a href="/" onClick={handleLogoClick} className="site-title">
-      在庫管理システム
-    </a>
-  </h1>
-</div>
+        <h1>
+          <a href="/" onClick={handleLogoClick} className="site-title">
+            {/*条件分岐：対象の画面ならロゴ画像、それ以外ならテキストを表示 */}
+            {isTargetPage ? (
+              <img src="/logo.png" alt="システムロゴ" className="header-logo-image" />
+            ) : (
+              "在庫管理システム"
+            )}
+          </a>
+        </h1>
+      </div>
  
       {(showSearch || showCategory) && (
         <div className="header-area">
