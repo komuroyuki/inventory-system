@@ -78,3 +78,13 @@ product_quantity = VALUES(product_quantity),
 product_image_url = VALUES(product_image_url),
 category_id = VALUES(category_id);
 
+INSERT INTO users (
+    id,
+    name,
+    password,
+    email,
+    is_admin
+) VALUES
+('admin', 'admin', '$2y$10$ny2sxBLUahBXS/XjRxEnnee0uNLGEwXyb2J0QJoCBi2aZCIEZyaAq', 'admin@example.com', TRUE),
+('user', 'user', '$2y$10$FJSZJh0oPHLbuKxxIr2GkO3y2EyQ39MTYKJbNGrbQuv.7kvN.dHg2', 'user@example.com', FALSE)
+ON DUPLICATE KEY UPDATE id = id;
