@@ -390,3 +390,23 @@ body {
     padding: 0 12px;
   }
 }
+/* ── ロゴ画像用のスタイル ── */
+.header-logo-image {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+/* ホバーした時のエフェクトを画像にも適用 */
+.site-title:hover .header-logo-image {
+  transform: translateY(-1px);
+}
+
+
+@media screen and (max-width: 600px) {
+  .header-logo-image {
+    height: 24px;
+  }
+}
