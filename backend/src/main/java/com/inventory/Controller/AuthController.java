@@ -1,0 +1,54 @@
+package com.inventory.Controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.inventory.DTO.LoginRequest;
+import com.inventory.DTO.LoginResponse;
+import com.inventory.Service.AuthService;
+
+@RestController
+@RequestMapping("/products")
+public class AuthController {
+
+    @Autowired
+    private AuthService authService;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest requestBody) {
+        
+        if (requestBody.getEmail() == null || requestBody.getEmail().isEmpty() || 
+            requestBody.getPassword() == null || requestBody.getPassword().isEmpty()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error_code", "VALIDATION_ERROR");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            LoginResponse response = authService.authenticate(requestBody);
+            
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error_code", "AUTH_FAILED");
+            error.put("message", e.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addProduct() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "商品の追加APIに正しくアクセスできました！");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+}
