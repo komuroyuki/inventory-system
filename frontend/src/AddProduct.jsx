@@ -24,7 +24,7 @@ const AddProduct = () => {
   // フォームの状態管理
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState(0);
-  // 💡 調整ポイント1: 初期値を「すべて（"0"）」ではなく、何かしらの具体的なカテゴリー（例: 水 "1"）にするか、空文字にしてバリデーションをかけるのが安全です
+  //調整ポイント1: 初期値を「すべて（"0"）」ではなく、何かしらの具体的なカテゴリー（例: 水 "1"）にするか、空文字にしてバリデーションをかけるのが安全です
   const [categoryId, setCategoryId] = useState("1"); 
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
@@ -58,18 +58,15 @@ const AddProduct = () => {
       return;
     }
 
-    //  画像パスの文字列を組み立てる
-    // 画像が選択されていれば「frontend/src/images/others/ファイル名.png」とし、なければ null にする
-    const imagePath = image 
-      ? `frontend/src/images/others/${image.name}` 
-      : null;
+    // 画像があれば「1.png」、なければ null にする
+    const imageName = image ? image.name : null;
 
     // 1. バックエンドの ProductRequest に合わせたオブジェクトを作る
     const requestBody = {
       name: productName,
       quantity: quantity,
       categoryId: Number(categoryId),
-      image: imagePath //  組み立てたパス文字列をセット！
+      image: imageName
     };
 
     try {
@@ -82,7 +79,31 @@ const AddProduct = () => {
         body: JSON.stringify(requestBody), 
       });
 
+      //変更ポイント: エラー（okじゃないとき）の処理を詳しく解析する
       if (!response.ok) {
+        // ステータスコードが 409 (Conflict) だった場合は即座に重複エラーとみなす
+        if (response.status === 409) {
+          alert("同一名の商品が既に登録されています。");
+          return; // 処理を中断
+        }
+
+        // サーバーから返ってきたエラーメッセージ（JSON）の中身を見て判断する
+        try {
+          const errorResult = await response.json();
+          // Java側のエラーメッセージに「既に存在」や「重複」のようなキーワードが入っているかチェック
+          if (errorResult.message && (
+              errorResult.message.includes("既に登録") || 
+              errorResult.message.includes("存在します") || 
+              errorResult.message.includes("Duplicate")
+          )) {
+            alert("同一名の商品が既に登録されています。");
+            return;
+          }
+       } catch (jsonErr) {
+          console.debug("JSONの解析をスキップしました:", jsonErr);
+        }
+
+        // 上記のいずれにも引っかからなかった通常のエラー
         throw new Error(`HTTPエラー! ステータス: ${response.status}`);
       }
 
@@ -93,7 +114,7 @@ const AddProduct = () => {
       navigate("/"); // トップへ戻る
     } catch (err) {
       console.error("登録エラー:", err);
-      alert("登録に失敗しました。");
+      alert("登録に失敗しました。詳細なエラーはコンソールを確認してください。");
     }
   };
 

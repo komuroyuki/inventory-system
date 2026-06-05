@@ -117,7 +117,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
             {isTargetPage ? (
               <img src="/logo.png" alt="システムロゴ" className="header-logo-image" />
             ) : (
-              "在庫管理システム"
+              "Re:fill"
             )}
           </a>
         </h1>
