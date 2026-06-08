@@ -58,6 +58,14 @@ public class DetailsService {
                         ? product.getLastModifiedDate().toString()
                         : "");
 
+        Product prevProduct = detailsRepository
+                .findFirstByIdLessThanOrderByIdDesc(product.getId());
+
+        response.setPrevProductId(
+                prevProduct != null
+                        ? prevProduct.getId()
+                        : null);
+
         return ResponseEntity.ok(response);
     }
 }

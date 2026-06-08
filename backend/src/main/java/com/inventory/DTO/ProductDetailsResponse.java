@@ -20,4 +20,6 @@ public class ProductDetailsResponse {
     private Integer categoryId;
 
     private Integer nextProductId;
+
+    private Integer prevProductId;
 }
