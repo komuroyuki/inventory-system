@@ -143,11 +143,19 @@ const Product_details = () => {
         );
     };
 
+    // サーバーから返ってくる「前の商品ID」を取得
+    const prevProductId =
+        data?.prevProductId ??
+        data?.prev_product_id;
+
     const handlePrev = () => {
         if (!confirmBeforeLeave()) return;
 
-        if (currentId > 1) {
-            navigate(`/product/${currentId - 1}`);
+        // prevProductId が存在するときだけそのIDへ移動
+        if (prevProductId) {
+            navigate(`/product/${prevProductId}`);
+        } else {
+            alert("前の商品は存在しません（これが最初の機能です）");
         }
     };
 
@@ -163,8 +171,7 @@ const Product_details = () => {
         navigate(`/product/${nextProductId}`);
     };
 
-    const handleRegister = async () => { //エラー処理
-
+    const handleRegister = async () => {
         if (isSubmitting) return;
 
         const Regex = /^\d+$/;
@@ -172,21 +179,24 @@ const Product_details = () => {
         if ((inflow !== '' && !Regex.test(inflow)) || 
         (outflow !== '' && !Regex.test(outflow))) {
             alert('半角数字・整数・0以上の値で入力してください');
-            return;}
+            return;
+        }
 
-
-if ((inflow !== '' && (!Regex.test(inflow) || inflow.includes('.'))) ||
-(outflow !== '' && (!Regex.test(outflow) || outflow.includes('.')))) {
-    alert('半角数字・整数・0以上の値で入力してください');
-    return;}
+        if ((inflow !== '' && (!Regex.test(inflow) || inflow.includes('.'))) ||
+        (outflow !== '' && (!Regex.test(outflow) || outflow.includes('.')))) {
+            alert('半角数字・整数・0以上の値で入力してください');
+            return;
+        }
 
         if(Number(inflow) >= 9999 || Number(outflow) >= 9999){
             alert('最大桁数を超えています');
-            return;}
+            return;
+        }
 
         if(Number(inflow) < 0 || Number(outflow) < 0){
             alert('半角数字・整数・0以上の値で入力してください');
-            return;}
+            return;
+        }
 
         const inf = Number(inflow) || 0;
         const outf = Number(outflow) || 0;
@@ -211,43 +221,50 @@ if ((inflow !== '' && (!Regex.test(inflow) || inflow.includes('.'))) ||
             更新後在庫数: ${newQuantity}`
         );
         
-        if (!confirmed) { //登録キャンセルコード
-            return;}
-
-    try {
-        setIsSubmitting(true);
-
-        const updatedProductPayload = {
-            categoryId: data?.categoryId?.id ?? data?.categoryId ?? 1,
-            name: productName,
-            quantity: newQuantity,
-            image: data?.productImageUrl ?? ''
-        };
-
-        const response = await fetch(`http://localhost:8080/products/${currentId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedProductPayload),
-        });
-
-        if (!response.ok) {
-            console.error('PUT失敗');
+        if (!confirmed) {
             return;
         }
 
-        await mutate();
-        setProductQuantity(newQuantity);
+        try {
+            setIsSubmitting(true);
 
-        alert('登録が完了しました');
-        setInflow('');
-        setOutflow('');
-    } catch (error) {
-        console.error('通信エラー:', error);
-    } finally {
-        setIsSubmitting(false);
-    }
+            // サーバーから取得した画像URL/パスから、安全に「ファイル名のみ」を抽出する
+            const rawImageUrl = data?.productImageUrl ?? data?.product_image_url ?? data?.image ?? '';
+            const imageName = rawImageUrl ? rawImageUrl.split('/').pop() : '';
+
+            const updatedProductPayload = {
+                categoryId: data?.categoryId?.id ?? data?.categoryId ?? 1,
+                name: productName,
+                quantity: newQuantity,
+                image: imageName
+            };
+
+            const response = await fetch(`http://localhost:8080/products/${currentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedProductPayload),
+            });
+
+            if (!response.ok) {
+                console.error(`PUT失敗! ステータス: ${response.status}`);
+                alert('データの更新に失敗しました。');
+                return;
+            }
+
+            await mutate();
+            setProductQuantity(newQuantity);
+
+            alert('登録が完了しました');
+            setInflow('');
+            setOutflow('');
+        } catch (error) {
+            console.error('通信エラー:', error);
+            alert('通信に失敗しました。');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
 if (isLoading) {

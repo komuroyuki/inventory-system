@@ -24,7 +24,7 @@ const AddProduct = () => {
   // フォームの状態管理
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState(0);
-  //調整ポイント1: 初期値を「すべて（"0"）」ではなく、何かしらの具体的なカテゴリー（例: 水 "1"）にするか、空文字にしてバリデーションをかけるのが安全です
+  //調整ポイント1: 初期値を「すべて（"0"）」ではなく、何かしらの具体的なカテゴリー（例: 水 "1"）にするか、空文字にしてバリデーションをかける
   const [categoryId, setCategoryId] = useState("1"); 
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
