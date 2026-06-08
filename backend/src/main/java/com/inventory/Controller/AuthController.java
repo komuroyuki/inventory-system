@@ -15,6 +15,8 @@ import com.inventory.DTO.LoginRequest;
 import com.inventory.DTO.LoginResponse;
 import com.inventory.Service.AuthService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/products")
 public class AuthController {
@@ -23,14 +25,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest requestBody) {
-        
-        if (requestBody.getEmail() == null || requestBody.getEmail().isEmpty() || 
-            requestBody.getPassword() == null || requestBody.getPassword().isEmpty()) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error_code", "VALIDATION_ERROR");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest requestBody) {
 
         try {
             LoginResponse response = authService.authenticate(requestBody);
@@ -45,10 +40,11 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addProduct() {
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
         Map<String, String> response = new HashMap<>();
-        response.put("message", "商品の追加APIに正しくアクセスできました！");
+        response.put("message", "ログアウトしました。");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 }

@@ -1,5 +1,8 @@
 package com.inventory.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +11,7 @@ import lombok.Setter;
 @Table(name = "users")
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -26,4 +30,8 @@ public class User {
     @Column(name = "is_admin", nullable = false)
     private Boolean isAdmin;
 
+    @JsonIgnore
+    public String getPassword() {
+        return this.password;
+    }
 }

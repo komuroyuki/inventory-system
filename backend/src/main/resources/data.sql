@@ -1,3 +1,5 @@
+TRUNCATE TABLE users;
+
 INSERT INTO category_m (category_id, category_name) VALUES
 (1, '水'),
 (2, 'お茶飲料'),
@@ -78,13 +80,11 @@ product_quantity = VALUES(product_quantity),
 product_image_url = VALUES(product_image_url),
 category_id = VALUES(category_id);
 
-INSERT INTO users (
-    id,
-    name,
-    password,
-    email,
-    is_admin
-) VALUES
-('admin', 'admin', '$2y$10$ny2sxBLUahBXS/XjRxEnnee0uNLGEwXyb2J0QJoCBi2aZCIEZyaAq', 'admin@example.com', TRUE),
-('user', 'user', '$2y$10$FJSZJh0oPHLbuKxxIr2GkO3y2EyQ39MTYKJbNGrbQuv.7kvN.dHg2', 'user@example.com', FALSE)
-ON DUPLICATE KEY UPDATE id = id;
+INSERT INTO users (id, name, password, email, is_admin) VALUES
+(1, 'admin', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.jqnjaFa', 'admin@example.com', TRUE),
+(2, 'user', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.jqnjaFa', 'user@example.com', FALSE)
+ON DUPLICATE KEY UPDATE
+    name = VALUES(name),
+    password = VALUES(password),
+    email = VALUES(email),
+    is_admin = VALUES(is_admin);

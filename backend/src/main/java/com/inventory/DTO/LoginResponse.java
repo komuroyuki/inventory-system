@@ -19,12 +19,5 @@ public class LoginResponse {
         private String email;
         private String role;
     }
-
-    public Object getPassword() {
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
-    }
-
-    public String getEmail() {
-        throw new UnsupportedOperationException("Unimplemented method 'getEmail'");
-    }
+    
 }
