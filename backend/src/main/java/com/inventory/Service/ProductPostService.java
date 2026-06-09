@@ -1,5 +1,7 @@
 package com.inventory.Service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.inventory.DTO.ProductRequest;
@@ -21,6 +23,13 @@ public class ProductPostService {
 
     public ProductResponse postProduct(ProductRequest request) {
 
+        String name = request.name().strip();
+        List<Product> existingProducts = productRepository.findByName(name);
+
+        if (!existingProducts.isEmpty()) {
+            throw new BadRequestException("商品が存在します。");
+        }
+
         Category category = categoryRepository.findById(request.categoryId()).orElse(null);
 
         if (category == null) {
@@ -29,7 +38,7 @@ public class ProductPostService {
 
         Product product = new Product();
 
-        product.setName(request.name());
+        product.setName(name);
         product.setQuantity(request.quantity());
         product.setImage(request.image());
         product.setCategoryId(category);
