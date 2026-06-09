@@ -47,7 +47,7 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // バリデーション（入力チェック時は空白を除去して判定）
+    // バリデーション
     if (!productName.trim()) {
       alert("商品名を入力してください");
       return;
@@ -58,10 +58,21 @@ const AddProduct = () => {
       return;
     }
 
+    // 初期在庫数の上限（1000）チェックを追加
+    if (quantity > 1000) {
+      alert("初期在庫数は1000以下で入力してください");
+      return;
+    }
+
+    // 負の数や、万が一の不正入力チェック（0未満）
+    if (quantity < 0 || isNaN(quantity)) {
+      alert("初期在庫数は0以上の正確な数値を入力してください");
+      return;
+    }
+
     // 画像があれば「1.png」、なければ null にする
     const imageName = image ? image.name : null;
 
-    // .trim() を適用して、前後の不要な空白を削除した商品名を取得
     const trimmedName = productName.trim();
 
     // 1. バックエンドの ProductRequest に合わせたオブジェクトを作る
@@ -71,6 +82,8 @@ const AddProduct = () => {
       categoryId: Number(categoryId),
       image: imageName
     };
+
+    // --- 以降の try-catch 処理はそのまま ---
 
     try {
       // 2. 指定のパスに JSON 形式でPOSTリクエストを送る
@@ -149,18 +162,36 @@ const AddProduct = () => {
             </div>
 
             {/* 在庫数 と カテゴリー の2カラム配置 */}
-            <div className="form-row">
-              <div className="form-group">
-                <label className="form-label" htmlFor="stock-quantity">初期在庫数</label>
-                <input
-                  type="number"
-                  id="stock-quantity"
-                  className="form-input"
-                  min="0"
-                  value={quantity}
-                  onChange={(e) => setQuantity(Number(e.target.value))}
-                />
-              </div>
+<div className="form-row">
+  <div className="form-group">
+    <label className="form-label" htmlFor="stock-quantity">初期在庫数</label>
+    <input
+      type="number"
+      id="stock-quantity"
+      className="form-input"
+      min="0"
+      max="1000"
+      value={quantity}
+      onChange={(e) => {
+      const rawValue = e.target.value;
+
+      // 1. もし中身が完全に空（バックスペースで全部消した時など）なら、状態を 0 にする
+      if (rawValue === "") {
+        setQuantity(0);
+        return;
+      }
+      // 2. 数値に変換する（これで自動的に先頭の「000...」は「0」に、「005」は「5」にギュッと縮む）
+      const numValue = Number(rawValue);
+      // 3. 状態（State）を更新
+      setQuantity(numValue);
+    }}
+    onKeyDown={(e) => {
+      if (["+", "-", "e", "E", "."].includes(e.key)) {
+        e.preventDefault();
+      }
+    }}
+  />
+</div>
 
               <div className="form-group">
                 <label className="form-label" htmlFor="category-select">カテゴリー</label>
