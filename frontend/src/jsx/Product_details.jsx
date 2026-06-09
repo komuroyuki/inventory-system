@@ -9,6 +9,20 @@ const allImagesGlob = import.meta.glob(
     { eager: true }
 );
 
+// カテゴリーIDとフォルダ名の対応表
+const CATEGORY_FOLDERS = {
+  "1": "water",          // 水
+  "2": "tea",            // お茶飲料
+  "3": "coffe",          // コーヒー飲料
+  "4": "carbonated",     // 炭酸飲料
+  "5": "fruits",         // 果実・野菜飲料
+  "6": "sports",         // スポーツドリンク
+  "7": "health",         // 健康飲料
+  "8": "energy",         // エナジードリンク
+  "9": "milky",          // 乳性・乳酸菌飲料
+  "10": "others"         // その他
+};
+
 const allImagesList = Object.keys(allImagesGlob).map((filePath) =>
     filePath.replace('/public', '')
 );
@@ -82,40 +96,30 @@ const Product_details = () => {
     const productImages = useMemo(() => {
         if (!data) return [];
 
-        const rawUrl =
-            data.product_image_url ||
-            data.productImageUrl ||
-            '';
+        // ーバーから画像名（"1.png" や "orange-juice.png"）を取得
+        const rawUrl = data.product_image_url || data.productImageUrl || data.image || '';
+        const fileName = rawUrl ? rawUrl.split('/').pop() : `${currentId}.jpeg`;
 
-        let dbImageUrl = rawUrl
-            ? rawUrl.replace('frontend/public', '')
-            : '';
+        // この商品のカテゴリーIDを取得（1 や 5 など）
+        const catId = String(data?.categoryId?.id ?? data?.categoryId ?? '10');
+        
+        // 対応表からフォルダ名（"water" や "fruit_vegetable"）を取得
+        const folderName = CATEGORY_FOLDERS[catId] || 'others';
 
-        if (dbImageUrl && !dbImageUrl.startsWith('/')) {
-            dbImageUrl = '/' + dbImageUrl;
-        }
-
-        const fileName = dbImageUrl
-            ? dbImageUrl.split('/').pop()
-            : `${currentId}.jpeg`;
-
-        const cleanId = fileName.split('.')[0];
+        // フォルダ名を含めた正しいパスを組み立てる（例: /src/images/fruit_vegetable/orange-juice.png）
+        const targetCleanId = fileName.split('.')[0];
 
         const matchedImages = allImagesList.filter((path) => {
-            const fName = path.split('/').pop();
-            const fNameNoExt = fName.split('.')[0];
-
-            return (
-                fNameNoExt === cleanId ||
-                fNameNoExt.startsWith(`${cleanId}_`)
-            );
+            // パスの中に、正しいカテゴリーのフォルダ名とファイル名が含まれているかチェック
+            return path.includes(`/${folderName}/`) && path.includes(targetCleanId);
         });
 
         if (matchedImages.length > 0) {
             return matchedImages;
         }
 
-        return [`/images/${cleanId}.jpeg`];
+        // 見つからなかった場合のフォールバック（バックアップ）
+        return [`/src/images/${folderName}/${fileName}`];
     }, [data, currentId]);
 
     const displayImage =

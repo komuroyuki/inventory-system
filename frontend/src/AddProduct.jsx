@@ -47,7 +47,7 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // バリデーション
+    // バリデーション（入力チェック時は空白を除去して判定）
     if (!productName.trim()) {
       alert("商品名を入力してください");
       return;
@@ -61,9 +61,12 @@ const AddProduct = () => {
     // 画像があれば「1.png」、なければ null にする
     const imageName = image ? image.name : null;
 
+    // .trim() を適用して、前後の不要な空白を削除した商品名を取得
+    const trimmedName = productName.trim();
+
     // 1. バックエンドの ProductRequest に合わせたオブジェクトを作る
     const requestBody = {
-      name: productName,
+      name: trimmedName,
       quantity: quantity,
       categoryId: Number(categoryId),
       image: imageName
