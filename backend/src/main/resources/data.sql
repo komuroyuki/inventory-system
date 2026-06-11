@@ -1,4 +1,9 @@
-TRUNCATE TABLE users;
+-- 1. まず子テーブル（商品）を削除
+DELETE FROM product_m;
+-- 2. 次に親テーブル（カテゴリ）を削除
+DELETE FROM category_m;
+-- 3. ユーザーテーブルも整理
+DELETE FROM users;
 
 INSERT INTO category_m (category_id, category_name) VALUES
 (1, '水'),
@@ -81,10 +86,5 @@ product_image_url = VALUES(product_image_url),
 category_id = VALUES(category_id);
 
 INSERT INTO users (id, name, password, email, is_admin) VALUES
-(1, 'admin', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.jqnjaFa', 'admin@example.com', TRUE),
-(2, 'user', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.jqnjaFa', 'user@example.com', FALSE)
-ON DUPLICATE KEY UPDATE
-    name = VALUES(name),
-    password = VALUES(password),
-    email = VALUES(email),
-    is_admin = VALUES(is_admin);
+(1, 'admin', '$2a$10$X5wFBtLrL/kHcmrOGGTrGufsBX8CJ0WpQpF3pgeuxBB/H73BK1DW6', 'admin@example.com', TRUE),
+(2, 'user', '$2a$10$X5wFBtLrL/kHcmrOGGTrGufsBX8CJ0WpQpF3pgeuxBB/H73BK1DW6', 'user@example.com', FALSE);
