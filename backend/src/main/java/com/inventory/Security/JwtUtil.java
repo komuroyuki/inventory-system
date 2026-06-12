@@ -13,16 +13,23 @@ import java.util.Date;
 public class JwtUtil {
 
     
-    private final String SECRET_KEY = "your-very-secure-secret-key-must-be-long-enough";
-    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    @org.springframework.beans.factory.annotation.Value("${jwt.secret}")
+    private String secretKey;
+    private Key key;
     
     
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
 
+    @jakarta.annotation.PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
+
     
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)

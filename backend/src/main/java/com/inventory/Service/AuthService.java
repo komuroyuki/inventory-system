@@ -47,15 +47,14 @@ public class AuthService {
         userInfo.setName(user.getName());
         userInfo.setEmail(user.getEmail());
 
-        if (Boolean.TRUE.equals(user.getIsAdmin())) {
-            userInfo.setRole("admin");
-        } else {
-            userInfo.setRole("user");
-        }
+        // 修正
+        String role = Boolean.TRUE.equals(user.getIsAdmin()) ? "admin" : "user";
+        userInfo.setRole(role);
+        
         
         response.setUser(userInfo);
 
-        String realToken = jwtUtil.generateToken(user.getEmail());
+        String realToken = jwtUtil.generateToken(user.getEmail(), role);
         response.setAccess_token(realToken);
 
         return response;

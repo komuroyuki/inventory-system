@@ -1,6 +1,5 @@
 package com.inventory.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
@@ -24,14 +23,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
 
     @Column(name = "is_admin", nullable = false)
     private Boolean isAdmin;
 
-    @JsonIgnore
-    public String getPassword() {
-        return this.password;
-    }
 }

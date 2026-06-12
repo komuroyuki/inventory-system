@@ -40,11 +40,4 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "ログアウトしました。");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
 }

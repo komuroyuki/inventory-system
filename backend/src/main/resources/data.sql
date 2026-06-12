@@ -1,8 +1,5 @@
--- 1. まず子テーブル（商品）を削除
 DELETE FROM product_m;
--- 2. 次に親テーブル（カテゴリ）を削除
 DELETE FROM category_m;
--- 3. ユーザーテーブルも整理
 DELETE FROM users;
 
 INSERT INTO category_m (category_id, category_name) VALUES
