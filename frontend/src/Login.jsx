@@ -62,7 +62,7 @@ const Login = () => {
             }, 2500);
 
             setTimeout(() => {
-                navigate("/");
+                navigate("/top");
             }, 3800);
 
             return;
