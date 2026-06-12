@@ -1,0 +1,205 @@
+.login-page {
+    min-height: 100vh;
+    background: #dff6ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vending-label {
+    font-weight: bold;
+    color: #2b7fb8;
+    margin-bottom: 10px;
+}
+
+
+.login-card {
+    width: 520px;
+
+    border-radius: 20px;
+    position: relative;
+    padding: 20px;
+    background: #f1f1f1;
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.login-card h1 {
+    color: #2196d3;
+    font-size: 50px;
+    margin-bottom: 8px;
+    letter-spacing: 0.07em;
+}
+
+.login-card p {
+    color: #5f7f92;
+    margin-bottom: 8px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 16px;
+    border: 2px solid #b8e6ff;
+    border-radius: 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.display-window {
+    background: #ffffff;
+    width: 95%;
+    min-height: 460px;
+    margin: 0 auto 40px;
+    border-radius: 18px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow:
+        inset 0 0 12px rgba(0, 0, 0, 0.06),
+        0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.logo-area {
+    text-align: center;
+}
+
+.login-form {
+    width: 320px;
+    margin: 28px auto;
+    padding: 18px;
+
+    background: #ffffff;
+
+}
+
+.login-form label {
+    text-align: left;
+    display: block;
+}
+
+.login-form input {
+    width: 100%;
+    box-sizing: border-box;
+
+    margin-bottom: 12px;
+    padding: 12px;
+
+    background: #e9f8ff;
+    border: 2px solid #bbc2c6;
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+.login-button {
+    width: 100%;
+    margin-top: 40px;
+    padding: 12px;
+
+    background: linear-gradient(to bottom, #4fc3f7, #168dcc);
+    color: white;
+
+    border: 2px solid #0b6fa4;
+    border-radius: 999px;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 0 #0b6fa4;
+}
+
+.login-button:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #0b6fa4;
+}
+
+.login-button:hover {
+    background: #168dcc;
+}
+
+.change-slot {
+    position: absolute;
+    right: 32px;
+    bottom: 105px;
+
+    width: 70px;
+    height: 44px;
+
+    background: #2f2f2f;
+    color: #dcdcdc;
+
+    border-radius: 8px;
+    border: 3px solid #1f1f1f;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    box-shadow:
+        inset 0 6px 12px rgba(0, 0, 0, 0.55),
+        0 3px 0 rgba(0, 0, 0, 0.25);
+}
+
+.pickup-box {
+    margin: 80px auto 50px;
+    width: 300px;
+    height: 110px;
+
+    background: #3a3a3a;
+
+    border-radius: 10px;
+
+    box-shadow:
+        inset 0 8px 20px rgba(0, 0, 0, 0.5);
+
+}
+
+.error-message {
+    color: #e82121;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 12px;
+    text-align: center;
+}
+
+
+
+.pickup-box {
+    position: relative;
+    overflow: hidden;
+}
+
+.dispensed-drink {
+    position: absolute;
+    left: 50%;
+    top: -100px;
+
+    width: 80px;
+
+    transform: translateX(-50%) rotate(90deg);
+
+    animation: dropDrink 0.25s ease-in forwards;
+}
+
+@keyframes dropDrink {
+    0% {
+        top: -100px;
+    }
+
+    80% {
+        top: 18px;
+    }
+
+    100% {
+        top: 10px;
+    }
+}
