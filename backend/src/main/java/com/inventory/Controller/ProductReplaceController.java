@@ -1,7 +1,7 @@
 package com.inventory.Controller;
 
 import org.springframework.http.ResponseEntity;
-// import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +23,9 @@ public class ProductReplaceController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> replaceProduct(@Validated @RequestBody ProductRequest newProduct,
             @PathVariable Integer id) {
         return productReplaceService.replaceProduct(newProduct, id);
     }
-
-    
 }
