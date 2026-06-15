@@ -1,30 +1,27 @@
 package com.inventory.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.inventory.DTO.LoginRequest;
 import com.inventory.DTO.LoginResponse;
-import com.inventory.Entity.User; 
+import com.inventory.Entity.User;
 import com.inventory.Repository.UserRepository;
 import com.inventory.Security.JwtUtil;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public LoginResponse authenticate(LoginRequest request) {
         System.out.println("① 受信したEmail: " + request.getEmail());
-        
+
         User user = userRepository.findByEmail(request.getEmail());
 
         if (user == null) {
@@ -50,8 +47,7 @@ public class AuthService {
         // 修正
         String role = Boolean.TRUE.equals(user.getIsAdmin()) ? "admin" : "user";
         userInfo.setRole(role);
-        
-        
+
         response.setUser(userInfo);
 
         String realToken = jwtUtil.generateToken(user.getEmail(), role);
