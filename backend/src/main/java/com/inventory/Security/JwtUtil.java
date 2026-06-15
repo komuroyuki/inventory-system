@@ -33,12 +33,13 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String validateTokenAndGetEmail(String token) {
+    public Claims validateToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.getSubject();
+
+        return claims;
     }
 }

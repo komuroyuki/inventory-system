@@ -6,12 +6,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.Claims;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -42,12 +49,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = header.substring(7);
 
             try {
-                String email = jwtUtil.validateTokenAndGetEmail(token);
+                Claims claims = jwtUtil.validateToken(token);
 
-                if (email != null) {
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(email, null,
-                            new ArrayList<>());
-                    SecurityContextHolder.getContext().setAuthentication(auth);
+                String sub = claims.getSubject();
+                String role = claims.get("role", String.class);
+
+                List<GrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new SimpleGrantedAuthority(role));
+
+                if (sub != null) {
+                    SecurityContext context = SecurityContextHolder.createEmptyContext();
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(sub, null, authorities);
+                    context.setAuthentication(authentication);
+
+                    SecurityContextHolder.setContext(context);
                 }
             } catch (Exception e) {
                 System.out.println("❌ 無効なJWTトークンが送信されました: " + e.getMessage());
