@@ -43,10 +43,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             try {
                 String email = jwtUtil.validateTokenAndGetEmail(token);
-                
+
                 if (email != null) {
-                    UsernamePasswordAuthenticationToken auth = 
-                            new UsernamePasswordAuthenticationToken(email, null, new ArrayList<>());
+                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(email, null,
+                            new ArrayList<>());
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             } catch (Exception e) {
