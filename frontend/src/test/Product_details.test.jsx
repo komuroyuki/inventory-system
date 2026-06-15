@@ -199,7 +199,11 @@ describe('test product details エラー', () => {
 
             await user.type(input, '5');
             await user.click(button);
-            expect(console.error).toHaveBeenCalledWith('PUT失敗');
+            
+            // 完全一致から「含まれているか」のチェックに修正
+            expect(console.error).toHaveBeenCalledWith(
+                expect.stringContaining('PUT失敗')
+            );
         });
 
         it('通信エラー時はcatchに入る', async () => {

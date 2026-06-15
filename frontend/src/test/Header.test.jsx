@@ -147,16 +147,19 @@ describe("Headerコンポーネントのテスト", () => {
       expect(mockSetSearchParams).toHaveBeenCalledWith(expectedParams);
     });
   });
+  
 
   describe("ロゴクリックによる遷移（handleLogoClick）のテスト", () => {
     it("confirmLeaveが設定されていない場合、無条件でトップへ遷移すること", () => {
-      const { getByAltText } = render(
+      // 💡 getByText を追加
+      const { getByText } = render(
         <Router location="/" navigator={mockNavigator}>
           <Header />
         </Router>,
       );
 
-      const logo = getByAltText("マイサイトのロゴ");
+      // 💡 getByAltText から getByText("Re:fill") に修正
+      const logo = getByText("Re:fill");
       fireEvent.click(logo);
 
       expect(mockNavigate).toHaveBeenCalledWith("/");
@@ -164,13 +167,15 @@ describe("Headerコンポーネントのテスト", () => {
 
     it("confirmLeaveがtrueを返した場合、トップへ遷移すること", () => {
       const mockConfirmLeave = vi.fn(() => true);
-      const { getByAltText } = render(
+      // 💡 getByText を追加
+      const { getByText } = render(
         <Router location="/" navigator={mockNavigator}>
           <Header confirmLeave={mockConfirmLeave} />
         </Router>,
       );
 
-      const logo = getByAltText("マイサイトのロゴ");
+      // 💡 getByAltText から getByText("Re:fill") に修正
+      const logo = getByText("Re:fill");
       fireEvent.click(logo);
 
       expect(mockConfirmLeave).toHaveBeenCalled();
@@ -179,17 +184,19 @@ describe("Headerコンポーネントのテスト", () => {
 
     it("confirmLeaveがfalseを返した場合、遷移がキャンセルされること", () => {
       const mockConfirmLeave = vi.fn(() => false);
-      const { getByAltText } = render(
+      // 💡 getByText を追加
+      const { getByText } = render(
         <Router location="/" navigator={mockNavigator}>
           <Header confirmLeave={mockConfirmLeave} />
         </Router>,
       );
 
-      const logo = getByAltText("マイサイトのロゴ");
+      // 💡 getByAltText から getByText("Re:fill") に修正
+      const logo = getByText("Re:fill");
       fireEvent.click(logo);
 
       expect(mockConfirmLeave).toHaveBeenCalled();
       expect(mockNavigate).not.toHaveBeenCalled();
     });
   });
-});
+}); // 一番最後の閉じタグ
