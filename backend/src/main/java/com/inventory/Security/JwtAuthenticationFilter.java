@@ -30,12 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // ① CORSの事前確認（OPTIONS）通信は無条件で通す
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         // ② ログインAPIへのアクセスはトークンチェックをスキップする
         if (request.getRequestURI().equals("/products/login")) {
             filterChain.doFilter(request, response);
