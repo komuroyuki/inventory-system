@@ -1,7 +1,5 @@
 package com.inventory.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +8,6 @@ import lombok.Setter;
 @Table(name = "users")
 @Getter
 @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -23,7 +20,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
 
