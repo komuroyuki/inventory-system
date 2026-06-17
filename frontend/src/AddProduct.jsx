@@ -40,7 +40,7 @@ const AddProduct = () => {
 
   // トップへ戻るボタンの処理
   const handleBackToTop = () => {
-    navigate("/");
+    navigate("/top");
   };
 
 // 登録ボタンの処理
@@ -131,7 +131,7 @@ const AddProduct = () => {
       console.log("登録成功レスポンス:", result);
 
       alert("商品を登録しました！");
-      navigate("/"); // トップへ戻る
+      navigate("/top"); // トップへ戻る
     } catch (err) {
       console.error("登録エラー:", err);
       alert("登録に失敗しました。詳細なエラーはコンソールを確認してください。");
