@@ -29,7 +29,6 @@ export const fetcher = async (url) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // トークンが存在する場合のみ Authorization ヘッダーを付与
        ...(token && { Authorization: `Bearer ${token}` })
       }
     });

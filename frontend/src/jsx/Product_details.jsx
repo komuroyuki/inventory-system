@@ -29,7 +29,7 @@ const allImagesList = Object.keys(allImagesGlob).map((filePath) =>
 
 const fetcher = async (url) => {
     // ローカルストレージからトークンを取得
-    const token = localStorage.getItem("jwtToken");
+    const token = localStorage.getItem("access_token");
 
     // 第2引数として headers を追加し、トークンを付与する
     const res = await fetch(url, {
@@ -243,7 +243,7 @@ const Product_details = () => {
             setIsSubmitting(true);
 
             // ★ 追加：ローカルストレージからトークンを取得
-            const token = localStorage.getItem("jwtToken");
+            const token = localStorage.getItem("access_token");
 
             // サーバーから取得した画像URL/パスから、安全に「ファイル名のみ」を抽出する
             const rawImageUrl = data?.productImageUrl ?? data?.product_image_url ?? data?.image ?? '';
@@ -261,7 +261,7 @@ const Product_details = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': token ? `Bearer ${token}` : ""
+                    ...(token && { Authorization: `Bearer ${token}` })
                 },
                 body: JSON.stringify(updatedProductPayload),
             });

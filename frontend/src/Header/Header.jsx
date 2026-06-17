@@ -100,7 +100,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
  
   const handleLogout = () => {
     // ① ローカルストレージからトークンを完全に削除する
-    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("access_token");
 
     alert("ログアウトしました");
 
