@@ -27,8 +27,18 @@ const allImagesList = Object.keys(allImagesGlob).map((filePath) =>
     filePath.replace('/public', '')
 );
 
-const fetcher = async (...args) => {
-    const res = await fetch(...args);
+const fetcher = async (url) => {
+    // ローカルストレージからトークンを取得
+    const token = localStorage.getItem("access_token");
+
+    // 第2引数として headers を追加し、トークンを付与する
+    const res = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": token ? `Bearer ${token}` : ""
+        }
+    });
 
     if (!res.ok) {
         throw new Error('API error');
@@ -232,6 +242,9 @@ const Product_details = () => {
         try {
             setIsSubmitting(true);
 
+            // ★ 追加：ローカルストレージからトークンを取得
+            const token = localStorage.getItem("access_token");
+
             // サーバーから取得した画像URL/パスから、安全に「ファイル名のみ」を抽出する
             const rawImageUrl = data?.productImageUrl ?? data?.product_image_url ?? data?.image ?? '';
             const imageName = rawImageUrl ? rawImageUrl.split('/').pop() : '';
@@ -243,10 +256,12 @@ const Product_details = () => {
                 image: imageName
             };
 
+            // ★ 修正：headers に Authorization を追加
             const response = await fetch(`http://localhost:8080/products/${currentId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Bearer ${token}` })
                 },
                 body: JSON.stringify(updatedProductPayload),
             });

@@ -88,7 +88,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
     if (confirmLeave && !confirmLeave()) {
       return;
     }
-    navigate("/");
+    navigate("/top");
   };
  
   const handleAddProduct = () => {
@@ -99,7 +99,13 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
   };
  
   const handleLogout = () => {
+    // ① ローカルストレージからトークンを完全に削除する
+    localStorage.removeItem("access_token");
+
     alert("ログアウトしました");
+
+    // ② ログイン画面（/login）へ強制的に遷移させる
+    navigate("/login");
   };
  
   // 現在のURLパスに基づいて、ロゴ画像を出すべき画面かどうかを判定する
