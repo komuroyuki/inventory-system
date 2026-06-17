@@ -1,6 +1,3 @@
-DELETE FROM product_m;
-DELETE FROM category_m;
-DELETE FROM users;
 
 INSERT INTO category_m (category_id, category_name) VALUES
 (1, '水'),
@@ -84,4 +81,9 @@ category_id = VALUES(category_id);
 
 INSERT INTO users (id, name, password, email, is_admin) VALUES
 (1, 'admin', '$2a$10$X5wFBtLrL/kHcmrOGGTrGufsBX8CJ0WpQpF3pgeuxBB/H73BK1DW6', 'admin@example.com', TRUE),
-(2, 'user', '$2a$10$X5wFBtLrL/kHcmrOGGTrGufsBX8CJ0WpQpF3pgeuxBB/H73BK1DW6', 'user@example.com', FALSE);
+(2, 'user', '$2a$10$X5wFBtLrL/kHcmrOGGTrGufsBX8CJ0WpQpF3pgeuxBB/H73BK1DW6', 'user@example.com', FALSE)
+ON DUPLICATE KEY UPDATE
+name = VALUES(name),
+password = VALUES(password),
+email = VALUES(email),
+is_admin = VALUES(is_admin);

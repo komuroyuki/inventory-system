@@ -105,7 +105,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
     alert("ログアウトしました");
 
     // ② ログイン画面（/login）へ強制的に遷移させる
-    navigate("/login");
+    navigate("/");
   };
  
   // 現在のURLパスに基づいて、ロゴ画像を出すべき画面かどうかを判定する
