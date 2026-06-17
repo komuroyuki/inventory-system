@@ -7,6 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 class SecurityConfigTest {
 
@@ -30,12 +34,11 @@ class SecurityConfigTest {
 
 @BeforeEach
 void setup() {
-    jdbcTemplate.execute("DELETE FROM users");
-
     jdbcTemplate.update("""
         INSERT INTO users(id, email, name, password, is_admin)
-        VALUES (1, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?)
     """,
+        99999L,
         "test@example.com",
         "test",
         passwordEncoder.encode("Password1"),
