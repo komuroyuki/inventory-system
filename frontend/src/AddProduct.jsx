@@ -86,11 +86,16 @@ const AddProduct = () => {
     // --- 以降の try-catch 処理はそのまま ---
 
     try {
+      // ★ 追加：ローカルストレージからトークンを取得する
+      const token = localStorage.getItem("jwtToken");
+
       // 2. 指定のパスに JSON 形式でPOSTリクエストを送る
       const response = await fetch("http://localhost:8080/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 
+          // ★ 追加：ヘッダーに Authorization を付与する
+          "Authorization": token ? `Bearer ${token}` : "" 
         },
         body: JSON.stringify(requestBody), 
       });

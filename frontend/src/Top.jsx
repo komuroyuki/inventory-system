@@ -20,8 +20,20 @@ export const getApiUrl = (categoryId, keyword) => {
 };
 
 export const fetcher = async (url) => {
+  // ① ローカルストレージから保存したトークンを取り出す
+  const token = localStorage.getItem("jwtToken");
+
   try {
-    const response = await fetch(url);
+    // ② fetch の第2引数でヘッダー（入場パス）を追加する
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // トークンが存在する場合のみ Authorization ヘッダーを付与
+        "Authorization": token ? `Bearer ${token}` : "" 
+      }
+    });
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
