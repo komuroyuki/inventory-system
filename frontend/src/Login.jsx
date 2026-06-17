@@ -10,7 +10,7 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [loginStep, setLoginStep] = useState("idle");
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         setErrorMessage("");
 
         if (!userId && !password) {
@@ -45,11 +45,26 @@ const Login = () => {
             return;
         }
 
-        const isValidUser =
-            (userId === "admin@example.com" && password === "password") ||
-            (userId === "user@example.com" && password === "password");
+        try {
+            const response = await fetch("http://localhost:8080/products/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: userId,
+                    password: password,
+                }),
+            });
 
-        if (isValidUser) {
+            if (!response.ok) {
+                setErrorMessage("ユーザーIDまたはパスワードが正しくありません");
+                return;
+            }
+
+            const data = await response.json();
+            localStorage.setItem("access_token", data.access_token);
+
 
             setLoginStep("loading");
 
@@ -66,11 +81,10 @@ const Login = () => {
             }, 3800);
 
             return;
+        } catch (error) {
+            setErrorMessage("サーバーに接続できませんでした");
         }
-
-        setErrorMessage("ユーザーIDまたはパスワードが正しくありません");
     };
-
 
     return (
         <div className="login-page">
@@ -131,7 +145,7 @@ const Login = () => {
 
                         {loginStep === "success" && (
                             <div className="login-status">
-                                <h2>ログインに成功しました！</h2>
+                                <h2>ログイン成功！</h2>
                                 <p>ようこそ、Re:fillへ</p>
                             </div>
                         )}
