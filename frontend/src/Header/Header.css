@@ -217,16 +217,16 @@ body {
 
 @media screen and (max-width: 820px) {
   .header {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     padding: 12px 16px;
     height: auto;
-    min-height: auto;
+    min-height: 56px;
     gap: 12px;
   }
 
   .header-logo,
   .header-logout {
-    width: 100%;
+    width: auto;
   }
 
   .header-area {
