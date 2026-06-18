@@ -1,6 +1,6 @@
 import "./Header.css";
 import { useState } from "react";
-import { useSearchParams, useNavigate, useLocation } from "react-router-dom"; // 💡 useLocation を追加
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
  
 const Header = ({ showSearch = true, showCategory = true, confirmLeave, className = "" }) => {
   const [keyword, setKeyword] = useState("");
@@ -31,10 +31,13 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
   ];
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // 💡 現在のURLの場所を取得
+  const location = useLocation();
 
   const [, setSearchParams] = useSearchParams();
  
+  // ログイン時に保存した管理者フラグを取得 (文字列の 'true' と比較して完全なBooleanにする)
+  const isAdmin = localStorage.getItem("user_role") === "admin";
+
   const categoryMapping = {
     すべて: "0",
     水: "1",
@@ -99,17 +102,16 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
   };
  
   const handleLogout = () => {
-    // ① ローカルストレージからトークンを完全に削除する
+    // ローカルストレージからトークンと管理権限フラグを削除する
     localStorage.removeItem("access_token");
+    localStorage.removeItem("user_role");
 
     alert("ログアウトしました");
 
-    // ② ログイン画面（/login）へ強制的に遷移させる
+    // ログイン画面へ強制的に遷移させる
     navigate("/");
   };
  
-  // 現在のURLパスに基づいて、ロゴ画像を出すべき画面かどうかを判定する
-  // パスが 「/AddProduct」 または 「/product/〜 (商品詳細)」 の場合に true になります
   const isTargetPage = 
     location.pathname === "/AddProduct" || 
     location.pathname.startsWith("/product/");
@@ -119,7 +121,6 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
       <div className="header-logo">
         <h1>
           <a href="/" onClick={handleLogoClick} className="site-title">
-            {/*条件分岐：対象の画面ならロゴ画像、それ以外ならテキストを表示 */}
             {isTargetPage ? (
               <img src="/logo.png" alt="システムロゴ" className="header-logo-image" />
             ) : (
@@ -179,9 +180,12 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
       )}
  
       <div className="header-logout">
-        <button className="add-product-btn" onClick={handleAddProduct}>
-          ＋ 商品追加
-        </button>
+        {/* 管理者（isAdmin === TRUE）の時だけ「＋ 商品追加」ボタンを表示する */}
+        {isAdmin && (
+          <button className="add-product-btn" onClick={handleAddProduct}>
+            ＋ 商品追加
+          </button>
+        )}
         <button className="logout-btn" onClick={handleLogout}>
           ログアウト
         </button>

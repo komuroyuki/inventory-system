@@ -57,6 +57,9 @@ const Product_details = () => {
     const [outflow, setOutflow] = useState('');
     const [imageIndex, setImageIndex] = useState(0);
 
+    // ローカルストレージから権限を取得し、管理者かどうかを判定
+    const isAdmin = localStorage.getItem("user_role") === "admin";
+
     const { data, error, isLoading, mutate } = useSWR(
         `http://localhost:8080/products/${currentId}`,
         fetcher
@@ -186,6 +189,8 @@ const Product_details = () => {
     };
 
     const handleRegister = async () => {
+        // 管理者でないなら処理を中断
+        if (!isAdmin) return;
         if (isSubmitting) return;
 
         const Regex = /^\d+$/;
@@ -242,10 +247,8 @@ const Product_details = () => {
         try {
             setIsSubmitting(true);
 
-            // ★ 追加：ローカルストレージからトークンを取得
             const token = localStorage.getItem("access_token");
 
-            // サーバーから取得した画像URL/パスから、安全に「ファイル名のみ」を抽出する
             const rawImageUrl = data?.productImageUrl ?? data?.product_image_url ?? data?.image ?? '';
             const imageName = rawImageUrl ? rawImageUrl.split('/').pop() : '';
 
@@ -256,7 +259,6 @@ const Product_details = () => {
                 image: imageName
             };
 
-            // ★ 修正：headers に Authorization を追加
             const response = await fetch(`http://localhost:8080/products/${currentId}`, {
                 method: 'PUT',
                 headers: {
@@ -304,7 +306,7 @@ if (isLoading) {
         );
     }
 
-    if (error || !data) { //商品0件の時の表示
+    if (error || !data) {
         return (
             <div className="product-container">
                 <Header
@@ -319,7 +321,7 @@ if (isLoading) {
                             指定されたID（ID: {currentId}）の商品データは見つかりませんでした。
                         </p>
                         <button 
-                            onClick={() => navigate(-1)} // 前のページに戻る、または一覧へ
+                            onClick={() => navigate(-1)}
                             className="register-btn" 
                             style={{ width: 'auto', padding: '10px 24px', cursor: 'pointer' }}
                         >
@@ -431,8 +433,9 @@ if (isLoading) {
                                                 value={inflow}
                                                 onChange={(e) => setInflow(e.target.value)}
                                                 className="combined-input no-spin"
-                                                placeholder="0"
+                                                placeholder={isAdmin ? "0" : "-"} /* 権限によってプレースホルダーを変更 */
                                                 aria-label="入庫数"
+                                                disabled={!isAdmin} /* 管理者でないなら入力不可にする */
                                             />
                                         </div>
                                     </div>
@@ -450,8 +453,9 @@ if (isLoading) {
                                                 value={outflow}
                                                 onChange={(e) => setOutflow(e.target.value)}
                                                 className="combined-input no-spin"
-                                                placeholder="0"
+                                                placeholder={isAdmin ? "0" : "-"} /* 権限によってプレースホルダーを変更 */
                                                 aria-label="出庫数"
+                                                disabled={!isAdmin} /* 管理者でないなら入力不可にする */
                                             />
                                         </div>
                                     </div>
@@ -476,12 +480,15 @@ if (isLoading) {
                                     </div>
                                 </div>
 
-                                <button
-                                    onClick={handleRegister}
-                                    className="register-btn"
-                                >
-                                    登録
-                                </button>
+                                {/* 管理者（isAdmin === true）の時だけ「登録」ボタンを表示する */}
+                                {isAdmin && (
+                                    <button
+                                        onClick={handleRegister}
+                                        className="register-btn"
+                                    >
+                                        登録
+                                    </button>
+                                )}
 
                             </div>
 
