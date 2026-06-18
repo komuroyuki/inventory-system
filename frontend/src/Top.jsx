@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Top.css";
 import Header from "./Header/Header.jsx";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 export const getApiUrl = (categoryId, keyword) => {
   const cat = categoryId ?? "";
@@ -23,13 +23,15 @@ export const fetcher = async (url) => {
   // ① ローカルストレージから保存したトークンを取り出す
   const token = localStorage.getItem("access_token");
 
+
+
   try {
     // ② fetch の第2引数でヘッダー（入場パス）を追加する
     const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-       ...(token && { Authorization: `Bearer ${token}` })
+        ...(token && { Authorization: `Bearer ${token}` })
       }
     });
 
@@ -48,6 +50,14 @@ export const fetcher = async (url) => {
 
 const Top = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword") ?? "";
   const categoryId = searchParams.get("category_id") ?? "";

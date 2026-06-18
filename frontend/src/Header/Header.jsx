@@ -1,20 +1,20 @@
 import "./Header.css";
 import { useState } from "react";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom"; // 💡 useLocation を追加
- 
+
 const Header = ({ showSearch = true, showCategory = true, confirmLeave, className = "" }) => {
   const [keyword, setKeyword] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("すべて");
   const fixedHeader = className.includes("product-detail-page-header");
   const headerStyle = fixedHeader
     ? {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        width: "100%",
-        zIndex: 9999,
-      }
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      width: "100%",
+      zIndex: 9999,
+    }
     : undefined;
   const categoryLabels = [
     "すべて",
@@ -34,7 +34,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
   const location = useLocation(); // 💡 現在のURLの場所を取得
 
   const [, setSearchParams] = useSearchParams();
- 
+
   const categoryMapping = {
     すべて: "0",
     水: "1",
@@ -48,41 +48,41 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
     "乳性・乳酸菌飲料": "9",
     その他: "10",
   };
- 
+
   const handleSearch = () => {
     if (keyword.length > 50) {
       alert("50文字以内で入力してください");
       return;
     }
- 
+
     const params = new URLSearchParams();
     params.append("keyword", keyword);
     params.append("category_id", categoryMapping[selectedCategory] || "0");
- 
+
     setSearchParams(params);
   };
- 
+
   const handleKeyDown = (event) => {
     if (event.nativeEvent.isComposing || event.keyCode === 229) {
       return;
     }
- 
+
     if (event.key === "Enter") {
       handleSearch();
     }
   };
- 
+
   const handleCategorySelect = (label) => {
     setSelectedCategory(label);
     setIsOpen(false);
- 
+
     const params = new URLSearchParams();
     params.append("keyword", keyword);
     params.append("category_id", categoryMapping[label] || "0");
- 
+
     setSearchParams(params);
   };
- 
+
   const handleLogoClick = (e) => {
     e.preventDefault();
     if (confirmLeave && !confirmLeave()) {
@@ -90,14 +90,14 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
     }
     navigate("/top");
   };
- 
+
   const handleAddProduct = () => {
     if (confirmLeave && !confirmLeave()) {
       return;
     }
     navigate("/AddProduct");
   };
- 
+
   const handleLogout = () => {
     // ① ローカルストレージからトークンを完全に削除する
     localStorage.removeItem("access_token");
@@ -105,13 +105,13 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
     alert("ログアウトしました");
 
     // ② ログイン画面（/login）へ強制的に遷移させる
-    navigate("/login");
+    navigate("/");
   };
- 
+
   // 現在のURLパスに基づいて、ロゴ画像を出すべき画面かどうかを判定する
   // パスが 「/AddProduct」 または 「/product/〜 (商品詳細)」 の場合に true になります
-  const isTargetPage = 
-    location.pathname === "/AddProduct" || 
+  const isTargetPage =
+    location.pathname === "/AddProduct" ||
     location.pathname.startsWith("/product/");
 
   return (
@@ -128,7 +128,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
           </a>
         </h1>
       </div>
- 
+
       {(showSearch || showCategory) && (
         <div className="header-area">
           {showSearch && (
@@ -154,7 +154,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
               </button>
             </div>
           )}
- 
+
           {showCategory && (
             <div className="category">
               <div className="category-list" onClick={() => setIsOpen(!isOpen)}>
@@ -177,7 +177,7 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
           )}
         </div>
       )}
- 
+
       <div className="header-logout">
         <button className="add-product-btn" onClick={handleAddProduct}>
           ＋ 商品追加
@@ -189,5 +189,5 @@ const Header = ({ showSearch = true, showCategory = true, confirmLeave, classNam
     </header>
   );
 };
- 
+
 export default Header;
