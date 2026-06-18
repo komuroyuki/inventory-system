@@ -1,4 +1,4 @@
-import { useParams, useNavigate} from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import { useState, useMemo, useEffect } from 'react';
 import useSWR from 'swr';
@@ -11,16 +11,16 @@ const allImagesGlob = import.meta.glob(
 
 // カテゴリーIDとフォルダ名の対応表
 const CATEGORY_FOLDERS = {
-  "1": "water",          // 水
-  "2": "tea",            // お茶飲料
-  "3": "coffe",          // コーヒー飲料
-  "4": "carbonated",     // 炭酸飲料
-  "5": "fruits",         // 果実・野菜飲料
-  "6": "sports",         // スポーツドリンク
-  "7": "health",         // 健康飲料
-  "8": "energy",         // エナジードリンク
-  "9": "milky",          // 乳性・乳酸菌飲料
-  "10": "others"         // その他
+    "1": "water",          // 水
+    "2": "tea",            // お茶飲料
+    "3": "coffe",          // コーヒー飲料
+    "4": "carbonated",     // 炭酸飲料
+    "5": "fruits",         // 果実・野菜飲料
+    "6": "sports",         // スポーツドリンク
+    "7": "health",         // 健康飲料
+    "8": "energy",         // エナジードリンク
+    "9": "milky",          // 乳性・乳酸菌飲料
+    "10": "others"         // その他
 };
 
 const allImagesList = Object.keys(allImagesGlob).map((filePath) =>
@@ -48,10 +48,19 @@ const fetcher = async (url) => {
 };
 
 const Product_details = () => {
-    const {productId} = useParams();
+    const { productId } = useParams();
     const [productQuantity, setProductQuantity] = useState(0);
     const currentId = Number(productId) || 1;
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            navigate("/");
+        }
+    }, [navigate]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [inflow, setInflow] = useState('');
     const [outflow, setOutflow] = useState('');
@@ -63,39 +72,40 @@ const Product_details = () => {
     );
 
     const isDirty = inflow !== '' || outflow !== '';
-    
+
     const confirmBeforeLeave = () => {
-    if (!isDirty) return true;
+        if (!isDirty) return true;
 
-    return window.confirm(
-        '入力中の内容がありますが、登録しなくてよろしいですか？'
-    );};
+        return window.confirm(
+            '入力中の内容がありますが、登録しなくてよろしいですか？'
+        );
+    };
 
-     useEffect(() => {
-    if (data) {
-        const initialStock =
-            Number(data?.productQuantity ?? data?.quantity ?? 0) || 0;
+    useEffect(() => {
+        if (data) {
+            const initialStock =
+                Number(data?.productQuantity ?? data?.quantity ?? 0) || 0;
 
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setProductQuantity(initialStock);
-    }
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setProductQuantity(initialStock);
+        }
 
-    setImageIndex(0);
-    setInflow('');
-    setOutflow('');
-}, [data, currentId]);
+        setImageIndex(0);
+        setInflow('');
+        setOutflow('');
+    }, [data, currentId]);
 
     useEffect(() => {
         const handleBeforeUnload = (e) => {
-        if (!isDirty) return;
+            if (!isDirty) return;
 
-        e.preventDefault();
-        e.returnValue = '';
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-        window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
+            e.preventDefault();
+            e.returnValue = '';
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, [isDirty]);
 
     const productName =
@@ -112,7 +122,7 @@ const Product_details = () => {
 
         // この商品のカテゴリーIDを取得（1 や 5 など）
         const catId = String(data?.categoryId?.id ?? data?.categoryId ?? '10');
-        
+
         // 対応表からフォルダ名（"water" や "fruit_vegetable"）を取得
         const folderName = CATEGORY_FOLDERS[catId] || 'others';
 
@@ -178,9 +188,9 @@ const Product_details = () => {
         data?.next_product_id;
 
     const handleNext = () => {
-        
+
         if (!confirmBeforeLeave()) return;
-        if (!nextProductId) return; 
+        if (!nextProductId) return;
 
         navigate(`/product/${nextProductId}`);
     };
@@ -190,24 +200,24 @@ const Product_details = () => {
 
         const Regex = /^\d+$/;
 
-        if ((inflow !== '' && !Regex.test(inflow)) || 
-        (outflow !== '' && !Regex.test(outflow))) {
+        if ((inflow !== '' && !Regex.test(inflow)) ||
+            (outflow !== '' && !Regex.test(outflow))) {
             alert('半角数字・整数・0以上の値で入力してください');
             return;
         }
 
         if ((inflow !== '' && (!Regex.test(inflow) || inflow.includes('.'))) ||
-        (outflow !== '' && (!Regex.test(outflow) || outflow.includes('.')))) {
+            (outflow !== '' && (!Regex.test(outflow) || outflow.includes('.')))) {
             alert('半角数字・整数・0以上の値で入力してください');
             return;
         }
 
-        if(Number(inflow) >= 9999 || Number(outflow) >= 9999){
+        if (Number(inflow) >= 9999 || Number(outflow) >= 9999) {
             alert('最大桁数を超えています');
             return;
         }
 
-        if(Number(inflow) < 0 || Number(outflow) < 0){
+        if (Number(inflow) < 0 || Number(outflow) < 0) {
             alert('半角数字・整数・0以上の値で入力してください');
             return;
         }
@@ -234,7 +244,7 @@ const Product_details = () => {
             出庫数: ${outf}
             更新後在庫数: ${newQuantity}`
         );
-        
+
         if (!confirmed) {
             return;
         }
@@ -286,7 +296,7 @@ const Product_details = () => {
         }
     };
 
-if (isLoading) {
+    if (isLoading) {
         return (
             <div className="product-container">
                 <Header
@@ -318,9 +328,9 @@ if (isLoading) {
                         <p style={{ color: '#666', marginBottom: '24px' }}>
                             指定されたID（ID: {currentId}）の商品データは見つかりませんでした。
                         </p>
-                        <button 
+                        <button
                             onClick={() => navigate(-1)} // 前のページに戻る、または一覧へ
-                            className="register-btn" 
+                            className="register-btn"
                             style={{ width: 'auto', padding: '10px 24px', cursor: 'pointer' }}
                         >
                             前のページに戻る
@@ -334,10 +344,10 @@ if (isLoading) {
     return (
         <div className="product-container">
             <Header
-              showSearch={false}
-              showCategory={false}
-              confirmLeave={confirmBeforeLeave}
-              className="product-detail-page-header"
+                showSearch={false}
+                showCategory={false}
+                confirmLeave={confirmBeforeLeave}
+                className="product-detail-page-header"
             />
 
             <main className="product-main">

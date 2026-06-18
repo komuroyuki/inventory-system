@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AddProduct.css";
 import Header from "./Header/Header.jsx";
@@ -20,12 +20,19 @@ const CATEGORIES = [
 
 const AddProduct = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   // フォームの状態管理
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState(0);
   //調整ポイント1: 初期値を「すべて（"0"）」ではなく、何かしらの具体的なカテゴリー（例: 水 "1"）にするか、空文字にしてバリデーションをかける
-  const [categoryId, setCategoryId] = useState("1"); 
+  const [categoryId, setCategoryId] = useState("1");
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
 
@@ -43,7 +50,7 @@ const AddProduct = () => {
     navigate("/top");
   };
 
-// 登録ボタンの処理
+  // 登録ボタンの処理
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -93,10 +100,10 @@ const AddProduct = () => {
       const response = await fetch("http://localhost:8080/products", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", 
-          ...(token && { Authorization: `Bearer ${token}` }) 
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` })
         },
-        body: JSON.stringify(requestBody), 
+        body: JSON.stringify(requestBody),
       });
 
       //変更ポイント: エラー（okじゃないとき）の処理を詳しく解析する
@@ -112,14 +119,14 @@ const AddProduct = () => {
           const errorResult = await response.json();
           // Java側のエラーメッセージに「既に存在」や「重複」のようなキーワードが入っているかチェック
           if (errorResult.message && (
-              errorResult.message.includes("既に登録") || 
-              errorResult.message.includes("存在します") || 
-              errorResult.message.includes("Duplicate")
+            errorResult.message.includes("既に登録") ||
+            errorResult.message.includes("存在します") ||
+            errorResult.message.includes("Duplicate")
           )) {
             alert("同一名の商品が既に登録されています。");
             return;
           }
-       } catch (jsonErr) {
+        } catch (jsonErr) {
           console.debug("JSONの解析をスキップしました:", jsonErr);
         }
 
@@ -151,7 +158,7 @@ const AddProduct = () => {
 
         <div className="form-card">
           <form onSubmit={handleSubmit}>
-            
+
             {/* 商品名入力 */}
             <div className="form-group">
               <label className="form-label" htmlFor="product-name">商品名</label>
@@ -166,36 +173,36 @@ const AddProduct = () => {
             </div>
 
             {/* 在庫数 と カテゴリー の2カラム配置 */}
-<div className="form-row">
-  <div className="form-group">
-    <label className="form-label" htmlFor="stock-quantity">初期在庫数</label>
-    <input
-      type="number"
-      id="stock-quantity"
-      className="form-input"
-      min="0"
-      max="1000"
-      value={quantity}
-      onChange={(e) => {
-      const rawValue = e.target.value;
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label" htmlFor="stock-quantity">初期在庫数</label>
+                <input
+                  type="number"
+                  id="stock-quantity"
+                  className="form-input"
+                  min="0"
+                  max="1000"
+                  value={quantity}
+                  onChange={(e) => {
+                    const rawValue = e.target.value;
 
-      // 1. もし中身が完全に空（バックスペースで全部消した時など）なら、状態を 0 にする
-      if (rawValue === "") {
-        setQuantity(0);
-        return;
-      }
-      // 2. 数値に変換する（これで自動的に先頭の「000...」は「0」に、「005」は「5」にギュッと縮む）
-      const numValue = Number(rawValue);
-      // 3. 状態（State）を更新
-      setQuantity(numValue);
-    }}
-    onKeyDown={(e) => {
-      if (["+", "-", "e", "E", "."].includes(e.key)) {
-        e.preventDefault();
-      }
-    }}
-  />
-</div>
+                    // 1. もし中身が完全に空（バックスペースで全部消した時など）なら、状態を 0 にする
+                    if (rawValue === "") {
+                      setQuantity(0);
+                      return;
+                    }
+                    // 2. 数値に変換する（これで自動的に先頭の「000...」は「0」に、「005」は「5」にギュッと縮む）
+                    const numValue = Number(rawValue);
+                    // 3. 状態（State）を更新
+                    setQuantity(numValue);
+                  }}
+                  onKeyDown={(e) => {
+                    if (["+", "-", "e", "E", "."].includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                />
+              </div>
 
               <div className="form-group">
                 <label className="form-label" htmlFor="category-select">カテゴリー</label>
