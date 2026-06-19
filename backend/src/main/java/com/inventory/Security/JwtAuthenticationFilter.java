@@ -59,8 +59,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.setContext(context);
                 }
-            } catch (Exception e) {
+            } catch (io.jsonwebtoken.ExpiredJwtException e) {
+                // ① トークン期限切れ専用の処理
+                System.out.println("❌ トークンの有効期限が切れています: " + e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTPステータス 401 をセット
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write("{\"error_code\": \"TOKEN_EXPIRED\", \"message\": \"ログインの有効期限が切れました。\"}");
+                return; // ！！超重要！！ ここでメソッドを終了させ、奥へ進ませない
+
+            } catch (io.jsonwebtoken.JwtException e) {
+                // ② その他のJWTエラー（改ざんなど）の処理
                 System.out.println("❌ 無効なJWTトークンが送信されました: " + e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTPステータス 401 をセット
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write("{\"error_code\": \"INVALID_TOKEN\", \"message\": \"不正なトークンです。\"}");
+                return; // ！！超重要！！ ここでメソッドを終了させる
             }
         }
 
