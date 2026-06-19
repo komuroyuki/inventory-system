@@ -42,7 +42,7 @@ h2 {
   gap: 20px;
   max-width: 1030px;
   margin: 20px auto;
-  justify-content: start;
+  justify-content: center;;
 }
 
 /* カードの修正：線の削除 */
@@ -132,11 +132,5 @@ h2 {
   font-size: small;
   text-align: center;
   padding: 20px 0;
-}
-
-@media screen and (max-width: 600px) {
-  .grid {
-    justify-content: center;
-  }
 }
 
