@@ -13,7 +13,7 @@ function SWRGlobalConfig({ children }) {
   return (
     <SWRConfig
       value={{
-        // 💡 【超重要】全画面共通で、401エラーの時はリトライを即座にストップさせる
+        // 全画面共通で、401エラーの時はリトライを即座にストップさせる
         onErrorRetry: (err) => {
           if (err.status === 401) return; // 401の時はリトライせず即エラー確定
         },
