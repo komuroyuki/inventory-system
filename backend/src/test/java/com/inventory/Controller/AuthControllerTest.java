@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.web.reactive.server.WebTestClientBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -47,8 +51,7 @@ public class AuthControllerTest {
         request.setEmail(email);
         request.setPassword("password");
 
-        client.post().uri("/products/login")
-                .contentType(MediaType.APPLICATION_JSON)
+        client.post().uri("")
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isOk()
@@ -68,6 +71,17 @@ public class AuthControllerTest {
 
         assertThat(claims.getSubject()).isEqualTo(email);
         assertThat(claims.get("role", String.class)).isEqualTo(role);
+    }
+
+    @TestConfiguration(proxyBeanMethods = false)
+    static class ClientConfig {
+
+        @Bean
+        WebTestClientBuilderCustomizer clientCustomizer() {
+            return builder -> builder
+                    .baseUrl("/products/login")
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        }
     }
 
 }
