@@ -49,6 +49,30 @@ public class AuthControllerTest {
         assertLogin(request, "admin");
     }
 
+    @Test
+    void loginShouldReturnUnauthorizedWhenTheEmailIsIncorrect() {
+        LoginRequest request = createRequest("incorrect@example.com", "password");
+        createStatusAssertions(request).isUnauthorized();
+    }
+
+    @Test
+    void loginShouldReturnUnauthorizedWhenThePasswordIsIncorrect() {
+        LoginRequest request = createRequest("user@example.com", "incorrect");
+        createStatusAssertions(request).isUnauthorized();
+    }
+
+    @Test
+    void loginShouldReturnBadRequestWhenTheEmailIsBlank() {
+        LoginRequest request = createRequest("", "password");
+        createStatusAssertions(request).isBadRequest();
+    }
+
+    @Test
+    void loginShouldReturnBadRequestWhenThePasswordIsBlank() {
+        LoginRequest request = createRequest("user@example.com", "");
+        createStatusAssertions(request).isBadRequest();
+    }
+
     private LoginRequest createRequest(String email, String password) {
         LoginRequest request = new LoginRequest();
         request.setEmail(email);
