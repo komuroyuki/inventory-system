@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.inventory.DTO.LoginRequest;
@@ -38,12 +39,14 @@ public class AuthControllerTest {
 
     @Test
     void loginShouldReturnUserJwtWhenUserRequests() {
-        testLogin("user@example.com", "user");
+        LoginRequest request = createRequest("user@example.com", "password");
+        assertLogin(request, "user");
     }
 
     @Test
     void loginShouldReturnAdminJwtWhenAdminRequests() {
-        testLogin("admin@example.com", "admin");
+        LoginRequest request = createRequest("admin@example.com", "password");
+        assertLogin(request, "admin");
     }
 
     private LoginRequest createRequest(String email, String password) {
@@ -54,15 +57,17 @@ public class AuthControllerTest {
         return request;
     }
 
-    private void testLogin(String email, String role) {
-        LoginRequest request = createRequest(email, "password");
-
-        client.post().uri("")
+    private StatusAssertions createStatusAssertions(LoginRequest request) {
+        return client.post().uri("")
                 .bodyValue(request)
                 .exchange()
-                .expectStatus().isOk()
+                .expectStatus();
+    }
+
+    private void assertLogin(LoginRequest request, String role) {
+        createStatusAssertions(request).isOk()
                 .expectBody(LoginResponse.class)
-                .consumeWith(result -> assertLoginResponse(result, email, role));
+                .consumeWith(result -> assertLoginResponse(result, request.getEmail(), role));
     }
 
     private void assertLoginResponse(EntityExchangeResult<LoginResponse> result, String email, String role) {
