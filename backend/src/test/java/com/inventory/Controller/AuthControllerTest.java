@@ -46,10 +46,16 @@ public class AuthControllerTest {
         testLogin("admin@example.com", "admin");
     }
 
-    private void testLogin(String email, String role) {
+    private LoginRequest createRequest(String email, String password) {
         LoginRequest request = new LoginRequest();
         request.setEmail(email);
-        request.setPassword("password");
+        request.setPassword(password);
+
+        return request;
+    }
+
+    private void testLogin(String email, String role) {
+        LoginRequest request = createRequest(email, "password");
 
         client.post().uri("")
                 .bodyValue(request)
