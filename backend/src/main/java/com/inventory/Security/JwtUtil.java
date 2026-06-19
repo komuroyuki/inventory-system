@@ -16,7 +16,7 @@ public class JwtUtil {
     private String secretKey;
     private Key key;
 
-    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
+    private final long EXPIRATION_TIME = 1000 * 60 * 15;
 
     @jakarta.annotation.PostConstruct
     public void init() {
