@@ -3,7 +3,7 @@
   width: 100%;
   min-height: 100vh;      
   margin: 0;
-  padding: 64px 20px 40px;
+  padding: 80px 20px 40px;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background-color: #B8EAFF;
   border: none !important;
@@ -39,10 +39,10 @@
   display: flex;
   align-items: center;     
   justify-content: center;
-  gap: 30px;          
+  gap: 20px;
   width: 100%;
   height: 100%;
-  max-width: 1400px;      
+  max-width: 1200px;
 }
 
 /* 通常時は画像とフォームが row (横並び) */
@@ -50,8 +50,10 @@
   display: flex;
   flex-direction: row;      
   align-items: center; 
-  gap: 50px;        
+  justify-content: center;
+  gap: 40px;
   flex: 1;
+  min-width: 0;
   max-width: 100%;     
   width: 100%;
   height: 100%;
@@ -97,17 +99,18 @@
 
 /* --- 画像セクション --- */
 .image-section {
-  flex: 0 0 450px;        
+  flex: 0 0 400px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 0;
 }
 
 .image-stage {
   position: relative; 
   width: 100%;
-  max-width: 450px;       
+  max-width: 400px;
   aspect-ratio: 1 / 1;
   height: auto;           
   border-radius: 12px;
@@ -140,22 +143,25 @@
 .form-section {
   flex: 1;                
   background-color: #B8EAFF;
-  padding: 20px 40px;      
+  padding: 20px 20px;
   display: flex;
   flex-direction: column;  
   justify-content: center; 
   width: 100%;
   box-sizing: border-box;
+  min-width: 0; 
 }
 
 /* 商品ID・商品名のヘッダー */
 .product-detail-header {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 20px;
   margin-bottom: 35px;    
   padding-bottom: 12px;
   border-bottom: 2px dotted #4A5568; 
+  width: 100%;
+  max-width: 360px;
 }
 
 .detail-id {
@@ -171,8 +177,11 @@
   font-weight: bold;
   color: #1A202C;
   flex: 1;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.4;
 }
 
 /* 入出庫ボックス ＆ 登録ボタン */
@@ -180,7 +189,7 @@
   margin-bottom: 25px;
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; 
 }
 
 .combined-stock-container {
@@ -274,7 +283,7 @@
   align-items: center;
   width: 100%;    
   max-width: 360px;            
-  margin: 30px auto 0 auto;       
+  margin: 30px 0 0 0;
   justify-content: space-between; 
   gap: 15px;
 }
@@ -359,11 +368,11 @@ input.no-spin {
 }
 
 
-/* 2. レスポンシブ用（画面幅が 900px 以下になったら自動適用）
-   全体のレイアウトや「左右のボタン配置」を崩さずに、画像だけを上に遷移させます*/
-@media (max-width: 900px) {
+/* --- レスポンシブ (スマホ・タブレット対応) --- */
+
+@media (max-width: 980px) {
   .product-container {
-    padding: 56px 10px 20px;
+    padding: 70px 10px 20px;
   }
 
   .main-content-wrapper {
@@ -404,9 +413,20 @@ input.no-spin {
     margin-bottom: 25px;
   }
 
+  .combined-stock-wrapper {
+    justify-content: center;
+  }
+
+  .bottom-actions-row {
+    margin: 30px auto 0 auto;
+  }
+
   .detail-name {
     flex: none; 
     font-size: 1.4rem; 
+    white-space: normal;
+    word-break: break-all;
+    line-height: 1.4;
   }
 
   .center-page-btn {
@@ -418,15 +438,15 @@ input.no-spin {
   }
 
   .product-overlay-image {
-  position: absolute; 
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(25deg); 
-  width: 80px;
-  height: auto;
-  max-width: 100%;  
-  max-height: 100%;
-  object-fit: contain; 
-  z-index: 2; 
-}
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(25deg); 
+    width: 80px;
+    height: auto;
+    max-width: 100%;  
+    max-height: 100%;
+    object-fit: contain; 
+    z-index: 2; 
+  }
 }
