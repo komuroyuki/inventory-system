@@ -48,20 +48,6 @@ export const fetcher = async (url) => {
 
 const Top = () => {
   const navigate = useNavigate();
-
-  // 1. トークンの取得と不正チェック
-  const token = localStorage.getItem("access_token");
-  const isTokenInvalid = !token || token.split('.').length !== 3;
-
-  // 未ログインや壊れたトークンの場合は、即座にローカルストレージを掃除してログイン画面へ
-  useEffect(() => {
-    if (isTokenInvalid) {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("user_role");
-      navigate("/");
-    }
-  }, [isTokenInvalid, navigate]);
-
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("keyword") ?? "";
   const categoryId = searchParams.get("category_id") ?? "";
@@ -71,16 +57,7 @@ const Top = () => {
     [categoryId, keyword],
   );
 
-  // 🔄 2. 商品データのフェッチ（不正トークン時は null で通信スキップ。401時の挙動は App.jsx が一括処理します）
-  const { data: product, error, isLoading } = useSWR(
-    isTokenInvalid ? null : apiUrl, 
-    fetcher
-  );
-
-  // トークン不正時はこれ以上下のレンダリングをスキップ
-  if (isTokenInvalid) {
-    return null;
-  }
+  const { data: product, error, isLoading } = useSWR(apiUrl, fetcher);
 
   const displayProducts = product ?? [];
   console.log("バックエンドから届いたデータ:", displayProducts);
