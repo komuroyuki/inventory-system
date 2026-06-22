@@ -43,7 +43,7 @@ public class ProductDeletionTests {
 
     @Test
     @WithMockUser
-    void deleteProductShouldReturnBadRequestWhenTheRequesterIsNotAnAdmin() {
+    void deleteProductShouldReturnForbiddenWhenTheRequesterIsNotAnAdmin() {
         Integer id = saveProduct();
 
         createStatusAssertions(id).isForbidden();
