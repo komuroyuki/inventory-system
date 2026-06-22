@@ -147,7 +147,7 @@
   display: flex;
   flex-direction: column;  
   justify-content: center; 
-  align-items: stretch;    /* 💡 修正：子要素（ヘッダーなど）を横いっぱいに引き伸ばす */
+  align-items: stretch;
   width: 100%;
   box-sizing: border-box;
   min-width: 0; 
@@ -156,13 +156,13 @@
 /* 商品ID・商品名のヘッダー */
 .product-detail-header {
   display: flex;
-  flex-direction: row;     /* 💡 修正：明示的に横並びをキープ */
+  flex-direction: row;
   align-items: center;     /* 上下の中央揃え */
   gap: 20px;
   margin-bottom: 35px;    
   padding-bottom: 12px;
   border-bottom: 2px dotted #4A5568; 
-  width: 100%;             /* 💡 修正：max-widthの360px制限を削除して100%広げる */
+  width: 100%;
 }
 
 .detail-id {
@@ -177,10 +177,10 @@
   font-size: 1.8rem;   
   font-weight: bold;
   color: #1A202C;
-  flex: 1;                 /* 💡 修正：IDの右側の余白をすべて使う */
-  min-width: 0;            /* 💡 修正：Flexbox内の横潰れを防ぐ */
+  flex: 1;
+  min-width: 0;
   white-space: normal;
-  word-break: break-all;   /* 💡 修正：潰れを防いだ上で、端っこまでいったら自然改行 */
+  word-break: break-all;
   overflow: visible;
   text-overflow: clip;
   line-height: 1.4;
@@ -201,7 +201,7 @@
   box-sizing: border-box;
   padding: 5px 15px;  
   width: 100%;     
-  max-width: 450px;        /* 💡 修正：360pxから少しゆとりのあるサイズに拡張 */
+  max-width: 450px;
   background-color: #ffffff;
   transition: border-color 0.2s;
   box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
@@ -286,7 +286,7 @@
   display: flex;
   align-items: center;
   width: 100%;    
-  max-width: 450px;            /* 💡 修正：上のインプットの幅と統一 */
+  max-width: 450px;
   margin: 30px 0 0 0;
   justify-content: space-between; 
   gap: 15px;
