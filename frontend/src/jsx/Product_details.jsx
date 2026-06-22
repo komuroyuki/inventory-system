@@ -164,8 +164,8 @@ const Product_details = () => {
             const token = localStorage.getItem("access_token");
 
             // 2. 削除APIへフェッチリクエスト
-            const response = await fetch(`http://localhost:8080/products/delete/${currentId}`, {
-                method: 'DELETE', // 削除のため一般的にDELETEメソッド、または要件に合わせて調整
+            const response = await fetch(`http://localhost:8080/products/${currentId}`, {
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     ...(token && { Authorization: `Bearer ${token}` })
