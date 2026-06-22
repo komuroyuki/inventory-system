@@ -11,8 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.web.reactive.server.WebTestClientBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.inventory.DTO.LoginRequest;
@@ -34,26 +39,66 @@ public class AuthControllerTest {
 
     @Test
     void loginShouldReturnUserJwtWhenUserRequests() {
-        testLogin("user@example.com", "user");
+        LoginRequest request = createRequest("user@example.com", "password");
+        assertLogin(request, "user");
     }
 
     @Test
     void loginShouldReturnAdminJwtWhenAdminRequests() {
-        testLogin("admin@example.com", "admin");
+        LoginRequest request = createRequest("admin@example.com", "password");
+        assertLogin(request, "admin");
     }
 
-    private void testLogin(String email, String role) {
+    @Test
+    void loginShouldReturnUnauthorizedWhenTheEmailIsIncorrect() {
+        LoginRequest request = createRequest("incorrect@example.com", "password");
+        createStatusAssertions(request).isUnauthorized();
+    }
+
+    @Test
+    void loginShouldReturnUnauthorizedWhenThePasswordIsIncorrect() {
+        LoginRequest request = createRequest("user@example.com", "incorrect");
+        createStatusAssertions(request).isUnauthorized();
+    }
+
+    @Test
+    void loginShouldReturnBadRequestWhenTheEmailIsBlank() {
+        LoginRequest request = createRequest("", "password");
+        createStatusAssertions(request).isBadRequest();
+    }
+
+    @Test
+    void loginShouldReturnBadRequestWhenThePasswordIsBlank() {
+        LoginRequest request = createRequest("user@example.com", "");
+        createStatusAssertions(request).isBadRequest();
+    }
+
+    @Test
+    void loginShouldReturnBadRequestWhenBodyIsMissing() {
+        client.post().uri("")
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    private LoginRequest createRequest(String email, String password) {
         LoginRequest request = new LoginRequest();
         request.setEmail(email);
-        request.setPassword("password");
+        request.setPassword(password);
 
-        client.post().uri("/products/login")
-                .contentType(MediaType.APPLICATION_JSON)
+        return request;
+    }
+
+    private StatusAssertions createStatusAssertions(LoginRequest request) {
+        return client.post().uri("")
                 .bodyValue(request)
                 .exchange()
-                .expectStatus().isOk()
+                .expectStatus();
+    }
+
+    private void assertLogin(LoginRequest request, String role) {
+        createStatusAssertions(request).isOk()
                 .expectBody(LoginResponse.class)
-                .consumeWith(result -> assertLoginResponse(result, email, role));
+                .consumeWith(result -> assertLoginResponse(result, request.getEmail(), role));
     }
 
     private void assertLoginResponse(EntityExchangeResult<LoginResponse> result, String email, String role) {
@@ -68,6 +113,17 @@ public class AuthControllerTest {
 
         assertThat(claims.getSubject()).isEqualTo(email);
         assertThat(claims.get("role", String.class)).isEqualTo(role);
+    }
+
+    @TestConfiguration(proxyBeanMethods = false)
+    static class ClientConfig {
+
+        @Bean
+        WebTestClientBuilderCustomizer clientCustomizer() {
+            return builder -> builder
+                    .baseUrl("/products/login")
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        }
     }
 
 }
