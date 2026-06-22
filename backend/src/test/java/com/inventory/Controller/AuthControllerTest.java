@@ -73,6 +73,13 @@ public class AuthControllerTest {
         createStatusAssertions(request).isBadRequest();
     }
 
+    @Test
+    void loginShouldReturnBadRequestWhenBodyIsMissing() {
+        client.post().uri("")
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
     private LoginRequest createRequest(String email, String password) {
         LoginRequest request = new LoginRequest();
         request.setEmail(email);
