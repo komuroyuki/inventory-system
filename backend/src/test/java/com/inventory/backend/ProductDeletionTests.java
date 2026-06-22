@@ -1,7 +1,6 @@
 package com.inventory.backend;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assumptions.abort;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.inventory.Entity.Category;
 import com.inventory.Entity.Product;
-import com.inventory.Repository.CategoryRepository;
 import com.inventory.Repository.ProductRepository;
 
 @SpringBootTest
@@ -27,10 +25,7 @@ public class ProductDeletionTests {
     private WebTestClient client;
 
     @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
+    private ProductRepository repository;
 
     @Test
     void deleteProductShouldDeleteProduct() {
@@ -38,7 +33,7 @@ public class ProductDeletionTests {
 
         createStatusAssertions(id).isNoContent()
                 .expectBody().isEmpty();
-        assertThat(productRepository.existsById(id)).isFalse();
+        assertThat(repository.existsById(id)).isFalse();
     }
 
     @Test
@@ -47,7 +42,7 @@ public class ProductDeletionTests {
         Integer id = saveProduct();
 
         createStatusAssertions(id).isForbidden();
-        assertThat(productRepository.existsById(id)).isTrue();
+        assertThat(repository.existsById(id)).isTrue();
     }
 
     @Test
@@ -58,14 +53,15 @@ public class ProductDeletionTests {
     }
 
     private Integer saveProduct() {
-        Category category = categoryRepository.findById(1).orElseGet(() -> abort());
+        Category category = new Category();
+        category.setId(1);
 
         Product product = new Product();
         product.setName("Test");
         product.setQuantity(10);
         product.setCategoryId(category);
 
-        Product saved = productRepository.save(product);
+        Product saved = repository.save(product);
         Integer id = saved.getId();
 
         return id;
