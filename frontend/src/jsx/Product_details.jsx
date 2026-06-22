@@ -150,15 +150,52 @@ const Product_details = () => {
         }
     };
 
+    // 商品削除処理
+    const handleDelete = async () => {
+        if (!isAdmin) return;
+        if (isSubmitting) return;
+
+        // 1. 確認モーダルを表示（OK=削除、キャンセル=何もしない）
+        const confirmed = window.confirm("商品を削除します。よろしいですか？");
+        if (!confirmed) return;
+
+        try {
+            setIsSubmitting(true);
+            const token = localStorage.getItem("access_token");
+
+            // 2. 削除APIへフェッチリクエスト
+            const response = await fetch(`http://localhost:8080/products/delete/${currentId}`, {
+                method: 'DELETE', // 削除のため一般的にDELETEメソッド、または要件に合わせて調整
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Bearer ${token}` })
+                }
+            });
+
+            if (!response.ok) {
+                console.error(`DELETE失敗! ステータス: ${response.status}`);
+                alert('商品の削除に失敗しました。');
+                return;
+            }
+
+            // 3. 成功アラートを表示し、商品一覧画面へ遷移
+            alert('商品を削除しました。');
+            navigate('/top');
+        } catch (error) {
+            console.error('通信エラー:', error);
+            alert('通信に失敗しました。');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     // 登録処理
     const handleRegister = async () => {
-        // 管理者でないなら処理を中断
         if (!isAdmin) return;
         if (isSubmitting) return;
 
         const Regex = /^\d+$/;
 
-        // 集約された入力バリデーション
         if ((inflow !== '' && !Regex.test(inflow)) || (outflow !== '' && !Regex.test(outflow))) {
             alert('半角数字・整数・0以上の値で入力してください');
             return;
@@ -218,7 +255,6 @@ const Product_details = () => {
                 return;
             }
 
-            // SWRデータを最新の在庫数に書き換えて同期
             await mutate(
                 { ...data, productQuantity: newQuantity, quantity: newQuantity },
                 { revalidate: true }
@@ -268,7 +304,6 @@ const Product_details = () => {
             <main className="product-main">
                 <div className="main-content-wrapper">
 
-                    {/* 💡 前後移動ボタンの disabled 判定を他画面との整合性のために統一 */}
                     <button onClick={handlePrev} disabled={!prevProductId} className="center-page-btn prev-center">
                         <img src="/left.png" alt="前の商品へ" className="left-button-icon" />
                     </button>
@@ -302,6 +337,12 @@ const Product_details = () => {
                             <div className="product-detail-header">
                                 <span className="detail-id">ID: {currentId}</span>
                                 <span className="detail-name">{productName}</span>
+                                {/* 💡 商品名の隣に配置する削除ボタン（管理者のときだけ表示） */}
+                                {isAdmin && (
+                                    <button onClick={handleDelete} className="delete-btn" disabled={isSubmitting}>
+                                        削除
+                                    </button>
+                                )}
                             </div>
 
                             <div className="combined-stock-wrapper">
@@ -346,7 +387,6 @@ const Product_details = () => {
                                     </div>
                                 </div>
 
-                                {/* 管理者（isAdmin === true）の時だけ「登録」ボタンを表示する */}
                                 {isAdmin && (
                                     <button onClick={handleRegister} className="register-btn">
                                         登録
