@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.inventory.Entity.Category;
 import com.inventory.Entity.Product;
+import com.inventory.Repository.CategoryRepository;
 import com.inventory.Repository.ProductRepository;
 
 @SpringBootTest
@@ -25,7 +26,10 @@ public class ProductDeletionTests {
     private WebTestClient client;
 
     @Autowired
-    private ProductRepository repository;
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Test
     void deleteProductShouldDeleteProduct() {
@@ -33,7 +37,7 @@ public class ProductDeletionTests {
 
         createStatusAssertions(id).isNoContent()
                 .expectBody().isEmpty();
-        assertThat(repository.existsById(id)).isFalse();
+        assertThat(productRepository.existsById(id)).isFalse();
     }
 
     @Test
@@ -42,7 +46,7 @@ public class ProductDeletionTests {
         Integer id = saveProduct();
 
         createStatusAssertions(id).isForbidden();
-        assertThat(repository.existsById(id)).isTrue();
+        assertThat(productRepository.existsById(id)).isTrue();
     }
 
     @Test
@@ -54,15 +58,17 @@ public class ProductDeletionTests {
 
     private Integer saveProduct() {
         Category category = new Category();
-        category.setId(1);
+        category.setName("Test");
+
+        Category savedCategory = categoryRepository.save(category);
 
         Product product = new Product();
         product.setName("Test");
         product.setQuantity(10);
-        product.setCategoryId(category);
+        product.setCategoryId(savedCategory);
 
-        Product saved = repository.save(product);
-        Integer id = saved.getId();
+        Product savedProduct = productRepository.save(product);
+        Integer id = savedProduct.getId();
 
         return id;
     }
