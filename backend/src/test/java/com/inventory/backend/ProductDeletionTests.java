@@ -21,7 +21,7 @@ import com.inventory.Repository.ProductRepository;
 @AutoConfigureMockMvc
 @Transactional
 @WithMockUser(authorities = "admin")
-public class ProductDeletionTest {
+public class ProductDeletionTests {
 
     @Autowired
     private WebTestClient client;
