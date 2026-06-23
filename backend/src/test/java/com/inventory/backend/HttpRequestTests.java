@@ -144,30 +144,30 @@ class HttpRequestTestsMock {
     }
 
     @Test
-@DisplayName("商品作成成功")
-void postProductShouldPostProduct() {
+    @DisplayName("商品作成成功")
+    void postProductShouldPostProduct() {
+        
+        ProductRequest request =
+        createProductRequest("Post", 10, "", 1);
 
-    ProductRequest request =
-            createProductRequest("Post", 10, "", 1);
-
-    ProductResponse response = webTestClient.post()
-            .uri("/products")
-            .bodyValue(request)
-            .exchange()
-            .expectStatus()
-            .isCreated()
-            .expectBody(ProductResponse.class)
-            .returnResult()
-            .getResponseBody();
-
-    Product product =
-            productRepository.findById(response.id()).orElseThrow();
-
+        ProductResponse response = webTestClient.post()
+                .uri("/products")
+                .bodyValue(request)
+                .exchange()
+                .expectStatus()
+                .isCreated()
+                .expectBody(ProductResponse.class)
+                .returnResult()
+                .getResponseBody();
+        
+        Product product =
+        productRepository.findById(response.id()).orElseThrow();
+        
     assertThat(product.getName()).isEqualTo(request.name());
     assertThat(product.getQuantity()).isEqualTo(request.quantity());
     assertThat(product.getImage()).isEqualTo(request.image());
     assertThat(product.getCategoryId().getId())
-            .isEqualTo(request.categoryId());
+                .isEqualTo(request.categoryId());
 }
 
     @Test

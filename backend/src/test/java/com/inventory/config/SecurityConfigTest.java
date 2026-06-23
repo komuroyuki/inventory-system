@@ -1,18 +1,16 @@
 package com.inventory.config;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.inventory.Repository.UserRepository;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,34 +20,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class SecurityConfigTest {
 
   @Autowired
   MockMvc mockMvc;
 
   @Autowired
-  JdbcTemplate jdbcTemplate;
+  UserRepository userRepository;
 
   @Autowired
   PasswordEncoder passwordEncoder;
-
-  @BeforeEach
-  void setup() {
-
-    jdbcTemplate.execute("DELETE FROM users");
-    
-    jdbcTemplate.update("""
-        INSERT INTO users(id, email, name, password, is_admin)
-        VALUES (?, ?, ?, ?, ?)
-    """,
-        99999L,
-        "test@example.com",
-        "test",
-        passwordEncoder.encode("Password1"),
-        false
-    );
-  }
 
   @Test
   void shouldRequireAuthentication_forProducts() throws Exception {
@@ -74,13 +56,13 @@ class SecurityConfigTest {
   @Test
   void login_shouldReturn401_whenCredentialsAreInvalid() throws Exception {
     mockMvc.perform(post("/products/login")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content("""
-          {
-            "email": "test@example.com",
-            "password": "wrong"
-          }
-        """))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
+              {
+                "email": "test@example.com",
+                "password": "wrong"
+              }
+            """))
         .andExpect(status().isUnauthorized())
         .andExpect(jsonPath("$.error_code").value("AUTH_FAILED"));
   }
