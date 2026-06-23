@@ -2,13 +2,14 @@ package com.inventory.config;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SecurityConfigTest {
 
   @Autowired
@@ -32,11 +34,11 @@ class SecurityConfigTest {
   @Autowired
   PasswordEncoder passwordEncoder;
 
-@BeforeEach
-void setup() {
+  @BeforeEach
+  void setup() {
 
-    jdbcTemplate.update("DELETE FROM users");
-
+    jdbcTemplate.execute("DELETE FROM users");
+    
     jdbcTemplate.update("""
         INSERT INTO users(id, email, name, password, is_admin)
         VALUES (?, ?, ?, ?, ?)
@@ -45,22 +47,18 @@ void setup() {
         "test@example.com",
         "test",
         passwordEncoder.encode("Password1"),
-        true
+        false
     );
-}
+  }
 
-// APIにセキュリティが効いているか
-@Test
-void shouldRequireAuthentication_forProducts() throws Exception {
-
+  @Test
+  void shouldRequireAuthentication_forProducts() throws Exception {
     mockMvc.perform(get("/products"))
         .andExpect(status().isUnauthorized());
-}
+  }
 
-  // 成功
-@Test
-void login_shouldReturn200_whenCredentialsAreValid() throws Exception {
-
+  @Test
+  void login_shouldReturn200_whenCredentialsAreValid() throws Exception {
     mockMvc.perform(post("/products/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
@@ -71,12 +69,10 @@ void login_shouldReturn200_whenCredentialsAreValid() throws Exception {
             """))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.access_token").exists());
-}
+  }
 
-  // 失敗
-@Test
-void login_shouldReturn401_whenCredentialsAreInvalid() throws Exception {
-
+  @Test
+  void login_shouldReturn401_whenCredentialsAreInvalid() throws Exception {
     mockMvc.perform(post("/products/login")
         .contentType(MediaType.APPLICATION_JSON)
         .content("""
@@ -87,11 +83,10 @@ void login_shouldReturn401_whenCredentialsAreInvalid() throws Exception {
         """))
         .andExpect(status().isUnauthorized())
         .andExpect(jsonPath("$.error_code").value("AUTH_FAILED"));
-}
+  }
 
-// JWTで認証成功
-@Test
-void shouldAccessProtectedApi_whenTokenIsValid() throws Exception {
+  @Test
+  void shouldAccessProtectedApi_whenTokenIsValid() throws Exception {
 
     String response = mockMvc.perform(post("/products/login")
             .contentType(MediaType.APPLICATION_JSON)
@@ -108,26 +103,21 @@ void shouldAccessProtectedApi_whenTokenIsValid() throws Exception {
 
     String token = com.jayway.jsonpath.JsonPath.read(response, "$.access_token");
 
-    mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/products")
+    mockMvc.perform(get("/products")
             .header("Authorization", "Bearer " + token))
         .andExpect(status().isOk());
-}
+  }
 
-
-// トークンなし
-@Test
-void shouldReturn401_whenNoToken() throws Exception {
-
-    mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/products"))
+  @Test
+  void shouldReturn401_whenNoToken() throws Exception {
+    mockMvc.perform(get("/products"))
         .andExpect(status().isUnauthorized());
-}
+  }
 
-// 不正トークン
-@Test
-void shouldReturn401_whenTokenIsInvalid() throws Exception {
-
-    mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/products")
+  @Test
+  void shouldReturn401_whenTokenIsInvalid() throws Exception {
+    mockMvc.perform(get("/products")
             .header("Authorization", "Bearer invalid-token"))
         .andExpect(status().isUnauthorized());
-}
+  }
 }
