@@ -1,16 +1,17 @@
 package com.inventory.config;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.inventory.Repository.UserRepository;
+import com.inventory.Entity.User;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,8 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-@Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class SecurityConfigTest {
 
   @Autowired
@@ -32,6 +31,22 @@ class SecurityConfigTest {
 
   @Autowired
   PasswordEncoder passwordEncoder;
+
+  private static final String EMAIL = "test@example.com";
+  private static final String PASSWORD = "Password1";
+
+  @BeforeEach
+  void setup() {
+    userRepository.deleteAll();
+
+    User user = new User();
+    user.setEmail(EMAIL);
+    user.setName("test");
+    user.setPassword(passwordEncoder.encode(PASSWORD));
+    user.setIsAdmin(false);
+
+    userRepository.save(user);
+  }
 
   @Test
   void shouldRequireAuthentication_forProducts() throws Exception {
