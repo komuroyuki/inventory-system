@@ -43,50 +43,49 @@ class HttpRequestTests {
     }
 
     
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-private JdbcTemplate jdbcTemplate;
+    private PasswordEncoder passwordEncoder;
 
-@Autowired
-private PasswordEncoder passwordEncoder;
+    @BeforeEach
+    void setupAuth() {
+        
+        jdbcTemplate.update("DELETE FROM users");
 
-@BeforeEach
-void setupAuth() {
-
-    jdbcTemplate.update("DELETE FROM users");
-
-    jdbcTemplate.update("""
-        INSERT INTO users(id, email, name, password, is_admin)
-        VALUES (?, ?, ?, ?, ?)
-    """,
-        99999L,
-        "test@example.com",
-        "test",
-        passwordEncoder.encode("Password1"),
-        true
-    );
-
-    String response = webTestClient.post()
-            .uri("/products/login")
-            .header("Content-Type", "application/json")
-            .bodyValue("""
-                {
-                    "email":"test@example.com",
-                    "password":"Password1"
-                }
-            """)
-            .exchange()
-            .expectStatus().isOk()
-            .expectBody(String.class)
-            .returnResult()
-            .getResponseBody();
-
-    String token = JsonPath.read(response, "$.access_token");
-
-    this.client = webTestClient.mutate()
-            .defaultHeader("Authorization", "Bearer " + token)
-            .build();
-}
+        jdbcTemplate.update("""
+                INSERT INTO users(id, email, name, password, is_admin)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                99999L,
+                "test@example.com",
+                "test",
+                passwordEncoder.encode("Password1"),
+                true
+        );
+                
+        String response = webTestClient.post()
+                .uri("/products/login")
+                .header("Content-Type", "application/json")
+                .bodyValue("""
+                        {
+                             "email":"test@example.com",
+                             "password":"Password1"
+                        }
+                        """)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
+                
+        String token = JsonPath.read(response, "$.access_token");
+        
+        this.client = webTestClient.mutate()
+                .defaultHeader("Authorization", "Bearer " + token)
+                .build();
+     }
 
     @Test
     @DisplayName("商品更新成功")
