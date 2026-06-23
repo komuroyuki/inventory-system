@@ -4,13 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -18,20 +16,18 @@ import com.inventory.DTO.ProductRequest;
 import com.inventory.DTO.ProductResponse;
 import com.inventory.Entity.Product;
 import com.inventory.Repository.ProductRepository;
-import com.jayway.jsonpath.JsonPath;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
+@WithMockUser
 @Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
-class HttpRequestTests {
+class HttpRequestTestsMock {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @Autowired
     private ProductRepository productRepository;
-
-    private WebTestClient client; // ★固定クライアント
 
     private ProductRequest createProductRequest(
             String name,
@@ -42,51 +38,6 @@ class HttpRequestTests {
         return new ProductRequest(name, quantity, image, categoryId);
     }
 
-    
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @BeforeEach
-    void setupAuth() {
-        
-        jdbcTemplate.update("DELETE FROM users");
-
-        jdbcTemplate.update("""
-                INSERT INTO users(id, email, name, password, is_admin)
-                VALUES (?, ?, ?, ?, ?)
-                """,
-                99999L,
-                "test@example.com",
-                "test",
-                passwordEncoder.encode("Password1"),
-                true
-        );
-                
-        String response = webTestClient.post()
-                .uri("/products/login")
-                .header("Content-Type", "application/json")
-                .bodyValue("""
-                        {
-                             "email":"test@example.com",
-                             "password":"Password1"
-                        }
-                        """)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(String.class)
-                .returnResult()
-                .getResponseBody();
-                
-        String token = JsonPath.read(response, "$.access_token");
-        
-        this.client = webTestClient.mutate()
-                .defaultHeader("Authorization", "Bearer " + token)
-                .build();
-     }
-
     @Test
     @DisplayName("商品更新成功")
     void shouldReplaceProduct() {
@@ -94,7 +45,7 @@ class HttpRequestTests {
         ProductRequest request =
                 new ProductRequest("Test", 10, "", 2);
 
-        client.put()
+        webTestClient.put()
                 .uri("/products/1")
                 .bodyValue(request)
                 .exchange()
@@ -124,7 +75,7 @@ class HttpRequestTests {
         ProductRequest request =
                 new ProductRequest("Error", 100, "error", 3);
 
-        client.put()
+        webTestClient.put()
                 .uri("/products/1000")
                 .bodyValue(request)
                 .exchange()
@@ -139,7 +90,7 @@ class HttpRequestTests {
         ProductRequest request =
                 new ProductRequest("Error", 100, "error", 100);
 
-        client.put()
+        webTestClient.put()
                 .uri("/products/1")
                 .bodyValue(request)
                 .exchange()
@@ -154,7 +105,7 @@ class HttpRequestTests {
         ProductRequest request =
                 new ProductRequest("", 100, "error", 3);
 
-        client.put()
+        webTestClient.put()
                 .uri("/products/1")
                 .bodyValue(request)
                 .exchange()
@@ -169,7 +120,7 @@ class HttpRequestTests {
         ProductRequest request =
                 new ProductRequest("Error", -1, "error", 3);
 
-        client.put()
+        webTestClient.put()
                 .uri("/products/1")
                 .bodyValue(request)
                 .exchange()
@@ -184,7 +135,7 @@ class HttpRequestTests {
         ProductRequest request =
                 new ProductRequest("Error", 100, "error", null);
 
-        client.put()
+        webTestClient.put()
                 .uri("/products/1")
                 .bodyValue(request)
                 .exchange()
@@ -199,7 +150,7 @@ void postProductShouldPostProduct() {
     ProductRequest request =
             createProductRequest("Post", 10, "", 1);
 
-    ProductResponse response = client.post()
+    ProductResponse response = webTestClient.post()
             .uri("/products")
             .bodyValue(request)
             .exchange()
@@ -228,7 +179,7 @@ void postProductShouldPostProduct() {
         ProductRequest request =
                 createProductRequest("Error", 100, "error", 100);
 
-        client.post()
+        webTestClient.post()
                 .uri("/products")
                 .bodyValue(request)
                 .exchange()
@@ -248,7 +199,7 @@ void postProductShouldPostProduct() {
         ProductRequest request =
                 createProductRequest("", 100, "error", 3);
 
-        client.post()
+        webTestClient.post()
                 .uri("/products")
                 .bodyValue(request)
                 .exchange()
@@ -268,7 +219,7 @@ void postProductShouldPostProduct() {
         ProductRequest request =
                 createProductRequest("Error", -1, "error", 3);
 
-        client.post()
+        webTestClient.post()
                 .uri("/products")
                 .bodyValue(request)
                 .exchange()
@@ -288,7 +239,7 @@ void postProductShouldPostProduct() {
         ProductRequest request =
                 createProductRequest("Error", 100, "error", null);
 
-        client.post()
+        webTestClient.post()
                 .uri("/products")
                 .bodyValue(request)
                 .exchange()
