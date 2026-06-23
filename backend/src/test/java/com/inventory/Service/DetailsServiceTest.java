@@ -158,5 +158,5 @@ public class DetailsServiceTest {
         // 更新日時が空文字列であることをアサート
         assertEquals("", detailsResponse.getProductUpdatedAt());
     }
-}
 
+}

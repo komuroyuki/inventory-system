@@ -166,7 +166,8 @@ public class FilterAndSearchServiceTest {
     @DisplayName("キーワードとカテゴリーIDが指定されている場合、両方でフィルタリング・検索する")
     void filterAndSearch_validKeywordAndCategoryId_filtersAndSearches() {
         String keyword = "A";
-        // filterRepository.findByCategoryIdIdAndNameContaining(1, keyword)がproduct1のリストを返すようにモックを設定
+        // filterRepository.findByCategoryIdIdAndNameContaining(1,
+        // keyword)がproduct1のリストを返すようにモックを設定
         when(filterRepository.findByCategoryIdIdAndNameContaining(1, keyword)).thenReturn(Arrays.asList(product1));
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
@@ -177,7 +178,8 @@ public class FilterAndSearchServiceTest {
         assertEquals(1, result.size());
         // 結果の商品IDがproduct1のIDと一致することをアサート
         assertEquals(product1.getId(), result.get(0).getId());
-        // filterRepository.findByCategoryIdIdAndNameContaining(1, keyword)が一度だけ呼ばれたことを検証
+        // filterRepository.findByCategoryIdIdAndNameContaining(1,
+        // keyword)が一度だけ呼ばれたことを検証
         verify(filterRepository, times(1)).findByCategoryIdIdAndNameContaining(1, keyword);
         // productRepositoryが一切呼び出されなかったことを検証
         verifyNoInteractions(productRepository);
@@ -187,7 +189,8 @@ public class FilterAndSearchServiceTest {
     @DisplayName("キーワードとカテゴリーIDが指定されているが、該当商品がない場合、空リストを返す")
     void filterAndSearch_noMatchingProducts_returnsEmptyList() {
         String keyword = "NonExistent";
-        // filterRepository.findByCategoryIdIdAndNameContaining(1, keyword)が空のリストを返すようにモックを設定
+        // filterRepository.findByCategoryIdIdAndNameContaining(1,
+        // keyword)が空のリストを返すようにモックを設定
         when(filterRepository.findByCategoryIdIdAndNameContaining(1, keyword)).thenReturn(Collections.emptyList());
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
@@ -195,7 +198,8 @@ public class FilterAndSearchServiceTest {
 
         // 結果が空であることをアサート
         assertTrue(result.isEmpty());
-        // filterRepository.findByCategoryIdIdAndNameContaining(1, keyword)が一度だけ呼ばれたことを検証
+        // filterRepository.findByCategoryIdIdAndNameContaining(1,
+        // keyword)が一度だけ呼ばれたことを検証
         verify(filterRepository, times(1)).findByCategoryIdIdAndNameContaining(1, keyword);
         // productRepositoryが一切呼び出されなかったことを検証
         verifyNoInteractions(productRepository);
@@ -237,4 +241,5 @@ public class FilterAndSearchServiceTest {
         // productRepositoryが一切呼び出されなかったことを検証
         verifyNoInteractions(productRepository);
     }
+
 }

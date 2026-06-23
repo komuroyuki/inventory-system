@@ -56,4 +56,5 @@ class DetailsControllerTest {
         mockMvc.perform(get("/products/999"))
                 .andExpect(status().isNotFound());
     }
+
 }

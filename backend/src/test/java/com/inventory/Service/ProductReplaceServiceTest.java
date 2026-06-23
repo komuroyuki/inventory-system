@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -76,8 +75,7 @@ class ProductReplaceServiceTest {
         when(categoryRepository.findById(categoryId))
                 .thenReturn(Optional.empty());
 
-        ResponseEntity<?> response =
-                productReplaceService.replaceProduct(productRequest, 1);
+        ResponseEntity<?> response = productReplaceService.replaceProduct(productRequest, 1);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("カテゴリIDが存在しません。\n", response.getBody());
@@ -98,8 +96,7 @@ class ProductReplaceServiceTest {
         when(productRepository.findById(1))
                 .thenReturn(Optional.empty());
 
-        ResponseEntity<?> response =
-                productReplaceService.replaceProduct(productRequest, 1);
+        ResponseEntity<?> response = productReplaceService.replaceProduct(productRequest, 1);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("IDが存在しません。\n", response.getBody());
@@ -124,13 +121,11 @@ class ProductReplaceServiceTest {
         when(productRepository.save(any()))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<?> response =
-                productReplaceService.replaceProduct(productRequest, 1);
+        ResponseEntity<?> response = productReplaceService.replaceProduct(productRequest, 1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        Product updatedProduct =
-                assertInstanceOf(Product.class, response.getBody());
+        Product updatedProduct = assertInstanceOf(Product.class, response.getBody());
 
         assertEquals("New Product Name", updatedProduct.getName());
         assertEquals(20, updatedProduct.getQuantity());
@@ -148,4 +143,5 @@ class ProductReplaceServiceTest {
         verify(productRepository)
                 .save(any(Product.class));
     }
+
 }

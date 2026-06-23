@@ -89,4 +89,5 @@ class FilterAndSearchControllerTest {
                         .param("keyword", "　apple　"))
                 .andExpect(status().isOk());
     }
+
 }
