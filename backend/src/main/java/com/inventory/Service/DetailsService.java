@@ -36,8 +36,7 @@ public class DetailsService {
                     .body("IDが存在しません。");
         }
 
-        ProductDetailsResponse response =
-                new ProductDetailsResponse();
+        ProductDetailsResponse response = new ProductDetailsResponse();
 
         response.setProductId(product.getId());
         response.setProductName(product.getName());
@@ -68,4 +67,5 @@ public class DetailsService {
 
         return ResponseEntity.ok(response);
     }
+
 }

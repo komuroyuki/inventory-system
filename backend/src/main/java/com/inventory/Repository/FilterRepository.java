@@ -10,5 +10,6 @@ public interface FilterRepository
         extends JpaRepository<Product, Integer> {
 
     List<Product> findByCategoryIdId(Integer categoryId);
+
     List<Product> findByCategoryIdIdAndNameContaining(Integer categoryId, String keyword);
 }

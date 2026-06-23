@@ -26,7 +26,7 @@ public class FilterAndSearchController {
 
         // 全角スペースを半角スペースに変換し、前後のスペースをトリム
         String trimmedKeyword = (keyword == null) ? "" : keyword.replace("　", " ").trim();
-        
+
         // 検索キーワードが空でない場合のバリデーション
         if (!trimmedKeyword.isEmpty()) {
             // 検索キーワードが50文字を超えていないかをチェック
@@ -42,4 +42,5 @@ public class FilterAndSearchController {
         List<Product> products = filterAndSearchService.filterAndSearch(categoryId, trimmedKeyword);
         return ResponseEntity.ok(products);
     }
+
 }

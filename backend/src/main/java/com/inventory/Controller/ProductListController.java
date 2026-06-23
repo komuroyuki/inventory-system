@@ -23,4 +23,5 @@ public class ProductListController {
     public List<Product> getProductList() {
         return productListService.getProductList();
     }
+
 }
