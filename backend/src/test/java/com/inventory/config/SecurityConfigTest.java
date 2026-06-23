@@ -34,6 +34,9 @@ class SecurityConfigTest {
 
 @BeforeEach
 void setup() {
+
+    jdbcTemplate.update("DELETE FROM users");
+
     jdbcTemplate.update("""
         INSERT INTO users(id, email, name, password, is_admin)
         VALUES (?, ?, ?, ?, ?)
@@ -42,7 +45,7 @@ void setup() {
         "test@example.com",
         "test",
         passwordEncoder.encode("Password1"),
-        false
+        true
     );
 }
 
