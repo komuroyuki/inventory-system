@@ -24,10 +24,10 @@ import com.inventory.repository.ProductRepository;
 class ProductSearchServiceTests {
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductRepository repository;
 
     @Mock
-    private ProductSearchRepository filterRepository;
+    private ProductSearchRepository searchRepository;
 
     @InjectMocks
     private ProductSearchService filterAndSearchService;
@@ -56,8 +56,8 @@ class ProductSearchServiceTests {
     @Test
     @DisplayName("キーワードが空でカテゴリーIDも指定なしの場合、全商品を取得する")
     void filterAndSearch_emptyKeywordAndNullCategoryId_returnsAllProducts() {
-        // productRepository.findAll()がproduct1とproduct2のリストを返すようにモックを設定
-        when(productRepository.findAll()).thenReturn(Arrays.asList(product1, product2));
+        // repository.findAll()がproduct1とproduct2のリストを返すようにモックを設定
+        when(repository.findAll()).thenReturn(Arrays.asList(product1, product2));
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(null, "");
@@ -65,17 +65,17 @@ class ProductSearchServiceTests {
         // 結果がnullでないこと、サイズが2であることをアサート
         assertNotNull(result);
         assertEquals(2, result.size());
-        // productRepository.findAll()が一度だけ呼ばれたことを検証
-        verify(productRepository, times(1)).findAll();
-        // filterRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(filterRepository);
+        // repository.findAll()が一度だけ呼ばれたことを検証
+        verify(repository, times(1)).findAll();
+        // searchRepositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(searchRepository);
     }
 
     @Test
     @DisplayName("キーワードが空でカテゴリーIDが0の場合、全商品を取得する")
     void filterAndSearch_emptyKeywordAndZeroCategoryId_returnsAllProducts() {
-        // productRepository.findAll()がproduct1とproduct2のリストを返すようにモックを設定
-        when(productRepository.findAll()).thenReturn(Arrays.asList(product1, product2));
+        // repository.findAll()がproduct1とproduct2のリストを返すようにモックを設定
+        when(repository.findAll()).thenReturn(Arrays.asList(product1, product2));
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(0, "");
@@ -83,17 +83,17 @@ class ProductSearchServiceTests {
         // 結果がnullでないこと、サイズが2であることをアサート
         assertNotNull(result);
         assertEquals(2, result.size());
-        // productRepository.findAll()が一度だけ呼ばれたことを検証
-        verify(productRepository, times(1)).findAll();
-        // filterRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(filterRepository);
+        // repository.findAll()が一度だけ呼ばれたことを検証
+        verify(repository, times(1)).findAll();
+        // searchRepositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(searchRepository);
     }
 
     @Test
     @DisplayName("キーワードが空でカテゴリーIDが指定されている場合、そのカテゴリーの商品を取得する")
     void filterAndSearch_emptyKeywordAndValidCategoryId_returnsProductsByCategory() {
-        // filterRepository.findByCategoryIdId(1)がproduct1とproduct2のリストを返すようにモックを設定
-        when(filterRepository.findByCategoryIdId(1)).thenReturn(Arrays.asList(product1, product2));
+        // searchRepository.findByCategoryIdId(1)がproduct1とproduct2のリストを返すようにモックを設定
+        when(searchRepository.findByCategoryIdId(1)).thenReturn(Arrays.asList(product1, product2));
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(1, "");
@@ -101,35 +101,35 @@ class ProductSearchServiceTests {
         // 結果がnullでないこと、サイズが2であることをアサート
         assertNotNull(result);
         assertEquals(2, result.size());
-        // filterRepository.findByCategoryIdId(1)が一度だけ呼ばれたことを検証
-        verify(filterRepository, times(1)).findByCategoryIdId(1);
-        // productRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(productRepository);
+        // searchRepository.findByCategoryIdId(1)が一度だけ呼ばれたことを検証
+        verify(searchRepository, times(1)).findByCategoryIdId(1);
+        // repositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(repository);
     }
 
     @Test
     @DisplayName("キーワードが空でカテゴリーIDが指定されているが、商品がない場合、空リストを返す")
     void filterAndSearch_emptyKeywordAndValidCategoryId_returnsEmptyList() {
-        // filterRepository.findByCategoryIdId(1)が空のリストを返すようにモックを設定
-        when(filterRepository.findByCategoryIdId(1)).thenReturn(Collections.emptyList());
+        // searchRepository.findByCategoryIdId(1)が空のリストを返すようにモックを設定
+        when(searchRepository.findByCategoryIdId(1)).thenReturn(Collections.emptyList());
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(1, "");
 
         // 結果が空であることをアサート
         assertTrue(result.isEmpty());
-        // filterRepository.findByCategoryIdId(1)が一度だけ呼ばれたことを検証
-        verify(filterRepository, times(1)).findByCategoryIdId(1);
-        // productRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(productRepository);
+        // searchRepository.findByCategoryIdId(1)が一度だけ呼ばれたことを検証
+        verify(searchRepository, times(1)).findByCategoryIdId(1);
+        // repositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(repository);
     }
 
     @Test
     @DisplayName("キーワードが指定されておりカテゴリーIDが指定されていない場合、キーワードで検索する")
     void filterAndSearch_validKeywordAndNullCategoryId_searchesByKeyword() {
         String keyword = "Product";
-        // productRepository.findByNameContaining(keyword)がproduct1とproduct2のリストを返すようにモックを設定
-        when(productRepository.findByNameContaining(keyword)).thenReturn(Arrays.asList(product1, product2));
+        // repository.findByNameContaining(keyword)がproduct1とproduct2のリストを返すようにモックを設定
+        when(repository.findByNameContaining(keyword)).thenReturn(Arrays.asList(product1, product2));
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(null, keyword);
@@ -137,18 +137,18 @@ class ProductSearchServiceTests {
         // 結果がnullでないこと、サイズが2であることをアサート
         assertNotNull(result);
         assertEquals(2, result.size());
-        // productRepository.findByNameContaining(keyword)が一度だけ呼ばれたことを検証
-        verify(productRepository, times(1)).findByNameContaining(keyword);
-        // filterRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(filterRepository);
+        // repository.findByNameContaining(keyword)が一度だけ呼ばれたことを検証
+        verify(repository, times(1)).findByNameContaining(keyword);
+        // searchRepositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(searchRepository);
     }
 
     @Test
     @DisplayName("キーワードが指定されておりカテゴリーIDが0の場合、キーワードで検索する")
     void filterAndSearch_validKeywordAndZeroCategoryId_searchesByKeyword() {
         String keyword = "Product";
-        // productRepository.findByNameContaining(keyword)がproduct1とproduct2のリストを返すようにモックを設定
-        when(productRepository.findByNameContaining(keyword)).thenReturn(Arrays.asList(product1, product2));
+        // repository.findByNameContaining(keyword)がproduct1とproduct2のリストを返すようにモックを設定
+        when(repository.findByNameContaining(keyword)).thenReturn(Arrays.asList(product1, product2));
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(0, keyword);
@@ -156,19 +156,19 @@ class ProductSearchServiceTests {
         // 結果がnullでないこと、サイズが2であることをアサート
         assertNotNull(result);
         assertEquals(2, result.size());
-        // productRepository.findByNameContaining(keyword)が一度だけ呼ばれたことを検証
-        verify(productRepository, times(1)).findByNameContaining(keyword);
-        // filterRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(filterRepository);
+        // repository.findByNameContaining(keyword)が一度だけ呼ばれたことを検証
+        verify(repository, times(1)).findByNameContaining(keyword);
+        // searchRepositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(searchRepository);
     }
 
     @Test
     @DisplayName("キーワードとカテゴリーIDが指定されている場合、両方でフィルタリング・検索する")
     void filterAndSearch_validKeywordAndCategoryId_filtersAndSearches() {
         String keyword = "A";
-        // filterRepository.findByCategoryIdIdAndNameContaining(1,
+        // searchRepository.findByCategoryIdIdAndNameContaining(1,
         // keyword)がproduct1のリストを返すようにモックを設定
-        when(filterRepository.findByCategoryIdIdAndNameContaining(1, keyword)).thenReturn(Arrays.asList(product1));
+        when(searchRepository.findByCategoryIdIdAndNameContaining(1, keyword)).thenReturn(Arrays.asList(product1));
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(1, keyword);
@@ -178,39 +178,39 @@ class ProductSearchServiceTests {
         assertEquals(1, result.size());
         // 結果の商品IDがproduct1のIDと一致することをアサート
         assertEquals(product1.getId(), result.get(0).getId());
-        // filterRepository.findByCategoryIdIdAndNameContaining(1,
+        // searchRepository.findByCategoryIdIdAndNameContaining(1,
         // keyword)が一度だけ呼ばれたことを検証
-        verify(filterRepository, times(1)).findByCategoryIdIdAndNameContaining(1, keyword);
-        // productRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(productRepository);
+        verify(searchRepository, times(1)).findByCategoryIdIdAndNameContaining(1, keyword);
+        // repositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(repository);
     }
 
     @Test
     @DisplayName("キーワードとカテゴリーIDが指定されているが、該当商品がない場合、空リストを返す")
     void filterAndSearch_noMatchingProducts_returnsEmptyList() {
         String keyword = "NonExistent";
-        // filterRepository.findByCategoryIdIdAndNameContaining(1,
+        // searchRepository.findByCategoryIdIdAndNameContaining(1,
         // keyword)が空のリストを返すようにモックを設定
-        when(filterRepository.findByCategoryIdIdAndNameContaining(1, keyword)).thenReturn(Collections.emptyList());
+        when(searchRepository.findByCategoryIdIdAndNameContaining(1, keyword)).thenReturn(Collections.emptyList());
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(1, keyword);
 
         // 結果が空であることをアサート
         assertTrue(result.isEmpty());
-        // filterRepository.findByCategoryIdIdAndNameContaining(1,
+        // searchRepository.findByCategoryIdIdAndNameContaining(1,
         // keyword)が一度だけ呼ばれたことを検証
-        verify(filterRepository, times(1)).findByCategoryIdIdAndNameContaining(1, keyword);
-        // productRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(productRepository);
+        verify(searchRepository, times(1)).findByCategoryIdIdAndNameContaining(1, keyword);
+        // repositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(repository);
     }
 
     @Test
     @DisplayName("キーワードに日本語が含まれる場合も正しく検索する")
     void filterAndSearch_japaneseKeyword_searchesCorrectly() {
         String keyword = "商品";
-        // productRepository.findByNameContaining(keyword)がproduct1とproduct2のリストを返すようにモックを設定
-        when(productRepository.findByNameContaining(keyword)).thenReturn(Arrays.asList(product1, product2));
+        // repository.findByNameContaining(keyword)がproduct1とproduct2のリストを返すようにモックを設定
+        when(repository.findByNameContaining(keyword)).thenReturn(Arrays.asList(product1, product2));
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(null, keyword);
@@ -218,17 +218,17 @@ class ProductSearchServiceTests {
         // 結果がnullでないこと、サイズが2であることをアサート
         assertNotNull(result);
         assertEquals(2, result.size());
-        // productRepository.findByNameContaining(keyword)が一度だけ呼ばれたことを検証
-        verify(productRepository, times(1)).findByNameContaining(keyword);
-        // filterRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(filterRepository);
+        // repository.findByNameContaining(keyword)が一度だけ呼ばれたことを検証
+        verify(repository, times(1)).findByNameContaining(keyword);
+        // searchRepositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(searchRepository);
     }
 
     @Test
     @DisplayName("カテゴリーIDが指定され、キーワードが空の場合、カテゴリーの商品を返す")
     void filterAndSearch_emptyKeywordAndCategoryId_returnsProductsByCategory() {
-        // filterRepository.findByCategoryIdId(1)がproduct1とproduct2のリストを返すようにモックを設定
-        when(filterRepository.findByCategoryIdId(1)).thenReturn(Arrays.asList(product1, product2));
+        // searchRepository.findByCategoryIdId(1)がproduct1とproduct2のリストを返すようにモックを設定
+        when(searchRepository.findByCategoryIdId(1)).thenReturn(Arrays.asList(product1, product2));
 
         // filterAndSearchService.filterAndSearch()を呼び出し、結果を取得
         List<Product> result = filterAndSearchService.filterAndSearch(1, "");
@@ -236,10 +236,10 @@ class ProductSearchServiceTests {
         // 結果がnullでないこと、サイズが2であることをアサート
         assertNotNull(result);
         assertEquals(2, result.size());
-        // filterRepository.findByCategoryIdId(1)が一度だけ呼ばれたことを検証
-        verify(filterRepository, times(1)).findByCategoryIdId(1);
-        // productRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(productRepository);
+        // searchRepository.findByCategoryIdId(1)が一度だけ呼ばれたことを検証
+        verify(searchRepository, times(1)).findByCategoryIdId(1);
+        // repositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(repository);
     }
 
 }

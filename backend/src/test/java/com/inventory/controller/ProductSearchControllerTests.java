@@ -26,10 +26,10 @@ class ProductSearchControllerTests {
     private MockMvc mockMvc;
 
     @Mock
-    private ProductSearchService filterAndSearchService;
+    private ProductSearchService service;
 
     @InjectMocks
-    private ProductSearchController filterAndSearchController;
+    private ProductSearchController controller;
 
     @BeforeEach
     void setUp() {
@@ -37,14 +37,14 @@ class ProductSearchControllerTests {
         MockitoAnnotations.openMocks(this);
 
         mockMvc = MockMvcBuilders
-                .standaloneSetup(filterAndSearchController)
+                .standaloneSetup(controller)
                 .build();
     }
 
     @Test
     void shouldReturnOk() throws Exception {
 
-        when(filterAndSearchService.filterAndSearch(
+        when(service.filterAndSearch(
                 eq(1),
                 eq("apple")))
                 .thenReturn(List.of());
@@ -79,7 +79,7 @@ class ProductSearchControllerTests {
     @Test
     void shouldTrimFullWidthSpaces() throws Exception {
 
-        when(filterAndSearchService.filterAndSearch(
+        when(service.filterAndSearch(
                 any(),
                 eq("apple")))
                 .thenReturn(List.of());

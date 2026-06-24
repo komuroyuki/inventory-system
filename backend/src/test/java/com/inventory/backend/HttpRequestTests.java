@@ -157,8 +157,7 @@ class HttpRequestTestsMock {
         assertThat(product.getName()).isEqualTo(request.name());
         assertThat(product.getQuantity()).isEqualTo(request.quantity());
         assertThat(product.getImage()).isEqualTo(request.image());
-        assertThat(product.getCategoryId().getId())
-                .isEqualTo(request.categoryId());
+        assertThat(product.getCategoryId().getId()).isEqualTo(request.categoryId());
     }
 
     @Test

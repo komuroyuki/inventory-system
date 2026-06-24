@@ -37,7 +37,7 @@ class ProductUpdateServiceTests {
     private CategoryRepository categoryRepository;
 
     @InjectMocks
-    private ProductUpdateService productReplaceService;
+    private ProductUpdateService service;
 
     private Product product;
     private Category category;
@@ -75,7 +75,7 @@ class ProductUpdateServiceTests {
         when(categoryRepository.findById(categoryId))
                 .thenReturn(Optional.empty());
 
-        ResponseEntity<?> response = productReplaceService.replaceProduct(productRequest, 1);
+        ResponseEntity<?> response = service.replaceProduct(productRequest, 1);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("カテゴリIDが存在しません。\n", response.getBody());
@@ -96,7 +96,7 @@ class ProductUpdateServiceTests {
         when(productRepository.findById(1))
                 .thenReturn(Optional.empty());
 
-        ResponseEntity<?> response = productReplaceService.replaceProduct(productRequest, 1);
+        ResponseEntity<?> response = service.replaceProduct(productRequest, 1);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("IDが存在しません。\n", response.getBody());
@@ -121,7 +121,7 @@ class ProductUpdateServiceTests {
         when(productRepository.save(any()))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<?> response = productReplaceService.replaceProduct(productRequest, 1);
+        ResponseEntity<?> response = service.replaceProduct(productRequest, 1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 

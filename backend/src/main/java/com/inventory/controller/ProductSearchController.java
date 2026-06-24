@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductSearchController {
 
-    private final ProductSearchService filterAndSearchService;
+    private final ProductSearchService service;
 
     @GetMapping("/products/search-filter")
     public ResponseEntity<?> getProducts(
@@ -39,7 +39,7 @@ public class ProductSearchController {
             }
         }
         // フィルタリングと検索の実行
-        List<Product> products = filterAndSearchService.filterAndSearch(categoryId, trimmedKeyword);
+        List<Product> products = service.filterAndSearch(categoryId, trimmedKeyword);
         return ResponseEntity.ok(products);
     }
 

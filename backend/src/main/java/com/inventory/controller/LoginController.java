@@ -22,13 +22,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final LoginService authService;
+    private final LoginService service;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest requestBody) {
 
         try {
-            LoginResponse response = authService.authenticate(requestBody);
+            LoginResponse response = service.authenticate(requestBody);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
 

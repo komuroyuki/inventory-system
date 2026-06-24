@@ -19,13 +19,15 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductUpdateController {
-    private final ProductUpdateService productReplaceService;
+
+    private final ProductUpdateService service;
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> replaceProduct(@Validated @RequestBody ProductRequest newProduct,
             @PathVariable Integer id) {
-        return productReplaceService.replaceProduct(newProduct, id);
+        return service.replaceProduct(newProduct, id);
     }
+
 }

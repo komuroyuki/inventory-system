@@ -15,8 +15,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductDetailService {
 
-    private final ProductRepository productRepository;
-    private final ProductDetailRepository detailsRepository;
+    private final ProductRepository repository;
+    private final ProductDetailRepository detailRepository;
 
     public ResponseEntity<?> getDetails(Integer id) {
 
@@ -26,7 +26,7 @@ public class ProductDetailService {
                     .body("IDを入力してください。");
         }
 
-        Product product = productRepository
+        Product product = repository
                 .findById(id)
                 .orElse(null);
 
@@ -44,7 +44,7 @@ public class ProductDetailService {
         response.setProductImageUrl(product.getImage());
         response.setCategoryId(product.getCategoryId().getId());
 
-        Product nextProduct = detailsRepository
+        Product nextProduct = detailRepository
                 .findFirstByIdGreaterThanOrderByIdAsc(product.getId());
 
         response.setNextProductId(
@@ -57,7 +57,7 @@ public class ProductDetailService {
                         ? product.getLastModifiedDate().toString()
                         : "");
 
-        Product prevProduct = detailsRepository
+        Product prevProduct = detailRepository
                 .findFirstByIdLessThanOrderByIdDesc(product.getId());
 
         response.setPrevProductId(

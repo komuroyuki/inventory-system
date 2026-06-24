@@ -14,17 +14,18 @@ import com.inventory.service.ProductDetailService;
 
 public class ProductDetailController {
 
-    private final ProductDetailService detailsService;
+    private final ProductDetailService service;
 
     public ProductDetailController(
-            ProductDetailService detailsService) {
+            ProductDetailService service) {
 
-        this.detailsService = detailsService;
+        this.service = service;
     }
 
     @GetMapping("/products/{id}")
     public ResponseEntity<?> productDetailsResponse(@PathVariable Integer id) {
 
-        return detailsService.getDetails(id);
+        return service.getDetails(id);
     }
+
 }

@@ -1,6 +1,7 @@
 package com.inventory.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
@@ -26,10 +27,10 @@ import com.inventory.repository.ProductRepository;
 class ProductDetailServiceTests {
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductRepository repository;
 
     @Mock
-    private ProductDetailRepository detailsRepository;
+    private ProductDetailRepository detailRepository;
 
     @InjectMocks
     private ProductDetailService detailsService;
@@ -55,8 +56,8 @@ class ProductDetailServiceTests {
     @Test
     @DisplayName("商品が存在しない場合、NOT_FOUNDを返す")
     void getDetails_productNotFound_returnsNotFound() {
-        // productRepository.findById()がOptional.empty()を返すようにモックを設定
-        when(productRepository.findById(anyInt())).thenReturn(Optional.empty());
+        // repository.findById()がOptional.empty()を返すようにモックを設定
+        when(repository.findById(anyInt())).thenReturn(Optional.empty());
 
         // detailsService.getDetails()を呼び出し、結果を取得
         ResponseEntity<?> response = detailsService.getDetails(101);
@@ -65,10 +66,10 @@ class ProductDetailServiceTests {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         // レスポンスボディが期待通りのエラーメッセージであることをアサート
         assertEquals("IDが存在しません。", response.getBody());
-        // productRepository.findById()が一度だけ指定したIDで呼ばれたことを検証
-        verify(productRepository, times(1)).findById(101);
-        // detailsRepositoryが一切呼び出されなかったことを検証
-        verifyNoInteractions(detailsRepository);
+        // repository.findById()が一度だけ指定したIDで呼ばれたことを検証
+        verify(repository, times(1)).findById(101);
+        // detailRepositoryが一切呼び出されなかったことを検証
+        verifyNoInteractions(detailRepository);
     }
 
     @Test
@@ -79,10 +80,10 @@ class ProductDetailServiceTests {
         nextProduct.setId(102);
         nextProduct.setName("Next Product");
 
-        // productRepository.findById()がOptional.of(product)を返すようにモックを設定
-        when(productRepository.findById(anyInt())).thenReturn(Optional.of(product));
-        // detailsRepository.findFirstByIdGreaterThanOrderByIdAsc()がnextProductを返すようにモックを設定
-        when(detailsRepository.findFirstByIdGreaterThanOrderByIdAsc(anyInt())).thenReturn(nextProduct);
+        // repository.findById()がOptional.of(product)を返すようにモックを設定
+        when(repository.findById(anyInt())).thenReturn(Optional.of(product));
+        // detailRepository.findFirstByIdGreaterThanOrderByIdAsc()がnextProductを返すようにモックを設定
+        when(detailRepository.findFirstByIdGreaterThanOrderByIdAsc(anyInt())).thenReturn(nextProduct);
 
         // detailsService.getDetails()を呼び出し、結果を取得
         ResponseEntity<?> response = detailsService.getDetails(101);
@@ -93,30 +94,30 @@ class ProductDetailServiceTests {
         assertTrue(response.getBody() instanceof ProductDetailResponse);
 
         // レスポンスボディをProductDetailsResponseにキャスト
-        ProductDetailResponse detailsResponse = (ProductDetailResponse) response.getBody();
+        ProductDetailResponse detailResponse = (ProductDetailResponse) response.getBody();
 
         // 各フィールドが期待通りに設定されているかをアサート
-        assertEquals(product.getId(), detailsResponse.getProductId());
-        assertEquals(product.getName(), detailsResponse.getProductName());
-        assertEquals(product.getQuantity(), detailsResponse.getProductQuantity());
-        assertEquals(product.getImage(), detailsResponse.getProductImageUrl());
-        assertEquals(product.getCategoryId().getId(), detailsResponse.getCategoryId());
-        assertEquals(product.getLastModifiedDate().toString(), detailsResponse.getProductUpdatedAt());
-        assertEquals(nextProduct.getId(), detailsResponse.getNextProductId());
+        assertEquals(product.getId(), detailResponse.getProductId());
+        assertEquals(product.getName(), detailResponse.getProductName());
+        assertEquals(product.getQuantity(), detailResponse.getProductQuantity());
+        assertEquals(product.getImage(), detailResponse.getProductImageUrl());
+        assertEquals(product.getCategoryId().getId(), detailResponse.getCategoryId());
+        assertEquals(product.getLastModifiedDate().toString(), detailResponse.getProductUpdatedAt());
+        assertEquals(nextProduct.getId(), detailResponse.getNextProductId());
 
-        // productRepository.findById()が一度だけ指定したIDで呼ばれたことを検証
-        verify(productRepository, times(1)).findById(101);
-        // detailsRepository.findFirstByIdGreaterThanOrderByIdAsc()が一度だけ指定したIDで呼ばれたことを検証
-        verify(detailsRepository, times(1)).findFirstByIdGreaterThanOrderByIdAsc(101);
+        // repository.findById()が一度だけ指定したIDで呼ばれたことを検証
+        verify(repository, times(1)).findById(101);
+        // detailRepository.findFirstByIdGreaterThanOrderByIdAsc()が一度だけ指定したIDで呼ばれたことを検証
+        verify(detailRepository, times(1)).findFirstByIdGreaterThanOrderByIdAsc(101);
     }
 
     @Test
     @DisplayName("商品が存在し、次の商品が存在しない場合、商品詳細とnullの次の商品IDを返す")
     void getDetails_productExistsNextProductNull_returnsDetailsAndNullNextProductId() {
-        // productRepository.findById()がOptional.of(product)を返すようにモックを設定
-        when(productRepository.findById(anyInt())).thenReturn(Optional.of(product));
-        // detailsRepository.findFirstByIdGreaterThanOrderByIdAsc()がnullを返すようにモックを設定
-        when(detailsRepository.findFirstByIdGreaterThanOrderByIdAsc(anyInt())).thenReturn(null);
+        // repository.findById()がOptional.of(product)を返すようにモックを設定
+        when(repository.findById(anyInt())).thenReturn(Optional.of(product));
+        // detailRepository.findFirstByIdGreaterThanOrderByIdAsc()がnullを返すようにモックを設定
+        when(detailRepository.findFirstByIdGreaterThanOrderByIdAsc(anyInt())).thenReturn(null);
 
         // detailsService.getDetails()を呼び出し、結果を取得
         ResponseEntity<?> response = detailsService.getDetails(101);
@@ -127,15 +128,15 @@ class ProductDetailServiceTests {
         assertTrue(response.getBody() instanceof ProductDetailResponse);
 
         // レスポンスボディをProductDetailsResponseにキャスト
-        ProductDetailResponse detailsResponse = (ProductDetailResponse) response.getBody();
+        ProductDetailResponse detailResponse = (ProductDetailResponse) response.getBody();
 
         // 次の商品IDがnullであることをアサート
-        assertNull(detailsResponse.getNextProductId());
+        assertNull(detailResponse.getNextProductId());
 
-        // productRepository.findById()が一度だけ指定したIDで呼ばれたことを検証
-        verify(productRepository, times(1)).findById(101);
-        // detailsRepository.findFirstByIdGreaterThanOrderByIdAsc()が一度だけ指定したIDで呼ばれたことを検証
-        verify(detailsRepository, times(1)).findFirstByIdGreaterThanOrderByIdAsc(101);
+        // repository.findById()が一度だけ指定したIDで呼ばれたことを検証
+        verify(repository, times(1)).findById(101);
+        // detailRepository.findFirstByIdGreaterThanOrderByIdAsc()が一度だけ指定したIDで呼ばれたことを検証
+        verify(detailRepository, times(1)).findFirstByIdGreaterThanOrderByIdAsc(101);
     }
 
     @Test
@@ -143,10 +144,10 @@ class ProductDetailServiceTests {
     void getDetails_productUpdatedAtIsNull_returnsEmptyString() {
         // 商品の更新日時をnullに設定
         product.setLastModifiedDate(null);
-        // productRepository.findById()がOptional.of(product)を返すようにモックを設定
-        when(productRepository.findById(anyInt())).thenReturn(Optional.of(product));
-        // detailsRepository.findFirstByIdGreaterThanOrderByIdAsc()がnullを返すようにモックを設定
-        when(detailsRepository.findFirstByIdGreaterThanOrderByIdAsc(anyInt())).thenReturn(null);
+        // repository.findById()がOptional.of(product)を返すようにモックを設定
+        when(repository.findById(anyInt())).thenReturn(Optional.of(product));
+        // detailRepository.findFirstByIdGreaterThanOrderByIdAsc()がnullを返すようにモックを設定
+        when(detailRepository.findFirstByIdGreaterThanOrderByIdAsc(anyInt())).thenReturn(null);
 
         // detailsService.getDetails()を呼び出し、結果を取得
         ResponseEntity<?> response = detailsService.getDetails(101);
@@ -154,9 +155,9 @@ class ProductDetailServiceTests {
         // ステータスコードがHttpStatus.OKであることをアサート
         assertEquals(HttpStatus.OK, response.getStatusCode());
         // レスポンスボディをProductDetailsResponseにキャスト
-        ProductDetailResponse detailsResponse = (ProductDetailResponse) response.getBody();
+        ProductDetailResponse detailResponse = (ProductDetailResponse) response.getBody();
         // 更新日時が空文字列であることをアサート
-        assertEquals("", detailsResponse.getProductUpdatedAt());
+        assertEquals("", detailResponse.getProductUpdatedAt());
     }
 
 }

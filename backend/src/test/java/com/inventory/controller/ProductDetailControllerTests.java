@@ -22,10 +22,10 @@ class ProductDetailControllerTests {
     private MockMvc mockMvc;
 
     @Mock
-    private ProductDetailService detailsService;
+    private ProductDetailService service;
 
     @InjectMocks
-    private ProductDetailController detailsController;
+    private ProductDetailController controller;
 
     @BeforeEach
     void setUp() {
@@ -33,14 +33,14 @@ class ProductDetailControllerTests {
         MockitoAnnotations.openMocks(this);
 
         mockMvc = MockMvcBuilders
-                .standaloneSetup(detailsController)
+                .standaloneSetup(controller)
                 .build();
     }
 
     @Test
     void shouldReturnOkWhenProductExists() throws Exception {
 
-        when(detailsService.getDetails(1))
+        when(service.getDetails(1))
                 .thenReturn(ResponseEntity.ok().build());
 
         mockMvc.perform(get("/products/1"))
@@ -50,7 +50,7 @@ class ProductDetailControllerTests {
     @Test
     void shouldReturnNotFoundWhenProductDoesNotExist() throws Exception {
 
-        when(detailsService.getDetails(999))
+        when(service.getDetails(999))
                 .thenReturn(ResponseEntity.notFound().build());
 
         mockMvc.perform(get("/products/999"))
