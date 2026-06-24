@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.inventory.service.FilterAndSearchService;
 
-class FilterAndSearchControllerTest {
+class ProductSearchControllerTests {
 
     private MockMvc mockMvc;
 
@@ -29,7 +29,7 @@ class FilterAndSearchControllerTest {
     private FilterAndSearchService filterAndSearchService;
 
     @InjectMocks
-    private FilterAndSearchController filterAndSearchController;
+    private ProductSearchController filterAndSearchController;
 
     @BeforeEach
     void setUp() {

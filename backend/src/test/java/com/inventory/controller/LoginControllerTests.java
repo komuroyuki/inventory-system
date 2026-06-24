@@ -29,7 +29,7 @@ import io.jsonwebtoken.security.Keys;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AuthControllerTest {
+class LoginControllerTests {
 
     @Autowired
     private WebTestClient client;

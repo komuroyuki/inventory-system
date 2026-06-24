@@ -12,11 +12,11 @@ import com.inventory.service.DetailsService;
 
 @CrossOrigin(origins = "*")
 
-public class DetailsController {
+public class ProductDetailController {
 
     private final DetailsService detailsService;
 
-    public DetailsController(
+    public ProductDetailController(
             DetailsService detailsService) {
 
         this.detailsService = detailsService;

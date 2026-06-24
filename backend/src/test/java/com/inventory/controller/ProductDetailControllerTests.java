@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.inventory.service.DetailsService;
 
-class DetailsControllerTest {
+class ProductDetailControllerTests {
 
     private MockMvc mockMvc;
 
@@ -25,7 +25,7 @@ class DetailsControllerTest {
     private DetailsService detailsService;
 
     @InjectMocks
-    private DetailsController detailsController;
+    private ProductDetailController detailsController;
 
     @BeforeEach
     void setUp() {

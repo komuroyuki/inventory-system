@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequiredArgsConstructor
-public class FilterAndSearchController {
+public class ProductSearchController {
 
     private final FilterAndSearchService filterAndSearchService;
 

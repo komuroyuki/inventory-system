@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class ProductDeletionController {
+public class ProductDeleteController {
 
     private final ProductRepository repository;
 

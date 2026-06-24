@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-public class AuthController {
+public class LoginController {
 
     private final AuthService authService;
 

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
-public class ProductPostController {
+public class ProductCreateController {
 
     private final ProductPostService service;
 

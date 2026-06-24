@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-public class ProductReplaceController {
+public class ProductUpdateController {
     private final ProductReplaceService productReplaceService;
 
     @CrossOrigin(origins = "http://localhost:5173")
