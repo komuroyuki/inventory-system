@@ -18,7 +18,7 @@ import com.inventory.entity.Product;
 import com.inventory.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductListServiceTest {
+class ProductListServiceTests {
 
     @Mock
     private ProductRepository productRepository;

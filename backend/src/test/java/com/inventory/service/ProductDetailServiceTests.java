@@ -23,7 +23,7 @@ import com.inventory.repository.ProductDetailRepository;
 import com.inventory.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class DetailsServiceTest {
+class ProductDetailServiceTests {
 
     @Mock
     private ProductRepository productRepository;
@@ -32,7 +32,7 @@ public class DetailsServiceTest {
     private ProductDetailRepository detailsRepository;
 
     @InjectMocks
-    private DetailsService detailsService;
+    private ProductDetailService detailsService;
 
     private Product product;
     private Category category;

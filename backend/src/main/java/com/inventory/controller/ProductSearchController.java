@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inventory.entity.Product;
 import java.util.List;
 
-import com.inventory.service.FilterAndSearchService;
+import com.inventory.service.ProductSearchService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductSearchController {
 
-    private final FilterAndSearchService filterAndSearchService;
+    private final ProductSearchService filterAndSearchService;
 
     @GetMapping("/products/search-filter")
     public ResponseEntity<?> getProducts(

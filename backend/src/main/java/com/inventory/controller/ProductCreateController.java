@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.inventory.dto.ProductRequest;
 import com.inventory.dto.ProductResponse;
-import com.inventory.service.ProductPostService;
+import com.inventory.service.ProductCreateService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = "http://localhost:5173")
 public class ProductCreateController {
 
-    private final ProductPostService service;
+    private final ProductCreateService service;
 
     @PostMapping("/products")
     @PreAuthorize("hasAuthority('admin')")

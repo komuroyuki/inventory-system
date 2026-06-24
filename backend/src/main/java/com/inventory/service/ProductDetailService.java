@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class DetailsService {
+public class ProductDetailService {
 
     private final ProductRepository productRepository;
     private final ProductDetailRepository detailsRepository;

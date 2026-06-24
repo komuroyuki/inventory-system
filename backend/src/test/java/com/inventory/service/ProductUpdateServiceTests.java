@@ -28,7 +28,7 @@ import com.inventory.repository.CategoryRepository;
 import com.inventory.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
-class ProductReplaceServiceTest {
+class ProductUpdateServiceTests {
 
     @Mock
     private ProductRepository productRepository;
@@ -37,7 +37,7 @@ class ProductReplaceServiceTest {
     private CategoryRepository categoryRepository;
 
     @InjectMocks
-    private ProductReplaceService productReplaceService;
+    private ProductUpdateService productReplaceService;
 
     private Product product;
     private Category category;

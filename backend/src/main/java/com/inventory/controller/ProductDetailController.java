@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.inventory.service.DetailsService;
+import com.inventory.service.ProductDetailService;
 
 @RestController
 
@@ -14,10 +14,10 @@ import com.inventory.service.DetailsService;
 
 public class ProductDetailController {
 
-    private final DetailsService detailsService;
+    private final ProductDetailService detailsService;
 
     public ProductDetailController(
-            DetailsService detailsService) {
+            ProductDetailService detailsService) {
 
         this.detailsService = detailsService;
     }

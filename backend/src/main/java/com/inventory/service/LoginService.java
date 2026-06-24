@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class LoginService {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;

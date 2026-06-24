@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.inventory.dto.LoginRequest;
 import com.inventory.dto.LoginResponse;
-import com.inventory.service.AuthService;
+import com.inventory.service.LoginService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final AuthService authService;
+    private final LoginService authService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest requestBody) {

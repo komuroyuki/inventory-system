@@ -15,14 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.inventory.service.DetailsService;
+import com.inventory.service.ProductDetailService;
 
 class ProductDetailControllerTests {
 
     private MockMvc mockMvc;
 
     @Mock
-    private DetailsService detailsService;
+    private ProductDetailService detailsService;
 
     @InjectMocks
     private ProductDetailController detailsController;

@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class FilterAndSearchService {
+public class ProductSearchService {
     private final ProductRepository productRepository;
     private final ProductSearchRepository filterRepository;
 

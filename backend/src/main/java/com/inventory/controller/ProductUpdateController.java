@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inventory.dto.ProductRequest;
-import com.inventory.service.ProductReplaceService;
+import com.inventory.service.ProductUpdateService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductUpdateController {
-    private final ProductReplaceService productReplaceService;
+    private final ProductUpdateService productReplaceService;
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/{id}")

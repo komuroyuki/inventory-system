@@ -19,14 +19,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.inventory.service.FilterAndSearchService;
+import com.inventory.service.ProductSearchService;
 
 class ProductSearchControllerTests {
 
     private MockMvc mockMvc;
 
     @Mock
-    private FilterAndSearchService filterAndSearchService;
+    private ProductSearchService filterAndSearchService;
 
     @InjectMocks
     private ProductSearchController filterAndSearchController;

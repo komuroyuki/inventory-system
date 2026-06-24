@@ -21,7 +21,7 @@ import com.inventory.repository.ProductSearchRepository;
 import com.inventory.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class FilterAndSearchServiceTest {
+class ProductSearchServiceTests {
 
     @Mock
     private ProductRepository productRepository;
@@ -30,7 +30,7 @@ public class FilterAndSearchServiceTest {
     private ProductSearchRepository filterRepository;
 
     @InjectMocks
-    private FilterAndSearchService filterAndSearchService;
+    private ProductSearchService filterAndSearchService;
 
     private Product product1;
     private Product product2;
