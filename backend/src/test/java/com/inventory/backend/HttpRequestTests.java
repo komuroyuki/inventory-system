@@ -12,10 +12,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.inventory.DTO.ProductRequest;
-import com.inventory.DTO.ProductResponse;
-import com.inventory.Entity.Product;
-import com.inventory.Repository.ProductRepository;
+import com.inventory.dto.ProductRequest;
+import com.inventory.dto.ProductResponse;
+import com.inventory.entity.Product;
+import com.inventory.repository.ProductRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -42,8 +42,7 @@ class HttpRequestTestsMock {
     @DisplayName("商品更新成功")
     void shouldReplaceProduct() {
 
-        ProductRequest request =
-                new ProductRequest("Test", 10, "", 2);
+        ProductRequest request = new ProductRequest("Test", 10, "", 2);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -52,8 +51,7 @@ class HttpRequestTestsMock {
                 .expectStatus()
                 .isOk();
 
-        Product updatedProduct =
-                productRepository.findById(1).orElseThrow();
+        Product updatedProduct = productRepository.findById(1).orElseThrow();
 
         assertThat(updatedProduct.getName())
                 .isEqualTo(request.name());
@@ -72,8 +70,7 @@ class HttpRequestTestsMock {
     @DisplayName("存在しない商品IDなら404")
     void shouldReturnNotFoundWhenProductIdDoesNotExist() {
 
-        ProductRequest request =
-                new ProductRequest("Error", 100, "error", 3);
+        ProductRequest request = new ProductRequest("Error", 100, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1000")
@@ -87,8 +84,7 @@ class HttpRequestTestsMock {
     @DisplayName("存在しないカテゴリIDなら400")
     void shouldReturnBadRequestWhenCategoryIdDoesNotExist() {
 
-        ProductRequest request =
-                new ProductRequest("Error", 100, "error", 100);
+        ProductRequest request = new ProductRequest("Error", 100, "error", 100);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -102,8 +98,7 @@ class HttpRequestTestsMock {
     @DisplayName("商品名が空文字なら400")
     void shouldReturnBadRequestWhenNameIsBlank() {
 
-        ProductRequest request =
-                new ProductRequest("", 100, "error", 3);
+        ProductRequest request = new ProductRequest("", 100, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -117,8 +112,7 @@ class HttpRequestTestsMock {
     @DisplayName("在庫数が負数なら400")
     void shouldReturnBadRequestWhenQuantityIsNegative() {
 
-        ProductRequest request =
-                new ProductRequest("Error", -1, "error", 3);
+        ProductRequest request = new ProductRequest("Error", -1, "error", 3);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -132,8 +126,7 @@ class HttpRequestTestsMock {
     @DisplayName("カテゴリIDがnullなら400")
     void shouldReturnBadRequestWhenCategoryIdIsNull() {
 
-        ProductRequest request =
-                new ProductRequest("Error", 100, "error", null);
+        ProductRequest request = new ProductRequest("Error", 100, "error", null);
 
         webTestClient.put()
                 .uri("/products/1")
@@ -146,9 +139,8 @@ class HttpRequestTestsMock {
     @Test
     @DisplayName("商品作成成功")
     void postProductShouldPostProduct() {
-        
-        ProductRequest request =
-        createProductRequest("Post", 10, "", 1);
+
+        ProductRequest request = createProductRequest("Post", 10, "", 1);
 
         ProductResponse response = webTestClient.post()
                 .uri("/products")
@@ -159,16 +151,14 @@ class HttpRequestTestsMock {
                 .expectBody(ProductResponse.class)
                 .returnResult()
                 .getResponseBody();
-        
-        Product product =
-        productRepository.findById(response.id()).orElseThrow();
-        
-    assertThat(product.getName()).isEqualTo(request.name());
-    assertThat(product.getQuantity()).isEqualTo(request.quantity());
-    assertThat(product.getImage()).isEqualTo(request.image());
-    assertThat(product.getCategoryId().getId())
-                .isEqualTo(request.categoryId());
-}
+
+        Product product = productRepository.findById(response.id()).orElseThrow();
+
+        assertThat(product.getName()).isEqualTo(request.name());
+        assertThat(product.getQuantity()).isEqualTo(request.quantity());
+        assertThat(product.getImage()).isEqualTo(request.image());
+        assertThat(product.getCategoryId().getId()).isEqualTo(request.categoryId());
+    }
 
     @Test
     @DisplayName("存在しないカテゴリIDならPOSTは400")
@@ -176,8 +166,7 @@ class HttpRequestTestsMock {
 
         long count = productRepository.count();
 
-        ProductRequest request =
-                createProductRequest("Error", 100, "error", 100);
+        ProductRequest request = createProductRequest("Error", 100, "error", 100);
 
         webTestClient.post()
                 .uri("/products")
@@ -196,8 +185,7 @@ class HttpRequestTestsMock {
 
         long count = productRepository.count();
 
-        ProductRequest request =
-                createProductRequest("", 100, "error", 3);
+        ProductRequest request = createProductRequest("", 100, "error", 3);
 
         webTestClient.post()
                 .uri("/products")
@@ -216,8 +204,7 @@ class HttpRequestTestsMock {
 
         long count = productRepository.count();
 
-        ProductRequest request =
-                createProductRequest("Error", -1, "error", 3);
+        ProductRequest request = createProductRequest("Error", -1, "error", 3);
 
         webTestClient.post()
                 .uri("/products")
@@ -236,8 +223,7 @@ class HttpRequestTestsMock {
 
         long count = productRepository.count();
 
-        ProductRequest request =
-                createProductRequest("Error", 100, "error", null);
+        ProductRequest request = createProductRequest("Error", 100, "error", null);
 
         webTestClient.post()
                 .uri("/products")
