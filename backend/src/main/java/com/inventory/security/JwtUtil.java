@@ -1,4 +1,4 @@
-package com.inventory.Security;
+package com.inventory.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

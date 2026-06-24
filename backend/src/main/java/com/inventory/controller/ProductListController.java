@@ -1,7 +1,7 @@
-package com.inventory.Controller;
+package com.inventory.controller;
 
-import com.inventory.Entity.Product;
-import com.inventory.Service.ProductListService;
+import com.inventory.entity.Product;
+import com.inventory.service.ProductListService;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;

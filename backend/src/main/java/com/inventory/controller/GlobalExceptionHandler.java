@@ -1,4 +1,4 @@
-package com.inventory.Controller;
+package com.inventory.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

@@ -1,12 +1,12 @@
-package com.inventory.Service;
+package com.inventory.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.inventory.Entity.Product;
-import com.inventory.Repository.ProductRepository;
-import com.inventory.Repository.FilterRepository;
+import com.inventory.entity.Product;
+import com.inventory.repository.ProductRepository;
+import com.inventory.repository.FilterRepository;
 
 import lombok.RequiredArgsConstructor;
 

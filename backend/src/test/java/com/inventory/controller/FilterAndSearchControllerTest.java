@@ -1,4 +1,4 @@
-package com.inventory.Controller;
+package com.inventory.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.inventory.Service.FilterAndSearchService;
+import com.inventory.service.FilterAndSearchService;
 
 class FilterAndSearchControllerTest {
 

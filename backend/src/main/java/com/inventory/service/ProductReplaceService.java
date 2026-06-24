@@ -1,14 +1,14 @@
-package com.inventory.Service;
+package com.inventory.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.inventory.DTO.ProductRequest;
-import com.inventory.Entity.Category;
-import com.inventory.Entity.Product;
-import com.inventory.Repository.CategoryRepository;
-import com.inventory.Repository.ProductRepository;
+import com.inventory.dto.ProductRequest;
+import com.inventory.entity.Category;
+import com.inventory.entity.Product;
+import com.inventory.repository.CategoryRepository;
+import com.inventory.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
 

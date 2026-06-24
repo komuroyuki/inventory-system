@@ -1,4 +1,4 @@
-package com.inventory.Service;
+package com.inventory.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -15,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.inventory.Entity.Category;
-import com.inventory.Entity.Product;
-import com.inventory.Repository.FilterRepository;
-import com.inventory.Repository.ProductRepository;
+import com.inventory.entity.Category;
+import com.inventory.entity.Product;
+import com.inventory.repository.FilterRepository;
+import com.inventory.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class FilterAndSearchServiceTest {

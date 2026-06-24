@@ -1,13 +1,13 @@
-package com.inventory.Service;
+package com.inventory.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.inventory.DTO.LoginRequest;
-import com.inventory.DTO.LoginResponse;
-import com.inventory.Entity.User;
-import com.inventory.Repository.UserRepository;
-import com.inventory.Security.JwtUtil;
+import com.inventory.dto.LoginRequest;
+import com.inventory.dto.LoginResponse;
+import com.inventory.entity.User;
+import com.inventory.repository.UserRepository;
+import com.inventory.security.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
 

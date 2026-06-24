@@ -11,10 +11,10 @@ import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.inventory.Entity.Category;
-import com.inventory.Entity.Product;
-import com.inventory.Repository.CategoryRepository;
-import com.inventory.Repository.ProductRepository;
+import com.inventory.entity.Category;
+import com.inventory.entity.Product;
+import com.inventory.repository.CategoryRepository;
+import com.inventory.repository.ProductRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc

@@ -1,4 +1,4 @@
-package com.inventory.Config;
+package com.inventory.config;
 
 import java.util.Arrays;
 
@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.inventory.Security.JwtAuthenticationFilter;
+import com.inventory.security.JwtAuthenticationFilter;
 
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletResponse;

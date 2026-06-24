@@ -1,4 +1,4 @@
-package com.inventory.Controller;
+package com.inventory.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,8 +20,8 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.StatusAssertions;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.inventory.DTO.LoginRequest;
-import com.inventory.DTO.LoginResponse;
+import com.inventory.dto.LoginRequest;
+import com.inventory.dto.LoginResponse;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

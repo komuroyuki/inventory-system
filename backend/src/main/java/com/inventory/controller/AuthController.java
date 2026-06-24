@@ -1,4 +1,4 @@
-package com.inventory.Controller;
+package com.inventory.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.inventory.DTO.LoginRequest;
-import com.inventory.DTO.LoginResponse;
-import com.inventory.Service.AuthService;
+import com.inventory.dto.LoginRequest;
+import com.inventory.dto.LoginResponse;
+import com.inventory.service.AuthService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

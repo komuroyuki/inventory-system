@@ -1,8 +1,8 @@
-package com.inventory.Repository;
+package com.inventory.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.inventory.Entity.Product;
+import com.inventory.entity.Product;
 
 public interface DetailsRepository extends JpaRepository<Product, Integer> {
 

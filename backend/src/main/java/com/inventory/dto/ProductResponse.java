@@ -1,4 +1,4 @@
-package com.inventory.DTO;
+package com.inventory.dto;
 
 public record ProductResponse(
         Integer id,

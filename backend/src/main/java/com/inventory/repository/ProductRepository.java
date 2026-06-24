@@ -1,10 +1,10 @@
-package com.inventory.Repository;
+package com.inventory.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.inventory.Entity.Product;
+import com.inventory.entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 

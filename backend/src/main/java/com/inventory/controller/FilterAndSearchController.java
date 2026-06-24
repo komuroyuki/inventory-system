@@ -1,14 +1,14 @@
-package com.inventory.Controller;
+package com.inventory.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.inventory.Entity.Product;
+import com.inventory.entity.Product;
 import java.util.List;
 
-import com.inventory.Service.FilterAndSearchService;
+import com.inventory.service.FilterAndSearchService;
 
 import lombok.RequiredArgsConstructor;
 
