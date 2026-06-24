@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.inventory.dto.ProductDetailsResponse;
+import com.inventory.dto.ProductDetailResponse;
 import com.inventory.entity.Product;
-import com.inventory.repository.DetailsRepository;
+import com.inventory.repository.ProductDetailRepository;
 import com.inventory.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class DetailsService {
 
     private final ProductRepository productRepository;
-    private final DetailsRepository detailsRepository;
+    private final ProductDetailRepository detailsRepository;
 
     public ResponseEntity<?> getDetails(Integer id) {
 
@@ -36,7 +36,7 @@ public class DetailsService {
                     .body("IDが存在しません。");
         }
 
-        ProductDetailsResponse response = new ProductDetailsResponse();
+        ProductDetailResponse response = new ProductDetailResponse();
 
         response.setProductId(product.getId());
         response.setProductName(product.getName());

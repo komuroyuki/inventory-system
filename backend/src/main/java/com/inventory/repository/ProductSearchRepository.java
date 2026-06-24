@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.inventory.entity.Product;
 
-public interface FilterRepository
+public interface ProductSearchRepository
         extends JpaRepository<Product, Integer> {
 
     List<Product> findByCategoryIdId(Integer categoryId);

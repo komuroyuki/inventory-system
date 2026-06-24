@@ -16,10 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.inventory.dto.ProductDetailsResponse;
+import com.inventory.dto.ProductDetailResponse;
 import com.inventory.entity.Category;
 import com.inventory.entity.Product;
-import com.inventory.repository.DetailsRepository;
+import com.inventory.repository.ProductDetailRepository;
 import com.inventory.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +29,7 @@ public class DetailsServiceTest {
     private ProductRepository productRepository;
 
     @Mock
-    private DetailsRepository detailsRepository;
+    private ProductDetailRepository detailsRepository;
 
     @InjectMocks
     private DetailsService detailsService;
@@ -90,10 +90,10 @@ public class DetailsServiceTest {
         // ステータスコードがHttpStatus.OKであることをアサート
         assertEquals(HttpStatus.OK, response.getStatusCode());
         // レスポンスボディがProductDetailsResponse型であることをアサート
-        assertTrue(response.getBody() instanceof ProductDetailsResponse);
+        assertTrue(response.getBody() instanceof ProductDetailResponse);
 
         // レスポンスボディをProductDetailsResponseにキャスト
-        ProductDetailsResponse detailsResponse = (ProductDetailsResponse) response.getBody();
+        ProductDetailResponse detailsResponse = (ProductDetailResponse) response.getBody();
 
         // 各フィールドが期待通りに設定されているかをアサート
         assertEquals(product.getId(), detailsResponse.getProductId());
@@ -124,10 +124,10 @@ public class DetailsServiceTest {
         // ステータスコードがHttpStatus.OKであることをアサート
         assertEquals(HttpStatus.OK, response.getStatusCode());
         // レスポンスボディがProductDetailsResponse型であることをアサート
-        assertTrue(response.getBody() instanceof ProductDetailsResponse);
+        assertTrue(response.getBody() instanceof ProductDetailResponse);
 
         // レスポンスボディをProductDetailsResponseにキャスト
-        ProductDetailsResponse detailsResponse = (ProductDetailsResponse) response.getBody();
+        ProductDetailResponse detailsResponse = (ProductDetailResponse) response.getBody();
 
         // 次の商品IDがnullであることをアサート
         assertNull(detailsResponse.getNextProductId());
@@ -154,7 +154,7 @@ public class DetailsServiceTest {
         // ステータスコードがHttpStatus.OKであることをアサート
         assertEquals(HttpStatus.OK, response.getStatusCode());
         // レスポンスボディをProductDetailsResponseにキャスト
-        ProductDetailsResponse detailsResponse = (ProductDetailsResponse) response.getBody();
+        ProductDetailResponse detailsResponse = (ProductDetailResponse) response.getBody();
         // 更新日時が空文字列であることをアサート
         assertEquals("", detailsResponse.getProductUpdatedAt());
     }

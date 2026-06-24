@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.inventory.entity.Product;
 
-public interface DetailsRepository extends JpaRepository<Product, Integer> {
+public interface ProductDetailRepository extends JpaRepository<Product, Integer> {
 
     Product findFirstByIdGreaterThanOrderByIdAsc(Integer id);
 

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.inventory.entity.Product;
 import com.inventory.repository.ProductRepository;
-import com.inventory.repository.FilterRepository;
+import com.inventory.repository.ProductSearchRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FilterAndSearchService {
     private final ProductRepository productRepository;
-    private final FilterRepository filterRepository;
+    private final ProductSearchRepository filterRepository;
 
     public List<Product> filterAndSearch(Integer categoryId, String trimmedKeyword) {
 

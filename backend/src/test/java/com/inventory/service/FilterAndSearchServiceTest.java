@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.inventory.entity.Category;
 import com.inventory.entity.Product;
-import com.inventory.repository.FilterRepository;
+import com.inventory.repository.ProductSearchRepository;
 import com.inventory.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,7 +27,7 @@ public class FilterAndSearchServiceTest {
     private ProductRepository productRepository;
 
     @Mock
-    private FilterRepository filterRepository;
+    private ProductSearchRepository filterRepository;
 
     @InjectMocks
     private FilterAndSearchService filterAndSearchService;
