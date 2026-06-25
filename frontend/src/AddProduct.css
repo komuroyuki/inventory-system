@@ -10,7 +10,6 @@
 
 .container {
   flex: 1;
-  padding: 20px;
   font-family: sans-serif;
   color: #000;
   max-width: 1200px;
