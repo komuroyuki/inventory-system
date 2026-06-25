@@ -137,7 +137,7 @@ body {
  
 /* カテゴリドロップダウン（グラスモーフィズム） */
 .category {
-  width: 118px;
+  width: 140px;
   height: 36px;
   position: relative;
   flex-shrink: 0;
