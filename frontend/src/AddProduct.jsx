@@ -184,23 +184,14 @@ const AddProduct = () => {
                   max="1000"
                   value={quantity}
                   onChange={(e) => {
-                    const rawValue = e.target.value;
-
-                    // 1. もし中身が完全に空（バックスペースで全部消した時など）なら、状態を 0 にする
-                    if (rawValue === "") {
-                      setQuantity(0);
-                      return;
-                    }
-                    // 2. 数値に変換する（これで自動的に先頭の「000...」は「0」に、「005」は「5」にギュッと縮む）
-                    const numValue = Number(rawValue);
-                    // 3. 状態（State）を更新
-                    setQuantity(numValue);
+                    setQuantity(e.target.value);
                   }}
                   onKeyDown={(e) => {
                     if (["+", "-", "e", "E", "."].includes(e.key)) {
                       e.preventDefault();
                     }
                   }}
+                  required
                 />
               </div>
 
