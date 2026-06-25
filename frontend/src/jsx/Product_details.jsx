@@ -202,7 +202,7 @@ const Product_details = () => {
         }
 
         if (Number(inflow) >= 9999 || Number(outflow) >= 9999) {
-            alert('最大桁数を超えています');
+            alert('上限を超えています');
             return;
         }
 
