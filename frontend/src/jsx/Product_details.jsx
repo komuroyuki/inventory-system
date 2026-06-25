@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import { useState, useMemo, useEffect } from 'react';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import './product_details.css';
+import { getApiUrl } from '../Top';
 
 // 画像を一括インポート（パスの配列化）
 const allImagesGlob = import.meta.glob(
@@ -45,6 +46,7 @@ const Product_details = () => {
     const { productId } = useParams();
     const currentId = Number(productId) || 1;
     const navigate = useNavigate();
+    const { mutate: globalMutate } = useSWRConfig();
 
     // 認証チェック
     useEffect(() => {
@@ -180,6 +182,8 @@ const Product_details = () => {
 
             // 3. 成功アラートを表示し、商品一覧画面へ遷移
             alert('商品を削除しました。');
+
+            globalMutate(getApiUrl("", ""));
             navigate('/top');
         } catch (error) {
             console.error('通信エラー:', error);
