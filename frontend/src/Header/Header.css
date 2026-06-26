@@ -243,7 +243,7 @@ body {
   }
 
   .category {
-    flex-shrink: 0;
+    width: 100px;
   }
 
   .header-logout {
@@ -356,7 +356,7 @@ body {
   }
  
   .header-keyword {
-    min-width: 200px;
+    min-width: 120px;
   }
 }
  
@@ -385,7 +385,7 @@ body {
  
   .add-product-btn,
   .logout-btn {
-    height: 32px;
+    height: 30px;
     font-size: 12px;
     padding: 0 12px;
   }
