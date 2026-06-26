@@ -205,7 +205,7 @@ const Product_details = () => {
             return;
         }
 
-        if (Number(inflow) >= 9999 || Number(outflow) >= 9999) {
+        if (Number(inflow) >= 1001 || Number(outflow) >= 1001) {
             alert('上限を超えています');
             return;
         }
