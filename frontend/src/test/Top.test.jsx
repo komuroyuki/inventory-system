@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, fireEvent, screen } from "@testing-library/react";
 import Top, { fetcher, getApiUrl } from "../Top.jsx";
-import { Router } from "react-router-dom";
 import useSWR from "swr";
 import * as router from "react-router-dom";
 import "@testing-library/jest-dom/vitest";
@@ -109,7 +108,10 @@ describe("fetcher", () => {
     const url = "http://localhost:8080/products/search-filter";
     const res = await fetcher(url);
 
-    expect(global.fetch).toHaveBeenCalledWith(url);
+    expect(global.fetch).toHaveBeenCalledWith(
+      url,
+      expect.objectContaining({ method: "GET" })
+    );
     expect(res).toEqual({ key: "value" });
   });
 
@@ -142,9 +144,7 @@ describe("Topコンポーネントの表示", () => {
     const header = screen.getByTestId("mock-header");
     expect(header).toBeInTheDocument();
   });
-});
 
-describe("Topコンポーネントの表示", () => {
   it("footerが正しく表示されること", () => {
     render(<Top/>);
 
