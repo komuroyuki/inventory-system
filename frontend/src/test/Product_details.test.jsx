@@ -77,6 +77,8 @@ describe('test product details エラー', () => {
         vi.spyOn(window, 'confirm').mockReturnValue(true);
         alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
         vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        localStorage.setItem("user_role", "admin");
     });
 
     afterEach(() => {
