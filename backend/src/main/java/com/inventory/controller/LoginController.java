@@ -36,8 +36,11 @@ public class LoginController {
             Map<String, String> error = new HashMap<>();
             error.put("error_code", "AUTH_FAILED");
             error.put("message", e.getMessage());
+            // ロック時のメッセージなら 423 を返す
+        if (e.getMessage().contains("ロック")) {
+            return new ResponseEntity<>(error, HttpStatus.LOCKED); 
+        }
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
         }
     }
-
 }
