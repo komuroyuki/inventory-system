@@ -58,6 +58,11 @@ const Login = () => {
             });
 
             if (!response.ok) {
+                const errorData = await response.json();
+                if (response.status === 423) {
+                    setErrorMessage(errorData.message);
+                    return;
+                }
                 setErrorMessage("ユーザーIDまたはパスワードが正しくありません");
                 return;
             }
