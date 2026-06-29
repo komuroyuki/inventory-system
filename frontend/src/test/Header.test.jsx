@@ -6,6 +6,7 @@ import Header from "../Header/Header.jsx";
 
 const mockSetSearchParams = vi.fn();
 const mockNavigate = vi.fn();
+const mockSearchParams = new URLSearchParams();
 
 const mockNavigator = {
   createHref: vi.fn(),
@@ -19,17 +20,19 @@ vi.mock("react-router-dom", async (importOriginal) => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
-    useSearchParams: () => [new URLSearchParams(), mockSetSearchParams],
+    useSearchParams: () => [mockSearchParams, mockSetSearchParams],
   };
 });
 
 describe("Headerコンポーネントのテスト", () => {
+  let alertSpy;
   beforeEach(() => {
     vi.clearAllMocks();
-    global.alert = vi.fn();
+    alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
   });
 
   afterEach(() => {
+    if (alertSpy) alertSpy.mockRestore();
     cleanup();
     document.body.innerHTML = "";
   });
@@ -72,9 +75,8 @@ describe("Headerコンポーネントのテスト", () => {
 
       const expectedParams = new URLSearchParams({
         keyword: "お茶",
-        category_id: "0",
       });
-      expect(mockSetSearchParams).toHaveBeenCalledWith(expectedParams);
+      expect(mockSetSearchParams.mock.calls[0][0].toString()).toBe(expectedParams.toString());
     });
 
     it("Enterキーで検索が実行されること", () => {
@@ -121,7 +123,7 @@ describe("Headerコンポーネントのテスト", () => {
       const searchButton = getByAltText("検索");
       fireEvent.click(searchButton);
 
-      expect(global.alert).toHaveBeenCalledWith("50文字以内で入力してください");
+      expect(alertSpy).toHaveBeenCalledWith("50文字以内で入力してください");
       expect(mockSetSearchParams).not.toHaveBeenCalled();
     });
   });
@@ -141,10 +143,9 @@ describe("Headerコンポーネントのテスト", () => {
       fireEvent.click(waterCategory);
 
       const expectedParams = new URLSearchParams({
-        keyword: "",
         category_id: "1",
       });
-      expect(mockSetSearchParams).toHaveBeenCalledWith(expectedParams);
+      expect(mockSetSearchParams.mock.calls[0][0].toString()).toBe(expectedParams.toString());
     });
   });
   
@@ -162,7 +163,7 @@ describe("Headerコンポーネントのテスト", () => {
       const logo = getByText("Re:fill");
       fireEvent.click(logo);
 
-      expect(mockNavigate).toHaveBeenCalledWith("/");
+      expect(mockNavigate).toHaveBeenCalledWith("/top");
     });
 
     it("confirmLeaveがtrueを返した場合、トップへ遷移すること", () => {
@@ -179,7 +180,7 @@ describe("Headerコンポーネントのテスト", () => {
       fireEvent.click(logo);
 
       expect(mockConfirmLeave).toHaveBeenCalled();
-      expect(mockNavigate).toHaveBeenCalledWith("/");
+      expect(mockNavigate).toHaveBeenCalledWith("/top");
     });
 
     it("confirmLeaveがfalseを返した場合、遷移がキャンセルされること", () => {
@@ -191,7 +192,6 @@ describe("Headerコンポーネントのテスト", () => {
         </Router>,
       );
 
-      // 💡 getByAltText から getByText("Re:fill") に修正
       const logo = getByText("Re:fill");
       fireEvent.click(logo);
 
@@ -199,4 +199,4 @@ describe("Headerコンポーネントのテスト", () => {
       expect(mockNavigate).not.toHaveBeenCalled();
     });
   });
-}); // 一番最後の閉じタグ
+});
