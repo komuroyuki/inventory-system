@@ -20,6 +20,8 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponse authenticate(LoginRequest request) {
+
+
         System.out.println("① 受信したEmail: " + request.getEmail());
 
         User user = userRepository.findByEmail(request.getEmail());
@@ -29,11 +31,38 @@ public class LoginService {
             throw new RuntimeException("メールアドレスが間違っています。");
         }
 
+        // 【追加】ロック状態の判定
+        if (user.getLockedUntil() != null && user.getLockedUntil().isAfter(java.time.LocalDateTime.now())) {
+            System.out.println("❌ 原因: アカウントがロックされています。");
+            throw new RuntimeException("アカウントがロックされています。30分後に再度お試しください。");
+        }
         // 【修正】パスワードが一致しない場合は、即座にエラーを投げてアクセスを拒否する！
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             System.out.println("❌ 原因: パスワードが一致しません。");
-            throw new RuntimeException("パスワードが間違っています。");
+
+        // 【追加】失敗回数のカウントアップ
+        user.setFailureCount(user.getFailureCount() + 1);
+
+        // 5回失敗でロック（30分間）
+        if (user.getFailureCount() >= 5) {
+            user.setLockedUntil(java.time.LocalDateTime.now().plusMinutes(30));
+            userRepository.save(user);
+            System.out.println("⚠️ アカウントをロックしました。");
+            throw new RuntimeException("アカウントをロックしました。");
         }
+
+        //4回以下
+            userRepository.save(user);
+            throw new RuntimeException("パスワードが間違っています。");
+        
+        }
+
+        // 【追加】成功時：回数リセット
+        if (user.getFailureCount() > 0) {
+            user.setFailureCount(0);
+            user.setLockedUntil(null);
+            userRepository.save(user);
+    }
 
         System.out.println("✅ 認証成功！");
 
@@ -56,3 +85,4 @@ public class LoginService {
         return response;
     }
 }
+

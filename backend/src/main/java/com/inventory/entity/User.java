@@ -1,5 +1,7 @@
 package com.inventory.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,4 +28,6 @@ public class User {
     @Column(name = "is_admin", nullable = false)
     private Boolean isAdmin;
 
+    private int failureCount = 0; // 失敗回数
+    private LocalDateTime lockedUntil;//ロック解除日時
 }
