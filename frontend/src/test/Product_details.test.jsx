@@ -115,7 +115,7 @@ describe('test product details エラー', () => {
             const { user, input, button } = await setup();
             await user.type(input, '10000');
             await user.click(button);
-            expect(window.alert).toHaveBeenCalledWith('最大桁数を超えています');
+            expect(window.alert).toHaveBeenCalledWith('上限を超えています');
         });
 
         it('在庫上限エラー', async () => {
