@@ -30,6 +30,8 @@ describe("AddProduct コンポーネントのテスト", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     vi.spyOn(console, "log").mockImplementation(() => {});
 
+    vi.spyOn(Storage.prototype, "getItem").mockReturnValue("dummy_token");
+
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ id: 1, name: "テスト商品" }),
@@ -124,14 +126,14 @@ describe("AddProduct コンポーネントのテスト", () => {
       expect(eventE).toBe(false);
     });
 
-    it("在庫数を空にすると自動的に 0 になること", async () => {
+    it("在庫数を空にすると自動的に空文字になること", async () => {
       const { user } = setup();
       const quantityInput = screen.getByLabelText("初期在庫数");
 
       await user.clear(quantityInput);
-      expect(quantityInput.value).toBe("0");
+      expect(quantityInput.value).toBe("");
     });
-  });
+    });
 
   describe("画像アップロードのテスト", () => {
     it("画像を選択するとプレビューが表示されること", async () => {
@@ -171,7 +173,10 @@ describe("AddProduct コンポーネントのテスト", () => {
         "http://localhost:8080/products",
         expect.objectContaining({
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": "Bearer dummy_token"
+          },
           body: JSON.stringify({
             name: "コーラ",
             quantity: 50,
@@ -183,9 +188,9 @@ describe("AddProduct コンポーネントのテスト", () => {
 
       await waitFor(() => {
         expect(alertSpy).toHaveBeenCalledWith("商品を登録しました！");
-        expect(mockNavigate).toHaveBeenCalledWith("/");
+        expect(mockNavigate).toHaveBeenCalledWith("/top"); // 💡 "/" から "/top" に修正
       });
-    });
+      });
 
     it("サーバーから409エラー(Conflict)が返ってきた場合、重複エラーメッセージが表示されること", async () => {
       global.fetch = vi.fn().mockResolvedValue({
@@ -239,12 +244,12 @@ describe("AddProduct コンポーネントのテスト", () => {
   });
 
   describe("画面遷移のテスト", () => {
-    it("「トップへ戻る」ボタンをクリックするとトップ画面（/）へ遷移すること", async () => {
+    it("「トップへ戻る」ボタンをクリックするとトップ画面（/top）へ遷移すること", async () => {
       const { user } = setup();
       const backButton = screen.getByText("トップへ戻る");
 
       await user.click(backButton);
-      expect(mockNavigate).toHaveBeenCalledWith("/");
+      expect(mockNavigate).toHaveBeenCalledWith("/top");
     });
   });
 });
