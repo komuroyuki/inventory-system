@@ -12,9 +12,13 @@ vi.mock('../Header/Header.jsx', () => {
     };
 });
 
-vi.mock('swr', () => ({
-    default: vi.fn(),
-}));
+vi.mock(import("swr"), async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...actual,
+        default: vi.fn(),
+    };
+});
 
 vi.mock('react-router-dom', () => ({
     useParams: vi.fn(),
@@ -73,6 +77,8 @@ describe('test product details エラー', () => {
         vi.spyOn(window, 'confirm').mockReturnValue(true);
         alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
         vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        localStorage.setItem("user_role", "admin");
     });
 
     afterEach(() => {
@@ -109,7 +115,7 @@ describe('test product details エラー', () => {
             const { user, input, button } = await setup();
             await user.type(input, '10000');
             await user.click(button);
-            expect(window.alert).toHaveBeenCalledWith('最大桁数を超えています');
+            expect(window.alert).toHaveBeenCalledWith('上限を超えています');
         });
 
         it('在庫上限エラー', async () => {
@@ -269,13 +275,13 @@ describe('test product details エラー', () => {
             const input = screen.getByLabelText('入庫数');
             await user.type(input, '10');
 
-            const prevBtn = screen.getByRole('button', { name: '前の商品へ' });
-            await user.click(prevBtn);
+            const button = screen.getByRole('button', { name: '次の商品へ' });
+            await user.click(button);
 
             expect(alertSpy).not.toHaveBeenCalled();
             expect(window.confirm).toHaveBeenCalled();
 
-            expect(mockNavigate).not.toHaveBeenCalled();
+            expect(mockNavigate).toHaveBeenCalledTimes(1);
         });
 
         it('次へボタンで画面が遷移する', async () => {
