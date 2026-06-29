@@ -45,8 +45,19 @@ const AddProduct = () => {
     }
   };
 
-  // トップへ戻るボタンの処理
+  const handleConfirmLeave = () => {
+    const hasChanges = productName !== "" || String(quantity) !== "0" || categoryId !== "1" || image !== null;
+    
+    if (hasChanges) {
+      return window.confirm("入力中の内容がありますが、登録しなくてよろしいですか？");
+    }
+    return true;
+  };
+
   const handleBackToTop = () => {
+    if (!handleConfirmLeave()) {
+      return;
+    }
     navigate("/top");
   };
 
@@ -85,7 +96,7 @@ const AddProduct = () => {
     // 1. バックエンドの ProductRequest に合わせたオブジェクトを作る
     const requestBody = {
       name: trimmedName,
-      quantity: quantity,
+      quantity: Number(quantity),
       categoryId: Number(categoryId),
       image: imageName
     };
@@ -150,7 +161,7 @@ const AddProduct = () => {
       <Header
         showSearch={false}
         showCategory={false}
-        confirmLeave={() => true}
+        confirmLeave={handleConfirmLeave} 
       />
 
       <div className="container">
@@ -167,6 +178,7 @@ const AddProduct = () => {
                 id="product-name"
                 className="form-input"
                 placeholder="例: 爽快ミネラルウォーター"
+                maxLength={50} 
                 value={productName}
                 onChange={(e) => setProductName(e.target.value)}
               />
