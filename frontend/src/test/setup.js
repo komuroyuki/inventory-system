@@ -1,1 +1,3 @@
-// konnnitiha
+afterEach(() => {
+    localStorage.clear();
+});
