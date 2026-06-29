@@ -151,4 +151,37 @@ describe("Topコンポーネントの表示", () => {
     const footer = screen.getByTestId("footer-area");
     expect(footer).toBeInTheDocument();
   });
+
+  it("データ読み込み中は「読み込み中...」と表示されること", () => {
+    useSWR.mockReturnValue({
+      data: undefined,
+      error: undefined,
+      isLoading: true,
+    });
+
+    render(<Top />);
+    expect(screen.getByText("読み込み中...")).toBeInTheDocument();
+  });
+
+  it("エラー発生時はエラーメッセージが表示されること", () => {
+    useSWR.mockReturnValue({
+      data: undefined,
+      error: new Error("通信失敗"),
+      isLoading: false,
+    });
+
+    render(<Top />);
+    expect(screen.getByText("エラー: 通信失敗")).toBeInTheDocument();
+  });
+
+  it("商品データが0件の場合、「該当する商品は見つかりませんでした」と表示されること", () => {
+    useSWR.mockReturnValue({
+      data: [],
+      error: undefined,
+      isLoading: false,
+    });
+
+    render(<Top />);
+    expect(screen.getByText("該当する商品は見つかりませんでした")).toBeInTheDocument();
+  });
 });

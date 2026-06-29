@@ -23,10 +23,14 @@ vi.mock("react-router-dom", async (importOriginal) => {
 
 describe("AddProduct コンポーネントのテスト", () => {
   let alertSpy;
+  let confirmSpy;
 
   beforeEach(() => {
     vi.clearAllMocks();
     alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    confirmSpy = vi.spyOn(window, "confirm").mockImplementation(() => true);
+
     vi.spyOn(console, "error").mockImplementation(() => {});
     vi.spyOn(console, "log").mockImplementation(() => {});
 
@@ -39,7 +43,8 @@ describe("AddProduct コンポーネントのテスト", () => {
   });
 
   afterEach(() => {
-    alertSpy.mockRestore();
+    if (alertSpy) alertSpy.mockRestore();
+    if (confirmSpy) confirmSpy.mockRestore();
   });
 
   const setup = () => {
@@ -126,6 +131,12 @@ describe("AddProduct コンポーネントのテスト", () => {
       expect(eventE).toBe(false);
     });
 
+    it("商品名入力欄に50文字の入力制限（maxLength）が設定されていること", () => {
+      setup();
+      const nameInput = screen.getByLabelText("商品名");
+      expect(nameInput).toHaveAttribute("maxLength", "50");
+    });
+
     it("在庫数を空にすると自動的に空文字になること", async () => {
       const { user } = setup();
       const quantityInput = screen.getByLabelText("初期在庫数");
@@ -188,9 +199,9 @@ describe("AddProduct コンポーネントのテスト", () => {
 
       await waitFor(() => {
         expect(alertSpy).toHaveBeenCalledWith("商品を登録しました！");
-        expect(mockNavigate).toHaveBeenCalledWith("/top"); // 💡 "/" から "/top" に修正
+        expect(mockNavigate).toHaveBeenCalledWith("/top");
       });
-      });
+    });
 
     it("サーバーから409エラー(Conflict)が返ってきた場合、重複エラーメッセージが表示されること", async () => {
       global.fetch = vi.fn().mockResolvedValue({
@@ -243,13 +254,40 @@ describe("AddProduct コンポーネントのテスト", () => {
     });
   });
 
-  describe("画面遷移のテスト", () => {
-    it("「トップへ戻る」ボタンをクリックするとトップ画面（/top）へ遷移すること", async () => {
+  describe("画面遷移のテスト（未保存チェック機能）", () => {
+    it("入力がない状態で「トップへ戻る」を押した場合、警告なしで遷移すること", async () => {
       const { user } = setup();
       const backButton = screen.getByText("トップへ戻る");
 
       await user.click(backButton);
+      
+      expect(confirmSpy).not.toHaveBeenCalled();
       expect(mockNavigate).toHaveBeenCalledWith("/top");
+    });
+
+    it("入力がある状態で「トップへ戻る」を押し、警告で「OK」を選んだ場合、遷移すること", async () => {
+      const { user } = setup();
+      
+      await user.type(screen.getByLabelText("商品名"), "テスト水");
+      
+      const backButton = screen.getByText("トップへ戻る");
+      await user.click(backButton);
+
+      expect(confirmSpy).toHaveBeenCalledWith("入力中の内容がありますが、登録しなくてよろしいですか？");
+      expect(mockNavigate).toHaveBeenCalledWith("/top");
+    });
+
+    it("入力がある状態で「トップへ戻る」を押し、警告で「キャンセル」を選んだ場合、遷移しないこと", async () => {
+      confirmSpy.mockImplementationOnce(() => false);
+
+      const { user } = setup();
+      await user.type(screen.getByLabelText("商品名"), "テスト水");
+      
+      const backButton = screen.getByText("トップへ戻る");
+      await user.click(backButton);
+
+      expect(confirmSpy).toHaveBeenCalledWith("入力中の内容がありますが、登録しなくてよろしいですか？");
+      expect(mockNavigate).not.toHaveBeenCalled();
     });
   });
 });
