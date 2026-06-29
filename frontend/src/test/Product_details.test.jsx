@@ -12,9 +12,13 @@ vi.mock('../Header/Header.jsx', () => {
     };
 });
 
-vi.mock('swr', () => ({
-    default: vi.fn(),
-}));
+vi.mock(import("swr"), async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...actual,
+        default: vi.fn(),
+    };
+});
 
 vi.mock('react-router-dom', () => ({
     useParams: vi.fn(),
