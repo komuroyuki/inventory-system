@@ -115,15 +115,16 @@ describe("fetcher", () => {
     expect(res).toEqual({ key: "value" });
   });
 
-  it("HTTPエラー(404など)の場合、例外がスローされること", async () => {
+  it("HTTPエラー(404など)の場合、エラーメッセージがスローされること", async () => {
     const url = "http://localhost:8080/products/search-filter?keyword=test";
-
+    
     global.fetch.mockResolvedValue({
       ok: false,
       status: 404,
+      text: async () => "正しく入力してください",
     });
-
-    await expect(fetcher(url)).rejects.toThrow("HTTP error! status: 404");
+    
+    await expect(fetcher(url)).rejects.toThrow("正しく入力してください");
   });
 
   it("ネットワークエラーが発生した場合、カスタムエラーがスローされること", async () => {
