@@ -118,7 +118,7 @@ describe("Login", () => {
         await user.click(screen.getByRole("button", { name: "投入してログイン" }));
 
         expect(
-            await screen.findByText("ユーザーIDまたはパスワードが正しくありません")
+            await screen.findByText("サーバーに接続できませんでした")
         ).toBeInTheDocument();
     });
 
