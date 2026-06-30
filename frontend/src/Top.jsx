@@ -32,10 +32,11 @@ export const fetcher = async (url) => {
     });
 
     if (!response.ok) {
-      const error = new Error(`HTTP error! status: ${response.status}`);
-      error.status = response.status;
-      throw error;
-    }
+    const message = await response.text(); // ★追加
+    const error = new Error(message || "エラーが発生しました");
+    error.status = response.status;
+    throw error;
+  }
     return await response.json();
   } catch (err) {
     if (err instanceof TypeError) {
