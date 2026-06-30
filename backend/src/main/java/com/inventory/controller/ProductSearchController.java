@@ -27,19 +27,25 @@ public class ProductSearchController {
         // 全角スペースを半角スペースに変換し、前後のスペースをトリム
         String trimmedKeyword = (keyword == null) ? "" : keyword.replace("　", " ").trim();
 
+        //全角→半角変換
+        String normalized = java.text.Normalizer.normalize(
+            trimmedKeyword,
+            java.text.Normalizer.Form.NFKC
+        );
+
         // 検索キーワードが空でない場合のバリデーション
-        if (!trimmedKeyword.isEmpty()) {
+        if (!normalized.isEmpty()) {
             // 検索キーワードが50文字を超えていないかをチェック
-            if (trimmedKeyword.length() > 50) {
-                return ResponseEntity.badRequest().body("検索文字は50文字以内で入力してください。");
+            if (normalized.length() > 50) {
+                return ResponseEntity.badRequest().body("正しく入力してください");
             }
             // 使用できない文字が含まれていないかをチェック
-            if (!trimmedKeyword.matches("^[ぁ-んァ-ヶ一-龠a-zA-Z0-9ー・\\s]+$")) {
-                return ResponseEntity.badRequest().body("使用できない文字が含まれています。");
+            if (!normalized.matches("^[ぁ-んァ-ヶ一-龠a-zA-Z0-9ー・\\s]+$")) {
+                return ResponseEntity.badRequest().body("正しく入力してください");
             }
         }
         // フィルタリングと検索の実行
-        List<Product> products = service.filterAndSearch(categoryId, trimmedKeyword);
+        List<Product> products = service.filterAndSearch(categoryId, normalized);
         return ResponseEntity.ok(products);
     }
 
